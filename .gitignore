@@ -1,14 +1,32 @@
+# Python 字节码缓存
 __pycache__/
 *.py[cod]
 *$py.class
+
+# 打包工具产生的临时文件
 *.spec
 dist/
 build/
+C:/Temp_Build/
+D:/Temp_Build/
+
+# 编辑器配置
 .vscode/
 .idea/
+*.swp
+
+# 运行过程中产生的业务文件 (剧本输出)
 *.docx
 *.pdf
 *.txt
-# 保留你的图标和逻辑代码
-!subtitle-toolbox.ico
+*.log
+
+# 操作系统临时文件
+Thumbs.db
+.DS_Store
+
+# --- 例外情况 ---
+# 确保图标和说明文档不被过滤
+!SubtitleToolbox.ico
 !README.md
+!resources/
