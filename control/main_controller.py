@@ -1,5 +1,6 @@
 import os
 from tkinter import simpledialog
+import customtkinter as ctk
 
 # 导入同级目录下的子控制器
 from .base_controller import BaseController
@@ -11,15 +12,18 @@ from gui.main_gui import ToolboxGUI
 class UnifiedApp(BaseController, UIController, TaskController, ToolController):
     def __init__(self, root, startup_path=None, startup_out=None):
         # 1. 初始化基础属性 (变量、设置、主题)
+        # 注意：这里不再处理 DPI 适配和 center_window，因为入口文件已经做好了
         BaseController.__init__(self, root, startup_path, startup_out)
         
-        # 2. 实例化 GUI (此时 self 已继承了所有 controller 的方法)
+        # 2. 实例化 GUI 
+        # root 此时已经是由入口文件设定的 800x680 并居中的窗口
         self.gui = ToolboxGUI(self.root, self)
         
         # 3. 设置窗口关闭协议
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
     def on_close(self):
+        """退出前保存所有当前设置"""
         self.save_settings()
         self.root.destroy()
         
@@ -50,9 +54,12 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
         return "Style: " + ",".join(parts)
 
     def save_theme_setting(self, new_theme):
+        """更新主题并保存"""
         self.theme_mode = new_theme
         self.save_settings()
 
     def open_config_file(self):
-        if not os.path.exists(self.config_file): self.save_settings()
+        """打开外部配置文件"""
+        if not os.path.exists(self.config_file): 
+            self.save_settings()
         os.startfile(self.config_file)

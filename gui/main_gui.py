@@ -2,7 +2,7 @@ import customtkinter as ctk
 import tkinter as tk
 from gui.components_gui import create_path_row
 from gui.ass_gui import ASSConfigWindow
-from gui.log_gui import LogComponent  # 导入新拆分的组件
+from gui.log_gui import LogComponent
 
 class ToolboxGUI:
     def __init__(self, root, controller):
@@ -22,23 +22,25 @@ class ToolboxGUI:
         self.main_frame = ctk.CTkFrame(self.root)
         self.main_frame.pack(fill="both", expand=True, padx=20, pady=20)
 
-        # 1. 顶部行 (左侧模式开关，右侧主题切换)
+        # 1. 顶部行 (左侧模式开关，中间配置按钮，右侧主题切换)
         header = ctk.CTkFrame(self.main_frame, fg_color="transparent")
         header.pack(fill="x", padx=15, pady=(15, 5))
         
+        # [左侧] 模式切换
         self.mode_switch = ctk.CTkSegmentedButton(
             header, 
             values=["SRT2ASS", "SCRIPT"],
             command=self._on_mode_switched,
-            height=30,  # 字体变大后，建议高度调至 35-40 之间
-            font=("Microsoft YaHei", 14, "bold")  # 直接定义字体、大小和字重
+            height=30,
+            font=("Microsoft YaHei", 14, "bold")
         )
         self.mode_switch.pack(side="left")
         
-        # 根据逻辑层状态初始化开关
-        initial_val = "转换 ASS" if self.app.task_mode.get() == "ASS" else "生成剧本"
+        # 初始化开关状态
+        initial_val = "SRT2ASS" if self.app.task_mode.get() == "SRT2ASS" else "SCRIPT"
         self.mode_switch.set(initial_val)
 
+        # [右侧] 主题切换 (side="right" 先pack的在最右)
         self.theme_btn = ctk.CTkSegmentedButton(
             header, 
             values=["Light", "Dark", "System"],
@@ -47,6 +49,20 @@ class ToolboxGUI:
         )
         self.theme_btn.pack(side="right")
         self.theme_btn.set(self.app.theme_mode)
+
+        # [中间靠右] 配置文件按钮
+        ctk.CTkButton(
+            header, text="📝 配置", command=self.app.open_config_file, 
+            fg_color="#FBC02D", hover_color="#00D4F5", text_color="black", width=90, height=28,
+            font=self.fonts["normal"]
+        ).pack(side="right", padx=5)
+        
+        # [中间靠右] ASS样式配置按钮
+        ctk.CTkButton(
+            header, text="🎨 ASS样式", command=self.ass_manager.open, 
+            fg_color="#D851D8", hover_color="#00D4F5",text_color="black", width=90, height=28,
+            font=self.fonts["normal"]
+        ).pack(side="right", padx=5)
 
         # 2. 路径输入行
         self.path_entry = create_path_row(self.main_frame, "源文件目录:", self.app.path_var, [
@@ -61,38 +77,35 @@ class ToolboxGUI:
             ("📂", self.app.browse_output_folder)
         ], self.fonts["normal"], self.fonts["small"], "#3b8ed0")
 
-        # 3. 功能开关行
-        row3 = ctk.CTkFrame(self.main_frame, fg_color="transparent")
-        row3.pack(fill="x", pady=10, padx=10)
-        
-        ctk.CTkSwitch(row3, text="智能分卷", variable=self.app.enable_grouping).pack(side="left", padx=5)
-        
-        ctk.CTkButton(
-            row3, text="📝 配置文件", command=self.app.open_config_file, 
-            fg_color="#FBC02D", text_color="black", width=100
-        ).pack(side="right", padx=(5, 0))
-        
-        ctk.CTkButton(
-            row3, text="🎨 ASS样式配置", command=self.ass_manager.open, 
-            fg_color="#D400FF", hover_color="#F57C00", width=120
-        ).pack(side="right")
-
-        # 4. 格式勾选与合并工具行
+        # 3. 格式勾选、智能分卷与合并工具行 (整合行)
         tool_row = ctk.CTkFrame(self.main_frame, fg_color="transparent")
-        tool_row.pack(fill="x", pady=(5, 0), padx=10)
+        tool_row.pack(fill="x", pady=(10, 5), padx=10)
         
+        # 左侧容器：包含复选框和智能分卷
         checkbox_frame = ctk.CTkFrame(tool_row, fg_color="transparent")
-        checkbox_frame.pack(side="left")
+        checkbox_frame.pack(side="left", padx=(10, 0))
+        
+        # TXT/Word/PDF 选框
         for text, var in [("TXT", self.app.do_txt), ("Word", self.app.do_word), ("PDF", self.app.do_pdf)]:
-            ctk.CTkCheckBox(checkbox_frame, text=text, variable=var, width=70).pack(side="left")
+            ctk.CTkCheckBox(
+                checkbox_frame, text=text, variable=var, width=70,
+                font=("Microsoft YaHei", 13, "bold")
+            ).pack(side="left")
 
-        # 合并按钮（颜色与逻辑颜色对应）
-        ctk.CTkButton(tool_row, text="PDF合并", command=self.app.start_pdf_merge_thread, fg_color="#ED1C24", width=85).pack(side="right", padx=2)
-        ctk.CTkButton(tool_row, text="Word合并", command=self.app.start_win32_thread, fg_color="#2B5797", width=85).pack(side="right", padx=2)
-        ctk.CTkButton(tool_row, text="TXT合并", command=self.app.start_txt_merge_thread, fg_color="#2DFB7C", text_color="black", width=85).pack(side="right", padx=2)
-        ctk.CTkLabel(tool_row, text="|", text_color="gray50").pack(side="right", padx=10)
+        # [新位置] 智能分卷：放在 PDF 选框右边
+        ctk.CTkSwitch(
+            checkbox_frame, 
+            text="智能分卷", 
+            variable=self.app.enable_grouping,
+            font=("Microsoft YaHei", 13, "bold")
+        ).pack(side="left", padx=25)
 
-        # 5. 操作按钮行 (开始处理 + 清空日志)
+        # 右侧：合并功能按钮
+        ctk.CTkButton(tool_row, text="PDF合并", command=self.app.start_pdf_merge_thread, fg_color="#ED1C24", hover_color="#00D4F5", width=85).pack(side="right", padx=2)
+        ctk.CTkButton(tool_row, text="Word合并", command=self.app.start_win32_thread, fg_color="#2B5797", hover_color="#00D4F5", width=85).pack(side="right", padx=2)
+        ctk.CTkButton(tool_row, text="TXT合并", command=self.app.start_txt_merge_thread, fg_color="#2DFB7C", text_color="black", hover_color="#00D4F5", width=85).pack(side="right", padx=2)
+
+        # 4. 操作按钮行 (开始处理 + 清空日志)
         btn_row = ctk.CTkFrame(self.main_frame, fg_color="transparent")
         btn_row.pack(fill="x", padx=15, pady=(15, 5))
 
@@ -116,12 +129,12 @@ class ToolboxGUI:
         )
         self.clear_log_btn.pack(side="right")
         
-        # 6. 进度条区域
+        # 5. 进度条区域
         track_color = ("#CCCCCC", "#3d3d3d")
         self.progress = ctk.CTkProgressBar(
             self.main_frame, 
             height=20, 
-            progress_color=track_color, # 初始与槽同色（隐藏绿点）
+            progress_color=track_color,
             fg_color=track_color,
             border_width=1,
             border_color=("#BBBBBB", "#2d2d2d")
@@ -129,7 +142,7 @@ class ToolboxGUI:
         self.progress.pack(fill="x", padx=15, pady=(10, 5))
         self.progress.set(0)
 
-        # 进度条智能显色逻辑：有进度变绿，无进度变灰
+        # 进度条显色逻辑
         orig_set = self.progress.set
         def smart_set(value):
             if value > 0:
@@ -139,22 +152,22 @@ class ToolboxGUI:
             orig_set(value)
         self.progress.set = smart_set
 
-        # 7. 日志区域 (对接拆分后的 LogComponent)
+        # 6. 日志区域
         self.log_area = LogComponent(self.main_frame)
         self.log_area.widget.pack(fill="both", padx=15, pady=10, expand=True)
 
     def _clear_log(self):
-        """调用组件方法清空日志"""
         if hasattr(self, 'log_area'):
             self.log_area.clear()
 
     def _on_mode_switched(self, value):
-        """同步切换逻辑层的任务模式"""
-        mode = "ASS" if value == "转换 ASS" else "PDF"
-        self.app.task_mode.set(mode)
+        self.app.task_mode.set(value)
+        if hasattr(self, 'log_area'):
+            self.log_area.write_log(f"[系统] 模式已切换为: {value}")
+        if hasattr(self.app, 'save_settings'):
+            self.app.save_settings()
 
     def theme_change(self, mode):
-        """切换主题并通知原生日志组件更新"""
         ctk.set_appearance_mode(mode)
         self.app.save_theme_setting(mode)
         if hasattr(self, 'log_area'):

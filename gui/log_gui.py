@@ -12,7 +12,9 @@ class LogComponent:
             "dark_fg": "#ffffff",
             "light_fg": "#000000",
             "pdf_red": "#ED1C24",
-            "word_blue": "#2189CF"
+            "word_blue": "#2189CF",
+            "success_green": "#2ecc71", # 路径成功绿色
+            "error_red": "#e74c3c"      # 路径失败红色
         }
         
         self.setup_ui()
@@ -42,6 +44,9 @@ class LogComponent:
         # 注册持久化的颜色标签
         self.widget.tag_config("pdf_red", foreground=self.colors["pdf_red"])
         self.widget.tag_config("word_blue", foreground=self.colors["word_blue"])
+        # --- 新增颜色标签 ---
+        self.widget.tag_config("success", foreground=self.colors["success_green"])
+        self.widget.tag_config("error", foreground=self.colors["error_red"])
         
         self.widget.configure(state='disabled')
 
@@ -60,15 +65,24 @@ class LogComponent:
         )
 
     def clear(self):
+        """清空日志区域"""
         self.widget.configure(state='normal')
         self.widget.delete("1.0", tk.END)
         self.widget.configure(state='disabled')
 
     def write_log(self, message, tag=None):
+        """写入日志内容"""
         self.widget.configure(state='normal')
+        
+        # 如果传入的是 success 或 error，会自动应用上面 tag_config 定义的颜色
         if tag:
             self.widget.insert(tk.END, str(message) + "\n", tag)
         else:
             self.widget.insert(tk.END, str(message) + "\n")
+            
         self.widget.see(tk.END)
         self.widget.configure(state='disabled')
+
+    def append(self, message):
+        """为了兼容性增加的别名方法"""
+        self.write_log(message)

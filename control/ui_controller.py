@@ -36,17 +36,36 @@ class UIController:
         d = filedialog.askdirectory(initialdir=initial)
         if d: self.output_path_var.set(d)
 
-    # --- 输入框验证逻辑 ---
+# --- 输入框验证逻辑 ---
     def update_path_from_entry(self, var, entry_widget):
-        """验证手动输入的路径并提供视觉反馈"""
-        p = var.get().strip()
+        """验证路径并提供彩色日志反馈"""
+        p = entry_widget.get().strip()
+        path_type = "源文件目录" if var == self.path_var else "输出位置"
+
         if os.path.isdir(p):
-            entry_widget.configure(border_color="#2ecc71") # 绿色
+            var.set(p)
+            # 视觉反馈
+            entry_widget.configure(border_color="#2ecc71") 
             self.root.after(1000, lambda: entry_widget.configure(border_color=["#979797", "#565b5e"]))
+            
+            # --- 关键修改：成功用绿色标签 ---
+            self.log(f"✅ {path_type}设置成功: {p}", tag="success")
+            self.save_settings()
         else:
-            if p == "" and var == self.output_path_var: return
-            entry_widget.configure(border_color="#e74c3c") # 红色
+            if p == "" and var == self.output_path_var:
+                self.log(f"ℹ️ {path_type}已重置为默认")
+                self.save_settings()
+                return
+            
+            # 视觉反馈
+            entry_widget.configure(border_color="#e74c3c") 
             self.root.after(1000, lambda: entry_widget.configure(border_color=["#979797", "#565b5e"]))
+            
+            # --- 关键修改：失败用红色标签 ---
+            if not p:
+                self.log(f"⚠️ {path_type}设置失败：路径不能为空", tag="error")
+            else:
+                self.log(f"❌ {path_type}设置失败：目录不存在 -> {p}", tag="error")
 
     # --- 预设切换逻辑 ---
     def on_preset_change(self, event):

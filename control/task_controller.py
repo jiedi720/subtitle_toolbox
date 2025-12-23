@@ -25,9 +25,9 @@ class TaskController:
         self.log(f"--- 任务启动 ---")
         try:
             mode = self.task_mode.get()
-            if mode == "ASS":
+            if mode == "SRT2ASS":
                 run_ass_task(target_dir, self._get_current_styles(), self.log, self.gui.progress, self.root, output_dir=final_out)
-            elif mode == "PDF":
+            elif mode == "SCRIPT":
                 batch = 4 if self.enable_grouping.get() else 0
                 if self.do_pdf.get():
                     run_pdf_task(target_dir, lambda m: self.log(m, "pdf_red"), self.gui.progress, self.root, batch, final_out)

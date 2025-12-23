@@ -7,14 +7,15 @@ def create_path_row(parent, label_text, variable, btns_cfg, ui_font, ui_font_sma
     row = ctk.CTkFrame(parent, fg_color="transparent")
     row.pack(fill="x", pady=5, padx=10)
     
-    ctk.CTkLabel(row, text=label_text, font=ui_font_small, width=90, anchor="e").pack(side="left")
+    # “源文件目录”和“输出位置”
+    ctk.CTkLabel(row, text=label_text, font=("Microsoft YaHei", 14, "bold"), width=90, anchor="e").pack(side="left")
     
     entry = ctk.CTkEntry(row, textvariable=variable, font=ui_font, height=34, text_color=text_color)
     entry.pack(side="left", fill="x", expand=True, padx=10)
 
     # 按钮样式配置
     btn_style = {
-        "fg_color": "transparent", "border_width": 1,
+        "fg_color": "transparent", "border_width": 2,
         "border_color": ("#000000", "#FFFFFF"),
         "width": 30, "height": 30,
         "text_color": ("#000000", "#FFFFFF"),
