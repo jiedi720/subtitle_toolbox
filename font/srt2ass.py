@@ -4,6 +4,7 @@ SRT转ASS字幕转换模块
 """
 
 import os
+import sys
 import re
 import pysubs2
 import configparser
@@ -14,6 +15,18 @@ from function.paths import get_organized_path
 # 预设硬编码默认样式
 DEFAULT_KOR_STYLE = "Style: KOR - Noto Serif KR,Noto Serif KR SemiBold,20,&H0026FCFF,&H000000FF,&H50000000,&H00000000,-1,0,0,0,100,100,0.1,0,1,0.6,0,2,10,10,34,1"
 DEFAULT_CHN_STYLE = "Style: CHN - Drama,小米兰亭,17,&H28FFFFFF,&H000000FF,&H64000000,&H00000000,-1,0,0,0,100,100,0,0,1,0.5,0,2,10,10,15,1"
+
+def get_config_path():
+    """获取配置文件路径，使用 exe 所在的目录"""
+    # 获取 exe 所在的目录或脚本所在目录
+    if getattr(sys, 'frozen', False):
+        # 如果是打包后的 exe
+        base_dir = os.path.dirname(sys.executable)
+    else:
+        # 如果是开发环境
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    return os.path.join(base_dir, "SubtitleToolbox.ini")
 
 def get_config_styles(log_func=None):
     """获取ASS样式配置
@@ -26,7 +39,7 @@ def get_config_styles(log_func=None):
     Returns:
         dict: 包含kor和chn样式的字典
     """
-    config_path = os.path.join(os.getcwd(), "SubtitleToolbox.ini")
+    config_path = get_config_path()
     styles = {"kor": DEFAULT_KOR_STYLE, "chn": DEFAULT_CHN_STYLE}
     
     if not os.path.exists(config_path):

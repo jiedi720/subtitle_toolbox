@@ -1,34 +1,34 @@
 cd "C:\Users\EJI1WX\OneDrive - Bosch Group\PythonProject\SubtitleToolbox"
 
-# 修改当前项目的用户名
+# Set username for current project
 git config user.name "jiedi720"
 
-# (可选) 修改全局用户名
+# (Optional) Set global username
 git config --global user.name "jiedi720"
 
-# 设置 UTF8 编码以支持中文显示
+# Set UTF8 encoding for display
 $OutputEncoding = [System.Text.Encoding]::UTF8
 
-Write-Host "--- 正在准备上传 SubtitleToolbox v3.0 ---" -ForegroundColor Cyan
+Write-Host "--- Preparing to upload SubtitleToolbox v3.0 ---" -ForegroundColor Cyan
 
-# 添加更改
+# Add changes
 git add .
 
-# 获取用户输入
-$msg = Read-Host "请输入更新说明 (直接回车默认为 '日常更新')"
-if ($msg -eq "") { $msg = "日常更新" }
+# Get user input
+$msg = Read-Host "Enter update message (press Enter for default 'Daily update')"
+if ($msg -eq "") { $msg = "Daily update" }
 
-# 提交
+# Commit
 git commit -m $msg
 
-# 推送
-Write-Host "正在推送到 GitHub..." -ForegroundColor Yellow
+# Push
+Write-Host "Pushing to GitHub..." -ForegroundColor Yellow
 git push -u origin main --force
 
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "✅ 更新成功！" -ForegroundColor Green
+    Write-Host "✅ Update successful!" -ForegroundColor Green
 } else {
-    Write-Host "❌ 更新失败，请检查网络。" -ForegroundColor Red
+    Write-Host "❌ Update failed, please check network." -ForegroundColor Red
 }
 
 pause

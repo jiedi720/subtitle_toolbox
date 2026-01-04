@@ -4,11 +4,24 @@
 """
 
 import os
+import sys
 import configparser
 
 # 全局常量与路径
-# 使用绝对路径，确保在任何工作目录下都能找到配置文件
-CONFIG_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "SubtitleToolbox.ini")
+# 使用 exe 所在的目录，确保打包后配置文件可以被修改和保存
+def get_config_path():
+    """获取配置文件路径，使用 exe 所在的目录"""
+    # 获取 exe 所在的目录或脚本所在目录
+    if getattr(sys, 'frozen', False):
+        # 如果是打包后的 exe
+        base_dir = os.path.dirname(sys.executable)
+    else:
+        # 如果是开发环境
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    return os.path.join(base_dir, "SubtitleToolbox.ini")
+
+CONFIG_FILE = get_config_path()
 
 # 默认 ASS 样式常量
 DEFAULT_KOR_STYLE = "Style: KOR - Noto Serif KR,Noto Serif KR SemiBold,20,&H0026FCFF,&H000000FF,&H50000000,&H00000000,-1,0,0,0,100,100,0.1,0,1,0.6,0,2,10,10,34,1"

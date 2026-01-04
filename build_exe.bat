@@ -3,7 +3,7 @@ chcp 65001 >nul
 cd /d "%~dp0"
 
 echo ============================================
-echo   SubtitleToolbox 自动化打包程序
+echo   SubtitleToolbox Auto Build Script
 echo ============================================
 
 if not exist "SubtitleToolbox.py" (
@@ -16,8 +16,8 @@ python -m PyInstaller --noconfirm --onefile --windowed --name="SubtitleToolbox" 
 
 echo.
 echo --------------------------------------------
-echo 打包执行完毕！
-echo 已启用 --windowed 模式。
-echo 输出目录: 当前目录
+echo Build completed!
+echo --windowed mode enabled.
+echo Output directory: Current directory
 echo --------------------------------------------
 pause

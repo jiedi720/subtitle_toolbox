@@ -2,25 +2,25 @@
 chcp 65001 >nul
 cd /d "%~dp0"
 
-echo 🔄 正在强制切换至 main 分支...
+echo Switching to main branch...
 git checkout main
 
-echo 📥 正在添加文件...
+echo Adding files...
 git add -A
 
-echo 💾 正在提交更改...
-set /p msg="请输入更新内容(回车默认'日常更新'): "
-if "%msg%"=="" set msg=日常更新
+echo Committing changes...
+set /p msg="Enter update message (press Enter for default 'Daily update'): "
+if "%msg%"=="" set msg=Daily update
 git commit -m "%msg%"
 
-echo 📤 正在强制推送到 GitHub...
+echo Force pushing to GitHub...
 git push origin main --force
 
 if %errorlevel% == 0 (
     echo.
-    echo ✅ 更新完成！项目已在 main 分支同步。
+    echo Update completed! Project synced to main branch.
 ) else (
     echo.
-    echo ❌ 推送失败，请检查 VPN 网络。
+    echo Push failed, please check VPN connection.
 )
 pause
