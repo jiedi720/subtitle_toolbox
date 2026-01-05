@@ -6,7 +6,7 @@ from PySide6.QtCore import Qt
 # 先导入 Icons_rc，确保资源文件在 UI 加载前可用
 from . import Icons_rc
 
-from .ui_Gui_SubtitleToolbox import Ui_SubtitleToolbox
+from .ui_SubtitleToolbox import Ui_SubtitleToolbox
 
 # 从log_gui.py导入LogComponent类
 from .log_gui import LogComponent
@@ -32,6 +32,40 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
         
         # 设置UI
         self.setupUi(self)
+        
+        # 强制设置按钮图标颜色为黑色，不受主题影响
+        from PySide6.QtGui import QPalette, QColor, QIcon, QPixmap, QPainter, QImage
+        from PySide6.QtCore import Qt
+        
+        # 为使用 fromTheme 图标的按钮应用固定的黑色图标
+        for btn in [self.RefreshSettings, self.OpenSettings, self.DeleteFiles, self.ClearLogs, self.Start]:
+            # 获取当前图标
+            icon = btn.icon()
+            if not icon.isNull():
+                # 获取图标的像素图（使用 Normal 模式）
+                pixmap = icon.pixmap(btn.iconSize(), QIcon.Mode.Normal, QIcon.State.Off)
+                if not pixmap.isNull():
+                    # 将像素图转换为图像
+                    image = pixmap.toImage()
+                    
+                    # 遍历所有像素，将非透明像素设置为黑色
+                    for y in range(image.height()):
+                        for x in range(image.width()):
+                            color = image.pixelColor(x, y)
+                            if color.alpha() > 0:  # 非透明像素
+                                image.setPixelColor(x, y, QColor(0, 0, 0, color.alpha()))
+                    
+                    # 转换回像素图
+                    black_pixmap = QPixmap.fromImage(image)
+                    
+                    # 创建新图标
+                    new_icon = QIcon(black_pixmap)
+                    btn.setIcon(new_icon)
+            
+            # 设置调色板
+            palette = btn.palette()
+            palette.setColor(QPalette.ColorRole.ButtonText, QColor(0, 0, 0))
+            btn.setPalette(palette)
         
         # 配置日志区域
         self.Log.setReadOnly(True)

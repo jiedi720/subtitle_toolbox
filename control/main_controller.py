@@ -31,6 +31,10 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
         # 实例化GUI
         self.gui = ToolboxGUI(self.root, self)
         
+        # 应用保存的主题设置
+        from gui.theme import apply_theme
+        apply_theme(self.theme_mode)
+        
         # 设置窗口关闭事件处理
         self.gui.closeEvent = self.on_close
 

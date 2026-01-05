@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Gui_SubtitleToolboxdlAgeL.ui'
+## Form generated from reading UI file 'SubtitleToolboxwGDKgQ.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -21,7 +21,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
     QLineEdit, QMainWindow, QMenu, QMenuBar,
     QPlainTextEdit, QProgressBar, QPushButton, QSizePolicy,
     QTabWidget, QVBoxLayout, QWidget)
-from . import Icons_rc
+import Icons_rc
 
 class Ui_SubtitleToolbox(object):
     def setupUi(self, SubtitleToolbox):
@@ -84,18 +84,20 @@ class Ui_SubtitleToolbox(object):
 "\n"
 "/* \u7b2c 1 \u4e2a\u6807\u7b7e\uff1a\u6d45\u7c89\u8272 */\n"
 "QTabBar::tab:first {\n"
+"   color: rgb(0, 0, 0);\n"
 "    background-color: #FFB6C1;\n"
 "}\n"
 "\n"
 "/* \u6240\u6709\u6807\u7b7e\uff08\u9ed8\u8ba4\u8272/\u7b2c 2 \u4e2a\uff09\uff1a\u6de1\u7eff\u8272 */\n"
 "/* \u6ce8\u610f\uff1a\u8fd9\u91cc\u4f5c\u4e3a\u9ed8\u8ba4\u503c\uff0c\u4f1a\u88ab first \u548c last \u8986\u76d6 */\n"
 "QTabBar::tab {\n"
+"    color: rgb(0, 0, 0);\n"
 "    padding: 2px 15px;\n"
 "    min-width: 20px;\n"
 "    background-color: #90EE90; \n"
-"    /* \u6838\u5fc3\u4fee\u6539\uff1a\u5206\u522b\u8bbe\u7f6e\u56db\u4e2a\u89d2\u7684\u5f27\u5ea6 */\n"
-"    /* \u987a\u5e8f\u4e3a\uff1a"
-                        "\u5de6\u4e0a, \u53f3\u4e0a, \u53f3\u4e0b, \u5de6\u4e0b */\n"
+"    /* \u6838\u5fc3\u4fee\u6539\uff1a\u5206\u522b\u8bbe\u7f6e\u56db\u4e2a\u89d2"
+                        "\u7684\u5f27\u5ea6 */\n"
+"    /* \u987a\u5e8f\u4e3a\uff1a\u5de6\u4e0a, \u53f3\u4e0a, \u53f3\u4e0b, \u5de6\u4e0b */\n"
 "    border-top-left-radius: 6px;  /* \u4e0a\u8fb9\u7f18\u5f27\u5ea6\u5927 */\n"
 "    border-top-right-radius: 6px; \n"
 "    border-bottom-left-radius: 1px; /* \u4e0b\u8fb9\u7f18\u5f27\u5ea6\u5c0f\u6216\u8bbe\u4e3a 0 */\n"
@@ -104,6 +106,7 @@ class Ui_SubtitleToolbox(object):
 "\n"
 "/* \u7b2c 3 \u4e2a\uff08\u6700\u540e\u4e00\u4e2a\uff09\u6807\u7b7e\uff1a\u5929\u84dd\u8272 */\n"
 "QTabBar::tab:last {\n"
+"    color: rgb(0, 0, 0);\n"
 "    background-color: #87CEFA;\n"
 "}\n"
 "\n"
@@ -114,10 +117,10 @@ class Ui_SubtitleToolbox(object):
 "    color: white;\n"
 "    /* 3. \u8fd9\u91cc\u7684 margin-top \u8bbe\u4e3a 0\uff0c\u914d\u5408\u57fa\u7840\u6001\u7684 2px\uff0c\u5b9e\u73b0\u76f8\u5bf9\u5347\u8d77\u6548\u679c */\n"
 "    margin-top: 0px; \n"
-"    /* \u518d\u6b21\u660e\u786e\u5706\u89d2\uff0c\u786e\u4fdd\u4e0d\u88ab\u9ed8\u8ba4\u6837\u5f0f\u8986\u76d6 */\n"
+"    /* \u518d\u6b21\u660e\u786e\u5706\u89d2\uff0c\u786e\u4fdd\u4e0d\u88ab\u9ed8\u8ba4\u6837\u5f0f\u8986"
+                        "\u76d6 */\n"
 "    border-top-left-radius: 6px;\n"
-"    border-top-right-radius: 6p"
-                        "x;\n"
+"    border-top-right-radius: 6px;\n"
 "}")
         self.Function.setElideMode(Qt.TextElideMode.ElideNone)
         self.Function.setDocumentMode(False)
@@ -162,7 +165,7 @@ class Ui_SubtitleToolbox(object):
 "QCheckBox::indicator:checked {\n"
 "    border: 1px solid #2196F3; \n"
 "    /* \u4fee\u6b63\u62fc\u5199\u9519\u8bef\uff1auurl -> url */\n"
-"    image: url(:/resources/checkmark.png); \n"
+"    image: url(:/Interaction/checkmark.png); \n"
 "}\n"
 "\n"
 "/* \u60ac\u6d6e\u72b6\u6001 */\n"
@@ -172,7 +175,7 @@ class Ui_SubtitleToolbox(object):
 "    background-color: #2196F3; \n"
 "}")
         icon = QIcon()
-        icon.addFile(u"../SubtitleToolbox/resources/PDF.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addFile(u":/resources/PDF.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.Output2PDF.setIcon(icon)
         self.Output2PDF.setIconSize(QSize(35, 35))
         self.Output2PDF.setCheckable(True)
@@ -206,7 +209,7 @@ class Ui_SubtitleToolbox(object):
 "QCheckBox::indicator:checked {\n"
 "    border: 1px solid #2196F3; \n"
 "    /* \u4fee\u6b63\u62fc\u5199\u9519\u8bef\uff1auurl -> url */\n"
-"    image: url(:/resources/checkmark.png); \n"
+"    image: url(:/Interaction/checkmark.png); \n"
 "}\n"
 "\n"
 "/* \u60ac\u6d6e\u72b6\u6001 */\n"
@@ -248,7 +251,7 @@ class Ui_SubtitleToolbox(object):
 "QCheckBox::indicator:checked {\n"
 "    border: 1px solid #2196F3; \n"
 "    /* \u4fee\u6b63\u62fc\u5199\u9519\u8bef\uff1auurl -> url */\n"
-"    image: url(:/resources/checkmark.png); \n"
+"    image: url(:/Interaction/checkmark.png); \n"
 "}\n"
 "\n"
 "/* \u60ac\u6d6e\u72b6\u6001 */\n"
@@ -310,6 +313,7 @@ class Ui_SubtitleToolbox(object):
         font5.setHintingPreference(QFont.PreferNoHinting)
         self.VolumeLabel.setFont(font5)
         self.VolumeLabel.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.VolumeLabel.setStyleSheet(u"color: rgb(0, 0, 0);")
         self.VolumeLabel.setFrameShape(QFrame.Shape.NoFrame)
         self.VolumeLabel.setTextFormat(Qt.TextFormat.PlainText)
         self.VolumeLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -349,9 +353,6 @@ class Ui_SubtitleToolbox(object):
         self.horizontalLayout_3.addLayout(self.horizontalLayout)
 
         self.Function.addTab(self.Script, "")
-        self.DividingLine.raise_()
-        self.VolumePatternSelect.raise_()
-        self.VolumeLabel.raise_()
         self.Merge = QWidget()
         self.Merge.setObjectName(u"Merge")
         self.Merge.setFont(font2)
@@ -381,7 +382,7 @@ class Ui_SubtitleToolbox(object):
 "QCheckBox::indicator:checked {\n"
 "    border: 1px solid #2196F3; \n"
 "    /* \u4fee\u6b63\u62fc\u5199\u9519\u8bef\uff1auurl -> url */\n"
-"    image: url(:/resources/checkmark.png); \n"
+"    image: url(:/Interaction/checkmark.png); \n"
 "}\n"
 "\n"
 "/* \u60ac\u6d6e\u72b6\u6001 */\n"
@@ -421,7 +422,7 @@ class Ui_SubtitleToolbox(object):
 "QCheckBox::indicator:checked {\n"
 "    border: 1px solid #2196F3; \n"
 "    /* \u4fee\u6b63\u62fc\u5199\u9519\u8bef\uff1auurl -> url */\n"
-"    image: url(:/resources/checkmark.png); \n"
+"    image: url(:/Interaction/checkmark.png); \n"
 "}\n"
 "\n"
 "/* \u60ac\u6d6e\u72b6\u6001 */\n"
@@ -461,7 +462,7 @@ class Ui_SubtitleToolbox(object):
 "QCheckBox::indicator:checked {\n"
 "    border: 1px solid #2196F3; \n"
 "    /* \u4fee\u6b63\u62fc\u5199\u9519\u8bef\uff1auurl -> url */\n"
-"    image: url(:/resources/checkmark.png); \n"
+"    image: url(:/Interaction/checkmark.png); \n"
 "}\n"
 "\n"
 "/* \u60ac\u6d6e\u72b6\u6001 */\n"
@@ -506,6 +507,7 @@ class Ui_SubtitleToolbox(object):
         font7.setHintingPreference(QFont.PreferNoHinting)
         self.AssPatternLabel.setFont(font7)
         self.AssPatternLabel.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.AssPatternLabel.setStyleSheet(u"color: rgb(0, 0, 0);")
         self.AssPatternLabel.setFrameShape(QFrame.Shape.NoFrame)
         self.AssPatternLabel.setTextFormat(Qt.TextFormat.PlainText)
         self.AssPatternLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -535,25 +537,36 @@ class Ui_SubtitleToolbox(object):
         self.RefreshSettings.setObjectName(u"RefreshSettings")
         self.RefreshSettings.setMinimumSize(QSize(45, 45))
         self.RefreshSettings.setMaximumSize(QSize(45, 45))
-        self.RefreshSettings.setStyleSheet(u"/* \u6309\u94ae\u9ed8\u8ba4\u6837\u5f0f */\n"
+        self.RefreshSettings.setStyleSheet(u"/* 按钮默认样式 */\n"
 "QPushButton {\n"
+"    color: rgb(0, 0, 0);\n"
 "    background-color:rgb(238, 238, 0);\n"
-"    color: white;\n"
 "    border-radius: 6px;\n"
 "    padding: 5px 15px;\n"
 "    border: none;\n"
 "}\n"
 "\n"
-"/* \u60ac\u6d6e\u7279\u6548\uff1a\u80cc\u666f\u989c\u8272\u53d8\u6d45\uff0c\u5e76\u589e\u52a0\u84dd\u8272\u8fb9\u6846\u611f */\n"
+"/* 悬浮特效：背景颜色变浅，并增加蓝色边框感 */\n"
 "QPushButton:hover {\n"
+"    color: rgb(0, 0, 0);\n"
 "    background-color:rgb(208, 208, 0);\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
+"/* 按下特效：点击时颜色变深，产生物理压下的错觉 */\n"
 "QPushButton:pressed {\n"
+"    color: rgb(0, 0, 0);\n"
 "    padding-top: 6px;\n"
 "}\n"
+"\n"
+"/* 禁用状态 */\n"
+"QPushButton:disabled {\n"
+"    color: rgb(128, 128, 128);\n"
+"}\n"
 "")
+        font3 = QFont()
+        font3.setPointSize(9)
+        font3.setHintingPreference(QFont.PreferDefaultHinting)
+        self.RefreshSettings.setFont(font3)
         icon3 = QIcon(QIcon.fromTheme(u"emblem-synchronized"))
         self.RefreshSettings.setIcon(icon3)
         self.RefreshSettings.setIconSize(QSize(30, 30))
@@ -564,25 +577,36 @@ class Ui_SubtitleToolbox(object):
         self.OpenSettings.setObjectName(u"OpenSettings")
         self.OpenSettings.setMinimumSize(QSize(45, 45))
         self.OpenSettings.setMaximumSize(QSize(45, 45))
-        self.OpenSettings.setStyleSheet(u"/* \u6309\u94ae\u9ed8\u8ba4\u6837\u5f0f */\n"
+        self.OpenSettings.setStyleSheet(u"/* 按钮默认样式 */\n"
 "QPushButton {\n"
+"    color: rgb(0, 0, 0);\n"
 "    background-color:rgb(167, 83, 250);\n"
-"    color: white;\n"
 "    border-radius: 6px;\n"
 "    padding: 5px 15px;\n"
 "    border: none;\n"
 "}\n"
 "\n"
-"/* \u60ac\u6d6e\u7279\u6548\uff1a\u80cc\u666f\u989c\u8272\u53d8\u6d45\uff0c\u5e76\u589e\u52a0\u84dd\u8272\u8fb9\u6846\u611f */\n"
+"/* 悬浮特效：背景颜色变浅，并增加蓝色边框感 */\n"
 "QPushButton:hover {\n"
+"    color: rgb(0, 0, 0);\n"
 "    background-color:rgb(127, 64, 191);\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
+"/* 按下特效：点击时颜色变深，产生物理压下的错觉 */\n"
 "QPushButton:pressed {\n"
+"    color: rgb(0, 0, 0);\n"
 "    padding-top: 6px;\n"
 "}\n"
+"\n"
+"/* 禁用状态 */\n"
+"QPushButton:disabled {\n"
+"    color: rgb(128, 128, 128);\n"
+"}\n"
 "")
+        font4 = QFont()
+        font4.setPointSize(9)
+        font4.setHintingPreference(QFont.PreferDefaultHinting)
+        self.OpenSettings.setFont(font4)
         icon4 = QIcon(QIcon.fromTheme(u"document-save-as"))
         self.OpenSettings.setIcon(icon4)
         self.OpenSettings.setIconSize(QSize(30, 30))
@@ -849,42 +873,53 @@ class Ui_SubtitleToolbox(object):
 
         self.PathLayout.addLayout(self.PathButton)
 
-        self.widget = QWidget(self.centralwidget)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(450, 110, 161, 102))
-        self.gridLayout = QGridLayout(self.widget)
+        self.layoutWidget1 = QWidget(self.centralwidget)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(450, 110, 161, 102))
+        self.gridLayout = QGridLayout(self.layoutWidget1)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.DeleteFiles = QPushButton(self.widget)
+        self.DeleteFiles = QPushButton(self.layoutWidget1)
         self.DeleteFiles.setObjectName(u"DeleteFiles")
         self.DeleteFiles.setMinimumSize(QSize(45, 45))
         self.DeleteFiles.setMaximumSize(QSize(45, 45))
         self.DeleteFiles.setStyleSheet(u"/* \u6309\u94ae\u9ed8\u8ba4\u6837\u5f0f */\n"
 "QPushButton {\n"
+"    color: rgb(0, 0, 0);\n"
 "    background-color: rgb(255, 160, 162);\n"
-"    color: white;\n"
 "    border-radius: 6px;\n"
 "    padding: 5px 15px;\n"
 "    border: none;\n"
 "}\n"
 "\n"
-"/* \u60ac\u6d6e\u7279\u6548\uff1a\u80cc\u666f\u989c\u8272\u53d8\u6d45\uff0c\u5e76\u589e\u52a0\u84dd\u8272\u8fb9\u6846\u611f */\n"
+"/* 悬浮特效：背景颜色变浅，并增加蓝色边框感 */\n"
 "QPushButton:hover {\n"
+"    color: rgb(0, 0, 0);\n"
 "    background-color: rgb(255, 89, 92);\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
+"/* 按下特效：点击时颜色变深，产生物理压下的错觉 */\n"
 "QPushButton:pressed {\n"
+"    color: rgb(0, 0, 0);\n"
 "    padding-top: 6px;\n"
 "}\n"
+"\n"
+"/* 禁用状态 */\n"
+"QPushButton:disabled {\n"
+"    color: rgb(128, 128, 128);\n"
+"}\n"
 "")
+        font7 = QFont()
+        font7.setPointSize(9)
+        font7.setHintingPreference(QFont.PreferDefaultHinting)
+        self.DeleteFiles.setFont(font7)
         icon7 = QIcon(QIcon.fromTheme(u"edit-delete"))
         self.DeleteFiles.setIcon(icon7)
         self.DeleteFiles.setIconSize(QSize(30, 30))
 
         self.gridLayout.addWidget(self.DeleteFiles, 0, 0, 1, 1)
 
-        self.Start = QPushButton(self.widget)
+        self.Start = QPushButton(self.layoutWidget1)
         self.Start.setObjectName(u"Start")
         sizePolicy.setHeightForWidth(self.Start.sizePolicy().hasHeightForWidth())
         self.Start.setSizePolicy(sizePolicy)
@@ -898,8 +933,8 @@ class Ui_SubtitleToolbox(object):
         self.Start.setFont(font10)
         self.Start.setStyleSheet(u"/* \u6309\u94ae\u9ed8\u8ba4\u6837\u5f0f */\n"
 "QPushButton {\n"
+"    color: rgb(0, 0, 0);\n"
 "    background-color:rgb(76, 229, 112);\n"
-"    color: white;\n"
 "    border-radius: 6px;\n"
 "    padding: 5px 15px;\n"
 "    border: none;\n"
@@ -923,44 +958,55 @@ class Ui_SubtitleToolbox(object):
 
         self.gridLayout.addWidget(self.Start, 0, 1, 2, 1)
 
-        self.ClearLogs = QPushButton(self.widget)
+        self.ClearLogs = QPushButton(self.layoutWidget1)
         self.ClearLogs.setObjectName(u"ClearLogs")
         self.ClearLogs.setMinimumSize(QSize(45, 45))
         self.ClearLogs.setMaximumSize(QSize(45, 45))
-        self.ClearLogs.setStyleSheet(u"/* \u6309\u94ae\u9ed8\u8ba4\u6837\u5f0f */\n"
+        self.ClearLogs.setStyleSheet(u"/* 按钮默认样式 */\n"
 "QPushButton {\n"
+"    color: rgb(0, 0, 0);\n"
 "    background-color: rgb(250, 160, 0);\n"
-"    color: white;\n"
 "    border-radius: 6px;\n"
 "    padding: 5px 15px;\n"
 "    border: none;\n"
 "}\n"
 "\n"
-"/* \u60ac\u6d6e\u7279\u6548\uff1a\u80cc\u666f\u989c\u8272\u53d8\u6d45\uff0c\u5e76\u589e\u52a0\u84dd\u8272\u8fb9\u6846\u611f */\n"
+"/* 悬浮特效：背景颜色变浅，并增加蓝色边框感 */\n"
 "QPushButton:hover {\n"
-"    background-color: rgb(250, 120, 0); /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
+"    color: rgb(0, 0, 0);\n"
+"    background-color: rgb(250, 120, 0); /* 颜色比默认稍亮 */\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
+"/* 按下特效：点击时颜色变深，产生物理压下的错觉 */\n"
 "QPushButton:pressed {\n"
+"    color: rgb(0, 0, 0);\n"
 "    padding-top: 6px;\n"
 "}\n"
+"\n"
+"/* 禁用状态 */\n"
+"QPushButton:disabled {\n"
+"    color: rgb(128, 128, 128);\n"
+"}\n"
 "")
+        font9 = QFont()
+        font9.setPointSize(9)
+        font9.setHintingPreference(QFont.PreferDefaultHinting)
+        self.ClearLogs.setFont(font9)
         icon9 = QIcon(QIcon.fromTheme(u"edit-clear"))
         self.ClearLogs.setIcon(icon9)
         self.ClearLogs.setIconSize(QSize(30, 30))
 
         self.gridLayout.addWidget(self.ClearLogs, 1, 0, 1, 1)
 
-        self.widget1 = QWidget(self.centralwidget)
-        self.widget1.setObjectName(u"widget1")
-        self.widget1.setGeometry(QRect(20, 220, 591, 341))
-        self.gridLayout_2 = QGridLayout(self.widget1)
+        self.layoutWidget2 = QWidget(self.centralwidget)
+        self.layoutWidget2.setObjectName(u"layoutWidget2")
+        self.layoutWidget2.setGeometry(QRect(20, 220, 591, 341))
+        self.gridLayout_2 = QGridLayout(self.layoutWidget2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setHorizontalSpacing(6)
         self.gridLayout_2.setVerticalSpacing(10)
         self.gridLayout_2.setContentsMargins(1, 0, 4, 0)
-        self.Log = QPlainTextEdit(self.widget1)
+        self.Log = QPlainTextEdit(self.layoutWidget2)
         self.Log.setObjectName(u"Log")
         self.Log.setStyleSheet(u"QPlainTextEdit {\n"
 "    /* 1. \u5fc5\u987b\u6709\u8fb9\u6846\uff0c\u900f\u660e\u5373\u53ef */\n"
@@ -973,13 +1019,16 @@ class Ui_SubtitleToolbox(object):
 "    /* palette(base) \u4f1a\u81ea\u52a8\u8ddf\u968f\u4e3b\u9898\uff1a\u6d45\u8272\u65f6\u662f\u767d\u8272\uff0c\u6df1\u8272\u65f6\u662f\u6df1\u7070 */\n"
 "    background-color: palette(base);\n"
 "    \n"
+"    /* 4. \u6587\u5b57\u989c\u8272\u4e5f\u8ddf\u968f\u4e3b\u9898 */\n"
+"    color: palette(text);\n"
+"    \n"
 "    /* \u5efa\u8bae\u52a0\u70b9\u5185\u8fb9\u8ddd\uff0c\u5426\u5219\u5b57\u4f1a\u8d34\u5230\u5706\u89d2\u8fb9\u4e0a */\n"
 "    padding: 3px;\n"
 "}")
 
         self.gridLayout_2.addWidget(self.Log, 1, 0, 1, 1)
 
-        self.ProgressBar = QProgressBar(self.widget1)
+        self.ProgressBar = QProgressBar(self.layoutWidget2)
         self.ProgressBar.setObjectName(u"ProgressBar")
         sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy4.setHorizontalStretch(0)
@@ -1001,7 +1050,7 @@ class Ui_SubtitleToolbox(object):
 "    background-color: #05B8CC;   /* \u8fdb\u5ea6\u6761\u989c\u8272\uff1a\u9752\u84dd\u8272 */\n"
 "    border-radius: 5px;          /* \u8fdb\u5ea6\u6761\u7684\u5706\u89d2 */\n"
 "}")
-        self.ProgressBar.setValue(0)
+        self.ProgressBar.setValue(24)
         self.ProgressBar.setTextVisible(False)
         self.ProgressBar.setOrientation(Qt.Orientation.Horizontal)
         self.ProgressBar.setInvertedAppearance(False)
@@ -1009,10 +1058,10 @@ class Ui_SubtitleToolbox(object):
         self.gridLayout_2.addWidget(self.ProgressBar, 0, 0, 1, 1)
 
         SubtitleToolbox.setCentralWidget(self.centralwidget)
-        self.Start.raise_()
+        self.layoutWidget.raise_()
+        self.layoutWidget.raise_()
         self.Function.raise_()
-        self.Log.raise_()
-        self.widget.raise_()
+        self.layoutWidget.raise_()
         self.menuBar = QMenuBar(SubtitleToolbox)
         self.menuBar.setObjectName(u"menuBar")
         self.menuBar.setGeometry(QRect(0, 0, 628, 22))
@@ -1087,6 +1136,8 @@ class Ui_SubtitleToolbox(object):
         self.Function.setTabText(self.Function.indexOf(self.Srt2Ass), QCoreApplication.translate("SubtitleToolbox", u"Srt2Ass", None))
         self.ReadPath.setText(QCoreApplication.translate("SubtitleToolbox", u"\u8bfb\u53d6\u76ee\u5f55\uff1a", None))
         self.SavePath.setText(QCoreApplication.translate("SubtitleToolbox", u"\u4fdd\u5b58\u76ee\u5f55\uff1a", None))
+        self.ReadPathInput.setPlaceholderText(QCoreApplication.translate("SubtitleToolbox", u"\u9009\u62e9\u5b57\u5e55\u6587\u4ef6\u6839\u76ee\u5f55", None))
+        self.SavePathInput.setPlaceholderText(QCoreApplication.translate("SubtitleToolbox", u"\u9009\u62e9\u4fdd\u5b58\u76ee\u5f55", None))
 #if QT_CONFIG(tooltip)
         self.ReadPathSet.setToolTip(QCoreApplication.translate("SubtitleToolbox", u"\u66f4\u65b0\u76ee\u5f55", None))
 #endif // QT_CONFIG(tooltip)
