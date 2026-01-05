@@ -10,9 +10,8 @@
 SubtitleToolbox/
 ├── SubtitleToolbox.py         # 程序唯一入口
 ├── SubtitleToolbox.ini        # 运行配置持久化文件 (自动生成)
-├── build_exe_home.bat         # PyInstaller 一键打包脚本 (家庭环境)
-├── build_exe_work.bat         # PyInstaller 一键打包脚本 (工作环境)
-├── requirements.txt           # 项目依赖库清单
+├── SubtitleToolbox.exe        # 打包后的可执行文件
+├── build_exe.bat              # PyInstaller 一键打包脚本
 ├── updateGithub.bat           # GitHub 更新脚本
 ├── updateGithub.ps1           # GitHub 更新 PowerShell 脚本
 │
@@ -106,34 +105,57 @@ SubtitleToolbox/
 
 ---
 
-## 📦 依赖库清单 (requirements.txt / A-Z 排序)
+## 📦 依赖库清单
 
 ```text
-PySide6            # 现代化 UI 框架
-docx               # Word 文档处理
-pypdf              # PDF 合并与处理
-pysrt              # SRT 字幕解析
-pysubs2            # ASS 字幕处理
-python-docx        # Word 文档解析
-reportlab          # PDF 生成与绘图支持
-send2trash         # 安全回收站操作
+PySide6>=6.0.0      # GUI 框架
+pysrt>=1.1.0         # SRT 字幕处理
+pysubs2>=1.7.0       # 通用字幕格式处理
+python-docx>=1.0.0   # Word 文档生成
+reportlab>=4.0.0     # PDF 文档生成
+pypdf>=3.0.0         # PDF 文档处理
+send2trash>=1.8.0    # 文件删除到回收站
+```
+
+**安装方法：**
+
+```bash
+pip install -r requirements.txt
+```
+
+或直接运行：
+
+```bash
+pip install ^
+    PySide6>=6.0.0 ^      # GUI 框架
+    pysrt>=1.1.0 ^         # SRT 字幕处理
+    pysubs2>=1.7.0 ^       # 通用字幕格式处理
+    python-docx>=1.0.0 ^   # Word 文档生成
+    reportlab>=4.0.0 ^     # PDF 文档生成
+    pypdf>=3.0.0 ^         # PDF 文档处理
+    send2trash>=1.8.0 ^    # 文件删除到回收站
 ```
 
 ---
 
 ## 🛠️ 打包指南
 
-项目已针对 PyInstaller 优化，提供两个打包脚本：
+项目已针对 PyInstaller 优化，提供打包脚本：
 
-* `build_exe_home.bat` - 家庭环境打包脚本
-* `build_exe_work.bat` - 工作环境打包脚本
+* `build_exe.bat` - PyInstaller 一键打包脚本
 
 **关键参数说明：**
 
-* `--add-data`：采用递归封装，确保所有子模块打入 EXE。
-* `--collect-all "send2trash"`：解决回收站 DLL 组件丢失问题。
-* `--windowed`：消除启动时的控制台黑窗。
-* `--icon`：设置程序图标为 `resources/SubtitleToolbox.ico`。
+* `--onefile`：打包成单个 EXE 文件
+* `--windowed`：消除启动时的控制台黑窗
+* `--icon`：设置程序图标为 `resources/SubtitleToolbox.ico`
+* `--optimize=2`：最高级别的字节码优化
+* `--upx=True`：启用 UPX 压缩减小体积
+* 排除不必要的模块（tkinter、PyQt5/6、numpy、pandas 等）
+
+**使用方法：**
+
+直接运行 `build_exe.bat` 即可生成 `SubtitleToolbox.exe`。
 
 ---
 

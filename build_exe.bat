@@ -12,7 +12,7 @@ if not exist "SubtitleToolbox.py" (
     exit
 )
 
-python -m PyInstaller --noconfirm --onefile --windowed --name="SubtitleToolbox" --collect-all "send2trash" --icon="resources\SubtitleToolbox.ico" --add-data "logic;logic" --add-data "control;control" --add-data "function;function" --add-data "gui;gui" --add-data "font;font" --add-data "config;config" --add-data "resources\SubtitleToolbox.ico;." --hidden-import="reportlab" --hidden-import="reportlab.platypus" --hidden-import="reportlab.lib.styles" --hidden-import="pysrt" --hidden-import="pysubs2" --hidden-import="docx" --hidden-import="pypdf" --hidden-import="send2trash" --distpath="." --workpath="C:/Temp_Build" --clean SubtitleToolbox.py
+python -m PyInstaller SubtitleToolbox.spec --distpath="." --workpath="C:/Temp_Build" --clean
 
 echo.
 echo --------------------------------------------
