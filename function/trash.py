@@ -16,17 +16,18 @@ try:
 except ImportError:
     HAS_SEND2TRASH = False
 
-def clear_output_to_trash(target_root, log_func):
+def clear_output_to_trash(target_root, log_func, parent=None):
     """智能清理输出目录，将文件发送到回收站
-    
+
     注意：永远不会删除 .srt 原始文件，仅对被占用的文件名使用错误标签。
-    
+
     Args:
         target_root: 目标根目录
         log_func: 日志记录函数
+        parent: 父窗口对象，用于继承主题设置
     """
     if not HAS_SEND2TRASH:
-        QMessageBox.critical(None, "缺少组件", "请安装：pip install send2trash")
+        QMessageBox.critical(parent, "缺少组件", "请安装：pip install send2trash")
         return
 
     # 直接处理目标目录，不再寻找script文件夹
@@ -46,7 +47,7 @@ def clear_output_to_trash(target_root, log_func):
         log_func("[清理] ℹ️ 目录已空。")
         return
 
-    if not QMessageBox.question(None, "确认清空", f"即将清空: {cleanup_dir}\n确定吗？", QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes:
+    if not QMessageBox.question(parent, "确认清空", f"即将清空: {cleanup_dir}\n确定吗？", QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes:
         return
 
     deleted_total = 0

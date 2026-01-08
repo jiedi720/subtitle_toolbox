@@ -32,7 +32,7 @@ if __name__ == "__main__":
         from logic.pdf_logic import init_fonts
         init_fonts()
     except Exception as e:
-        print(f"字体初始化失败: {e}")
+        pass  # 静默处理字体初始化失败
     
     # 创建控制器实例，初始化主窗口
     controller = UnifiedApp(None)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SubtitleToolboxuYcPHe.ui'
+## Form generated from reading UI file 'SubtitleToolboxMZjMTs.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -32,7 +32,7 @@ class Ui_SubtitleToolbox(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(SubtitleToolbox.sizePolicy().hasHeightForWidth())
         SubtitleToolbox.setSizePolicy(sizePolicy)
-        SubtitleToolbox.setMinimumSize(QSize(600, 605))
+        SubtitleToolbox.setMinimumSize(QSize(606, 605))
         SubtitleToolbox.setMaximumSize(QSize(606, 605))
         font = QFont()
         font.setHintingPreference(QFont.PreferDefaultHinting)
@@ -185,11 +185,14 @@ class Ui_SubtitleToolbox(object):
 "    background-color: rgb(160, 160, 160); /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
 "QPushButton:pressed {\n"
-"    padding-top: 3px;\n"
-"}\n"
-"")
+"    /* 1. \u5411\u4e0b\u63a8\u6587\u5b57 */\n"
+"    padding-top: 4px; \n"
+"    /* 2. \u540c\u65f6\u51cf\u5c11\u5e95\u90e8\uff0c\u786e\u4fdd\u5185\u90e8\u6709\u6548\u7a7a\u95f4\u9ad8\u5ea6\u4e0d\u53d8 */\n"
+"    padding-bottom: 0px; \n"
+"    /* 3. \u5f3a\u5236\u5185\u5bb9\u6c34\u5e73\u5782\u76f4\u5c45\u4e2d\uff0c\u9632\u6b62\u5bf9\u9f50\u65b9\u5f0f\u5e72\u6270 */\n"
+"    text-align: center;\n"
+"}")
         icon3 = QIcon()
         icon3.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/open-folder2.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.ReadPathOpen.setIcon(icon3)
@@ -215,11 +218,14 @@ class Ui_SubtitleToolbox(object):
 "    background-color: rgb(160, 160, 160); /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
 "QPushButton:pressed {\n"
-"    padding-top: 3px;\n"
-"}\n"
-"")
+"    /* 1. \u5411\u4e0b\u63a8\u6587\u5b57 */\n"
+"    padding-top: 4px; \n"
+"    /* 2. \u540c\u65f6\u51cf\u5c11\u5e95\u90e8\uff0c\u786e\u4fdd\u5185\u90e8\u6709\u6548\u7a7a\u95f4\u9ad8\u5ea6\u4e0d\u53d8 */\n"
+"    padding-bottom: 0px; \n"
+"    /* 3. \u5f3a\u5236\u5185\u5bb9\u6c34\u5e73\u5782\u76f4\u5c45\u4e2d\uff0c\u9632\u6b62\u5bf9\u9f50\u65b9\u5f0f\u5e72\u6270 */\n"
+"    text-align: center;\n"
+"}")
         icon4 = QIcon()
         icon4.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/search2.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.ReadPathSelect.setIcon(icon4)
@@ -246,11 +252,14 @@ class Ui_SubtitleToolbox(object):
 "    background-color: rgb(160, 160, 160); /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
 "QPushButton:pressed {\n"
-"    padding-top: 3px;\n"
-"}\n"
-"")
+"    /* 1. \u5411\u4e0b\u63a8\u6587\u5b57 */\n"
+"    padding-top: 4px; \n"
+"    /* 2. \u540c\u65f6\u51cf\u5c11\u5e95\u90e8\uff0c\u786e\u4fdd\u5185\u90e8\u6709\u6548\u7a7a\u95f4\u9ad8\u5ea6\u4e0d\u53d8 */\n"
+"    padding-bottom: 0px; \n"
+"    /* 3. \u5f3a\u5236\u5185\u5bb9\u6c34\u5e73\u5782\u76f4\u5c45\u4e2d\uff0c\u9632\u6b62\u5bf9\u9f50\u65b9\u5f0f\u5e72\u6270 */\n"
+"    text-align: center;\n"
+"}")
         icon5 = QIcon()
         icon5.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/refresh.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.ReadPathSet.setIcon(icon5)
@@ -276,11 +285,14 @@ class Ui_SubtitleToolbox(object):
 "    background-color: rgb(160, 160, 160); /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
 "QPushButton:pressed {\n"
-"    padding-top: 3px;\n"
-"}\n"
-"")
+"    /* 1. \u5411\u4e0b\u63a8\u6587\u5b57 */\n"
+"    padding-top: 4px; \n"
+"    /* 2. \u540c\u65f6\u51cf\u5c11\u5e95\u90e8\uff0c\u786e\u4fdd\u5185\u90e8\u6709\u6548\u7a7a\u95f4\u9ad8\u5ea6\u4e0d\u53d8 */\n"
+"    padding-bottom: 0px; \n"
+"    /* 3. \u5f3a\u5236\u5185\u5bb9\u6c34\u5e73\u5782\u76f4\u5c45\u4e2d\uff0c\u9632\u6b62\u5bf9\u9f50\u65b9\u5f0f\u5e72\u6270 */\n"
+"    text-align: center;\n"
+"}")
         self.SavePathOpen.setIcon(icon3)
         self.SavePathOpen.setIconSize(QSize(20, 20))
 
@@ -304,11 +316,14 @@ class Ui_SubtitleToolbox(object):
 "    background-color: rgb(160, 160, 160); /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
 "QPushButton:pressed {\n"
-"    padding-top: 3px;\n"
-"}\n"
-"")
+"    /* 1. \u5411\u4e0b\u63a8\u6587\u5b57 */\n"
+"    padding-top: 4px; \n"
+"    /* 2. \u540c\u65f6\u51cf\u5c11\u5e95\u90e8\uff0c\u786e\u4fdd\u5185\u90e8\u6709\u6548\u7a7a\u95f4\u9ad8\u5ea6\u4e0d\u53d8 */\n"
+"    padding-bottom: 0px; \n"
+"    /* 3. \u5f3a\u5236\u5185\u5bb9\u6c34\u5e73\u5782\u76f4\u5c45\u4e2d\uff0c\u9632\u6b62\u5bf9\u9f50\u65b9\u5f0f\u5e72\u6270 */\n"
+"    text-align: center;\n"
+"}")
         self.SavePathSelect.setIcon(icon4)
         self.SavePathSelect.setIconSize(QSize(20, 20))
 
@@ -332,11 +347,14 @@ class Ui_SubtitleToolbox(object):
 "    background-color: rgb(160, 160, 160); /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
 "QPushButton:pressed {\n"
-"    padding-top: 3px;\n"
-"}\n"
-"")
+"    /* 1. \u5411\u4e0b\u63a8\u6587\u5b57 */\n"
+"    padding-top: 4px; \n"
+"    /* 2. \u540c\u65f6\u51cf\u5c11\u5e95\u90e8\uff0c\u786e\u4fdd\u5185\u90e8\u6709\u6548\u7a7a\u95f4\u9ad8\u5ea6\u4e0d\u53d8 */\n"
+"    padding-bottom: 0px; \n"
+"    /* 3. \u5f3a\u5236\u5185\u5bb9\u6c34\u5e73\u5782\u76f4\u5c45\u4e2d\uff0c\u9632\u6b62\u5bf9\u9f50\u65b9\u5f0f\u5e72\u6270 */\n"
+"    text-align: center;\n"
+"}")
         self.SavePathSet.setIcon(icon5)
         self.SavePathSet.setIconSize(QSize(20, 20))
 
@@ -678,15 +696,16 @@ class Ui_SubtitleToolbox(object):
 "\n"
 "/* 3. \u6bcf\u4e00\u4e2a\u9009\u9879\u7684\u6837\u5f0f */\n"
 "QComboBox QAbstractItemView::item {\n"
+"    color: black;\n"
 "    height: 30px; /* \u589e\u52a0\u9ad8\u5ea6\uff0c\u5706\u89d2\u624d\u597d\u770b */\n"
 "    padding-left: 10px;\n"
 "}\n"
 "\n"
 "/* 4. \u9009\u4e2d\u9879\u7684\u6837\u5f0f */\n"
 "QComboBox QAbstractItemView::item:selected {\n"
-"    background-color: #7953B1;\n"
-"    "
-                        "color: white;\n"
+"    background-co"
+                        "lor: #7953B1;\n"
+"    color: white;\n"
 "    /* \u5982\u679c\u60f3\u8ba9\u9009\u4e2d\u7684\u9ad8\u4eae\u5757\u4e5f\u6709\u5706\u89d2\uff0c\u53ef\u4ee5\u52a0\u4e0b\u9762\u8fd9\u53e5 */\n"
 "    border-radius: 5px; \n"
 "}\n"
@@ -945,15 +964,16 @@ class Ui_SubtitleToolbox(object):
 "\n"
 "/* 3. \u6bcf\u4e00\u4e2a\u9009\u9879\u7684\u6837\u5f0f */\n"
 "QComboBox QAbstractItemView::item {\n"
+"    color: black;\n"
 "    height: 30px; /* \u589e\u52a0\u9ad8\u5ea6\uff0c\u5706\u89d2\u624d\u597d\u770b */\n"
 "    padding-left: 10px;\n"
 "}\n"
 "\n"
 "/* 4. \u9009\u4e2d\u9879\u7684\u6837\u5f0f */\n"
 "QComboBox QAbstractItemView::item:selected {\n"
-"    background-color: #7953B1;\n"
-"    "
-                        "color: white;\n"
+"    background-co"
+                        "lor: #7953B1;\n"
+"    color: white;\n"
 "    /* \u5982\u679c\u60f3\u8ba9\u9009\u4e2d\u7684\u9ad8\u4eae\u5757\u4e5f\u6709\u5706\u89d2\uff0c\u53ef\u4ee5\u52a0\u4e0b\u9762\u8fd9\u53e5 */\n"
 "    border-radius: 5px; \n"
 "}\n"
@@ -1036,15 +1056,16 @@ class Ui_SubtitleToolbox(object):
 "\n"
 "/* 3. \u6bcf\u4e00\u4e2a\u9009\u9879\u7684\u6837\u5f0f */\n"
 "QComboBox QAbstractItemView::item {\n"
+"    color: black;\n"
 "    height: 30px; /* \u589e\u52a0\u9ad8\u5ea6\uff0c\u5706\u89d2\u624d\u597d\u770b */\n"
 "    padding-left: 10px;\n"
 "}\n"
 "\n"
 "/* 4. \u9009\u4e2d\u9879\u7684\u6837\u5f0f */\n"
 "QComboBox QAbstractItemView::item:selected {\n"
-"    background-color: #7953B1;\n"
-"    "
-                        "color: white;\n"
+"    background-co"
+                        "lor: #7953B1;\n"
+"    color: white;\n"
 "    /* \u5982\u679c\u60f3\u8ba9\u9009\u4e2d\u7684\u9ad8\u4eae\u5757\u4e5f\u6709\u5706\u89d2\uff0c\u53ef\u4ee5\u52a0\u4e0b\u9762\u8fd9\u53e5 */\n"
 "    border-radius: 5px; \n"
 "}\n"
@@ -1076,11 +1097,14 @@ class Ui_SubtitleToolbox(object):
 "    background-color: rgb(160, 160, 160); /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
 "QPushButton:pressed {\n"
-"    padding-top: 3px;\n"
-"}\n"
-"")
+"    /* 1. \u5411\u4e0b\u63a8\u6587\u5b57 */\n"
+"    padding-top: 3px; \n"
+"    /* 2. \u540c\u65f6\u51cf\u5c11\u5e95\u90e8\uff0c\u786e\u4fdd\u5185\u90e8\u6709\u6548\u7a7a\u95f4\u9ad8\u5ea6\u4e0d\u53d8 */\n"
+"    padding-bottom: 0px; \n"
+"    /* 3. \u5f3a\u5236\u5185\u5bb9\u6c34\u5e73\u5782\u76f4\u5c45\u4e2d\uff0c\u9632\u6b62\u5bf9\u9f50\u65b9\u5f0f\u5e72\u6270 */\n"
+"    text-align: center;\n"
+"}")
         self.SelectWhisperModel.setIcon(icon4)
         self.SelectWhisperModel.setIconSize(QSize(25, 25))
 
@@ -1139,15 +1163,16 @@ class Ui_SubtitleToolbox(object):
 "\n"
 "/* 3. \u6bcf\u4e00\u4e2a\u9009\u9879\u7684\u6837\u5f0f */\n"
 "QComboBox QAbstractItemView::item {\n"
+"    color: black;\n"
 "    height: 30px; /* \u589e\u52a0\u9ad8\u5ea6\uff0c\u5706\u89d2\u624d\u597d\u770b */\n"
 "    padding-left: 10px;\n"
 "}\n"
 "\n"
 "/* 4. \u9009\u4e2d\u9879\u7684\u6837\u5f0f */\n"
 "QComboBox QAbstractItemView::item:selected {\n"
-"    background-color: #7953B1;\n"
-"    "
-                        "color: white;\n"
+"    background-co"
+                        "lor: #7953B1;\n"
+"    color: white;\n"
 "    /* \u5982\u679c\u60f3\u8ba9\u9009\u4e2d\u7684\u9ad8\u4eae\u5757\u4e5f\u6709\u5706\u89d2\uff0c\u53ef\u4ee5\u52a0\u4e0b\u9762\u8fd9\u53e5 */\n"
 "    border-radius: 5px; \n"
 "}\n"
@@ -1201,11 +1226,14 @@ class Ui_SubtitleToolbox(object):
 "    background-color: rgb(0, 214, 196); /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
 "QPushButton:pressed {\n"
-"    padding-top: 6px;\n"
-"}\n"
-"")
+"    /* 1. \u5411\u4e0b\u63a8\u6587\u5b57 */\n"
+"    padding-top: 5px; \n"
+"    /* 2. \u540c\u65f6\u51cf\u5c11\u5e95\u90e8\uff0c\u786e\u4fdd\u5185\u90e8\u6709\u6548\u7a7a\u95f4\u9ad8\u5ea6\u4e0d\u53d8 */\n"
+"    padding-bottom: 0px; \n"
+"    /* 3. \u5f3a\u5236\u5185\u5bb9\u6c34\u5e73\u5782\u76f4\u5c45\u4e2d\uff0c\u9632\u6b62\u5bf9\u9f50\u65b9\u5f0f\u5e72\u6270 */\n"
+"    text-align: center;\n"
+"}")
         icon9 = QIcon()
         icon9.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/shuttle.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.Start.setIcon(icon9)
@@ -1244,7 +1272,7 @@ class Ui_SubtitleToolbox(object):
 "\n"
 "/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
 "QPushButton:pressed {\n"
-"    padding-top: 6px;\n"
+"    padding-top: 8px;\n"
 "}\n"
 "")
         icon10 = QIcon()
@@ -1262,23 +1290,26 @@ class Ui_SubtitleToolbox(object):
         self.DeleteFiles.setMaximumSize(QSize(16777215, 50))
         self.DeleteFiles.setStyleSheet(u"/* \u6309\u94ae\u9ed8\u8ba4\u6837\u5f0f */\n"
 "QPushButton {\n"
-"    color: rgb(0, 0, 0);\n"
-"    background-color: #f6416c;\n"
-"    border-radius: 9px;\n"
-"    padding: 5px 15px;\n"
-"    border: none;\n"
+"color: rgb(0, 0, 0);\n"
+"background-color: #f6416c;\n"
+"border-radius: 9px;\n"
+"padding: 5px 15px;\n"
+"border: none;\n"
 "}\n"
 "\n"
 "/* \u60ac\u6d6e\u7279\u6548\uff1a\u80cc\u666f\u989c\u8272\u53d8\u6d45\uff0c\u5e76\u589e\u52a0\u84dd\u8272\u8fb9\u6846\u611f */\n"
 "QPushButton:hover {\n"
-"    background-color: rgb(255, 102, 117);\n"
+"background-color: rgb(255, 102, 117);\n"
 "}\n"
 "\n"
-"/* \u6309\u4e0b\u7279\u6548\uff1a\u70b9\u51fb\u65f6\u989c\u8272\u53d8\u6df1\uff0c\u4ea7\u751f\u7269\u7406\u538b\u4e0b\u7684\u9519\u89c9 */\n"
 "QPushButton:pressed {\n"
-"    padding-top: 6px;\n"
-"}\n"
-"")
+"    /* 1. \u5411\u4e0b\u63a8\u6587\u5b57 */\n"
+"    padding-top: 5px; \n"
+"    /* 2. \u540c\u65f6\u51cf\u5c11\u5e95\u90e8\uff0c\u786e\u4fdd\u5185\u90e8\u6709\u6548\u7a7a\u95f4\u9ad8\u5ea6\u4e0d\u53d8 */\n"
+"    padding-bottom: 0px; \n"
+"    /* 3. \u5f3a\u5236\u5185\u5bb9\u6c34\u5e73\u5782\u76f4\u5c45\u4e2d\uff0c\u9632\u6b62\u5bf9\u9f50\u65b9\u5f0f\u5e72\u6270 */\n"
+"    text-align: center;\n"
+"}")
         icon11 = QIcon()
         icon11.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/delete.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.DeleteFiles.setIcon(icon11)
@@ -1325,7 +1356,7 @@ class Ui_SubtitleToolbox(object):
 "    background-color: #05B8CC;   /* \u8fdb\u5ea6\u6761\u989c\u8272\uff1a\u9752\u84dd\u8272 */\n"
 "    border-radius: 7px;          /* \u8fdb\u5ea6\u6761\u7684\u5706\u89d2 */\n"
 "}")
-        self.ProgressBar.setValue(24)
+        self.ProgressBar.setValue(0)
         self.ProgressBar.setTextVisible(False)
         self.ProgressBar.setOrientation(Qt.Orientation.Horizontal)
         self.ProgressBar.setInvertedAppearance(False)

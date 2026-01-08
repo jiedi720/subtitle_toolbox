@@ -87,7 +87,7 @@ class SettingsHandler:
         
         # 写入所有 section
         for section_name, section_data in config_data.items():
-            if not c.has_section(section_name): 
+            if not c.has_section(section_name):
                 c.add_section(section_name)
             for key, value in section_data.items():
                 c.set(section_name, key, str(value))
@@ -175,6 +175,7 @@ class ConfigManager:
         # Whisper 模型相关设置
         self.whisper_model = "默认"  # 当前 Whisper 模型
         self.whisper_model_path = "C:/Users/jiedi/AppData/Roaming/PotPlayerMini64/Model/faster-whisper-large-v3-turbo"  # Whisper 模型目录路径（默认值）
+        self.whisper_language = "auto"  # Whisper 语言设置（"auto" 表示自动检测）
 
     def load_settings(self):
         """从配置文件加载设置"""
@@ -213,6 +214,13 @@ class ConfigManager:
         self.autosub_output_dir = autosub_config.get("autosub_output_dir", "")
         default_whisper_path = "C:/Users/jiedi/AppData/Roaming/PotPlayerMini64/Model/faster-whisper-large-v3-turbo"
         self.whisper_model_path = autosub_config.get("Model_dir", default_whisper_path)
+        # 加载语言设置
+        language_value = autosub_config.get("language", "auto")
+        # 处理空字符串、字符串 'None' 或 None，都转换为 "auto"
+        if language_value is None or language_value == "" or language_value == "None":
+            self.whisper_language = "auto"
+        else:
+            self.whisper_language = language_value
 
         # 加载主题设置
         appearance = data.get("Appearance", {})
@@ -305,11 +313,6 @@ class ConfigManager:
                 self.ass_pattern = "kor_chn"
     def save_settings(self):
         """保存设置到配置文件"""
-        print(f"DEBUG: save_settings - 当前任务模式 = {self.task_mode}")
-        print(f"DEBUG: save_settings - srt2ass_dir = {self.srt2ass_dir}")
-        print(f"DEBUG: save_settings - script_dir = {self.script_dir}")
-        print(f"DEBUG: save_settings - path_var = {self.path_var}")
-
         # 将英文格式转换为中文格式保存到配置文件
         preset_mapping = {
             "kor_chn": "韩上中下",
@@ -349,7 +352,8 @@ class ConfigManager:
             "AutoSub": {
                 "autosub_dir": self.autosub_dir.strip() if hasattr(self, 'autosub_dir') else "",
                 "autosub_output_dir": self.autosub_output_dir.strip() if hasattr(self, 'autosub_output_dir') else "",
-                "Model_dir": self.whisper_model_path if hasattr(self, 'whisper_model_path') else ""
+                "Model_dir": self.whisper_model_path if hasattr(self, 'whisper_model_path') else "",
+                "language": self.whisper_language if hasattr(self, 'whisper_language') else "auto"
             }
         }
 
@@ -394,7 +398,9 @@ class ConfigManager:
         """
         model_size = "large-v3-turbo"  # 默认模型
         model_path = None
-        language = None  # 默认自动检测语言
+        language_value = getattr(self, 'whisper_language', "auto")  # 从属性获取语言设置
+        # 将 "auto" 转换为 None，因为 Whisper 需要 None 表示自动检测
+        language = None if language_value == "auto" else language_value
         
         # 如果选择了特定模型
         if self.whisper_model and self.whisper_model != "默认":
@@ -430,10 +436,6 @@ class ConfigManager:
 
     def sync_from_controller(self, controller):
         """从控制器实例同步属性到配置管理器"""
-        print(f"DEBUG: sync_from_controller - 开始同步")
-        print(f"DEBUG: sync_from_controller - controller.srt2ass_dir = {controller.srt2ass_dir if hasattr(controller, 'srt2ass_dir') else 'N/A'}")
-        print(f"DEBUG: sync_from_controller - controller.script_dir = {controller.script_dir if hasattr(controller, 'script_dir') else 'N/A'}")
-
         # 路径相关变量
         self.path_var = controller.path_var
         self.output_path_var = controller.output_path_var
@@ -447,9 +449,6 @@ class ConfigManager:
         self.srt2ass_output_dir = controller.srt2ass_output_dir if hasattr(controller, 'srt2ass_output_dir') else ""
         self.autosub_dir = controller.autosub_dir if hasattr(controller, 'autosub_dir') else ""
         self.autosub_output_dir = controller.autosub_output_dir if hasattr(controller, 'autosub_output_dir') else ""
-
-        print(f"DEBUG: sync_from_controller - 同步后 self.srt2ass_dir = {self.srt2ass_dir}")
-        print(f"DEBUG: sync_from_controller - 同步后 self.script_dir = {self.script_dir}")
 
         # 预设相关变量
         self.ass_pattern = controller.ass_pattern
@@ -473,6 +472,7 @@ class ConfigManager:
         # Whisper 模型相关设置
         self.whisper_model = controller.whisper_model
         self.whisper_model_path = controller.whisper_model_path
+        self.whisper_language = controller.whisper_language if hasattr(controller, 'whisper_language') else "auto"
 
     def sync_to_controller(self, controller):
         """将配置管理器的属性同步到控制器实例"""
@@ -512,6 +512,7 @@ class ConfigManager:
         # Whisper 模型相关设置
         controller.whisper_model = self.whisper_model
         controller.whisper_model_path = self.whisper_model_path
+        controller.whisper_language = self.whisper_language if hasattr(self, 'whisper_language') else "auto"
 
         # 同步解析后的样式
         controller.kor_parsed = self.kor_parsed

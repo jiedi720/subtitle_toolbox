@@ -117,7 +117,10 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
         
         # Whisper模型选择下拉框信号
         self.WhisperModelSelect.currentIndexChanged.connect(self._on_whisper_model_changed)
-        
+
+        # Whisper语言选择下拉框信号
+        self.WhisperLanguageSelect.currentIndexChanged.connect(self._on_whisper_language_changed)
+
         # 连接控制器信号到GUI槽函数（线程安全更新）
         if hasattr(self.app, 'update_log'):
             self.app.update_log.connect(self.log)
@@ -283,6 +286,9 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
             message: 日志内容
             tag: 日志标签（可选），用于设置不同的颜色
         """
+        # 同时输出到终端
+        print(message)
+        
         from PySide6.QtGui import QColor, QTextCursor, QTextCharFormat, QPalette
         from PySide6.QtWidgets import QApplication
         
@@ -335,6 +341,7 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
         
         # 使用QTextCursor插入文本
         cursor = self.Log.textCursor()
+        cursor.movePosition(QTextCursor.End)
         
         if text_color:
             # 只有特殊日志才设置颜色
@@ -343,7 +350,8 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
             cursor.insertText(message + "\n", format)
         else:
             # 默认日志不设置颜色，使用调色板的默认文本颜色
-            cursor.insertText(message + "\n")
+            default_format = QTextCharFormat()
+            cursor.insertText(message + "\n", default_format)
         
         self.Log.ensureCursorVisible()
     
@@ -535,15 +543,43 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
             self.log(f"✓ 已切换 Whisper 模型: {model_name}")
         else:
             self.log(f"✓ 已切换为默认模型")
+
+    def _on_whisper_language_changed(self, value):
+        """
+        Whisper 语言选择变化时的处理
+
+        Args:
+            value: 语言索引
+        """
+        # 获取当前选中的语言名称
+        language_name = self.WhisperLanguageSelect.currentText()
+
+        # 语言代码映射
+        language_map = {
+            "自动": "auto",
+            "韩语": "ko",
+            "日语": "ja",
+            "英语": "en",
+            "中文": "zh"
+        }
+
+        # 获取语言代码
+        language_code = language_map.get(language_name, None)
+
+        # 更新控制器的语言设置
+        if hasattr(self.app, 'whisper_language'):
+            self.app.whisper_language = language_code
         
-        # 保存配置
-        try:
-            if hasattr(self.app, 'config'):
-                self.app.config.sync_from_controller(self.app)
-                self.app.config.save_config()
-                self.log("✓ 模型配置已保存")
-        except Exception as e:
-            self.log(f"⚠️ 保存配置失败: {e}", "error")
+        # 保存到配置
+        if hasattr(self.app, 'config'):
+            self.app.config.whisper_language = language_code
+            self.app.config.save_settings()
+
+        # 记录日志
+        if language_name == "自动":
+            self.log(f"✓ 已切换为自动语言检测 (auto)")
+        else:
+            self.log(f"✓ 已切换 Whisper 语言: {language_name} ({language_code})")
     
 
     
@@ -620,7 +656,29 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
                 self.WhisperModelSelect.setCurrentIndex(model_index)
             # 恢复信号发射
             self.WhisperModelSelect.blockSignals(False)
-        
+
+        # 更新Whisper语言选择
+        if hasattr(self.app, 'whisper_language'):
+            # 阻止信号发射
+            self.WhisperLanguageSelect.blockSignals(True)
+            # 语言代码到语言名称的映射
+            language_map = {
+                "auto": "自动",
+                None: "自动",
+                "ko": "韩语",
+                "ja": "日语",
+                "en": "英语",
+                "zh": "中文"
+            }
+            # 获取语言名称
+            language_name = language_map.get(self.app.whisper_language, "自动")
+            # 查找语言在下拉框中的索引
+            language_index = self.WhisperLanguageSelect.findText(language_name)
+            if language_index >= 0:
+                self.WhisperLanguageSelect.setCurrentIndex(language_index)
+            # 恢复信号发射
+            self.WhisperLanguageSelect.blockSignals(False)
+
         # 更新ASS字体方案选择
         if hasattr(self.app, 'ass_pattern'):
             # 阻止信号发射

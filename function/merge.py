@@ -343,7 +343,7 @@ def execute_merge_tasks(path_var, output_path_var, log_callback, update_progress
     # 获取目标目录
     target_dir = path_var.strip()
     if not target_dir or not os.path.exists(target_dir):
-        QMessageBox.critical(None, "错误", "请选择有效目录")
+        QMessageBox.critical(root, "错误", "请选择有效目录")
         return
     
     # 获取输出目录

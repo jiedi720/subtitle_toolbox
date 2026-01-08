@@ -32,7 +32,7 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
     # 验证源目录
     target_dir = path_var.strip()
     if not target_dir or not os.path.exists(target_dir):
-        QMessageBox.critical(None, "错误", "源目录无效")
+        QMessageBox.critical(root, "错误", "源目录无效")
         return False
     
     # 获取输出目录
@@ -64,7 +64,7 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
             volume_pattern = getattr(gui, 'volume_pattern', '智能')
             
             # 执行各类输出任务
-            if gui.output2pdf:
+            if gui.Output2PDF:
                 run_pdf_task(
                     target_dir, 
                     log_callback, 
@@ -74,7 +74,7 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
                     final_out, 
                     volume_pattern
                 )
-            if gui.output2word:
+            if gui.Output2Word:
                 run_word_creation_task(
                     target_dir, 
                     log_callback, 
@@ -140,56 +140,109 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
                 return False
         elif task_mode == "AutoSub":
             # 执行自动字幕生成任务
+            from function.AutoSubtitles import SubtitleGenerator
+
+            # 获取模型配置（从控制器获取，确保使用最新的设置）
+            # 注意：root 在 PySide6 中可能是 None，所以直接使用传入的 gui 对象
+            model_config = gui.app.config.get_whisper_model_config()
+            model_size = model_config["model_size"]
+            model_path = model_config["model_path"]
+
+            # 创建字幕生成器
+            language_setting = model_config.get("language", None)
+            log_callback(f"DEBUG: 语言设置: {language_setting}")
+            generator = SubtitleGenerator(
+                model_size=model_size,
+                model_path=model_path,
+                device="auto",
+                language=language_setting,
+                allow_download=model_config.get("allow_download", False)
+            )
+            log_callback(f"DEBUG: generator.language = {generator.language}")
+
             try:
-                from function.AutoSubtitles import SubtitleGenerator
-                
-                # 获取模型配置
-                from function.settings import ConfigManager
-                config = ConfigManager()
-                model_config = config.get_whisper_model_config()
-                model_size = model_config["model_size"]
-                model_path = model_config["model_path"]
-                
-                # 创建字幕生成器
-                generator = SubtitleGenerator(
-                    model_size=model_size,
-                    model_path=model_path,
-                    device="auto",
-                    language=model_config.get("language", None),
-                    allow_download=model_config.get("allow_download", False)
-                )
-                
                 # 初始化模型
-                generator.initialize_model(progress_callback=lambda m: log_callback(m))
-                
+                generator.initialize_model(log_callback=log_callback)
+
+                # 检测已生成的字幕文件
+                mp3_files = []
+                for root, _, files in os.walk(target_dir):
+                    for file in files:
+                        if file.lower().endswith(".mp3"):
+                            mp3_files.append(os.path.join(root, file))
+
+                existing_files = []
+                new_files = []
+
+                for mp3_file in mp3_files:
+                    base_name = os.path.splitext(os.path.basename(mp3_file))[0]
+                    dir_name = os.path.dirname(mp3_file)
+
+                    has_subtitle = False
+                    for file in os.listdir(dir_name):
+                        if file.startswith(f"{base_name}.whisper.[") and file.endswith(".srt"):
+                            has_subtitle = True
+                            break
+
+                    if has_subtitle:
+                        existing_files.append(mp3_file)
+                    else:
+                        new_files.append(mp3_file)
+
+                skip_existing = True
+                if existing_files:
+                    log_callback(f"检测到 {len(existing_files)} 个文件已生成字幕")
+                    # 暂时跳过对话框，直接跳过已存在的文件
+                    skip_existing = True
+                    log_callback(f"将跳过 {len(existing_files)} 个已存在的字幕文件")
+
+                if skip_existing:
+                    log_callback(f"将跳过 {len(existing_files)} 个已存在的字幕文件")
+                else:
+                    log_callback(f"将覆盖 {len(existing_files)} 个已存在的字幕文件")
+
                 # 批量处理
                 results = generator.batch_process(
                     input_dir=target_dir,
-                    progress_callback=lambda m: log_callback(m)
+                    progress_callback=progress_callback,
+                    log_callback=log_callback,
+                    skip_existing=skip_existing
                 )
-                
+
                 # 统计结果
                 success_count = sum(1 for _, _, success in results if success)
                 fail_count = len(results) - success_count
+
+                log_callback(f"\n✅ 处理完成: 成功 {success_count} 个，失败 {fail_count} 个")
+
+                log_callback("--- AutoSub任务完成 ---")
                 
-                log_callback(f"\n✓ 处理完成: 成功 {success_count} 个，失败 {fail_count} 个")
-                
-                # 清理模型资源
-                try:
-                    del generator
-                    log_callback("已释放模型资源")
-                except:
-                    pass
+                # 不调用 cleanup()，让 Python 的垃圾回收器自动处理
+                log_callback("DEBUG: [A] 跳过模型清理，让 GC 自动处理")
+                log_callback("DEBUG: [B] AutoSub 任务块完成")
                 
             except Exception as e:
                 log_callback(f"❌ AutoSub模式处理失败: {e}")
                 import traceback
                 log_callback(f"详细错误: {traceback.format_exc()}")
+                log_callback("DEBUG: [E] AutoSub 异常捕获")
                 return False
         
+        # 任务完成日志
+        log_callback("DEBUG: [F] 准备输出完成日志")
         log_callback("✅ 任务流处理完毕。")
-        return True
+        log_callback("--- execute_task函数返回 ---")
         
+        # 不做任何清理操作，让 Python 的垃圾回收器自然处理
+        # 自动模式下 Whisper 的析构函数会卡死，所以不能显式清理
+        if task_mode == "AutoSub" and model_config.get("language") is None:
+            log_callback("DEBUG: 自动模式，跳过模型清理（避免析构函数卡死）")
+        
+        log_callback("DEBUG: [G] execute_task 函数即将返回")
+        # 不使用 return 语句，让函数自然结束
+        # return True        
     except Exception as e: 
         log_callback(f"❌ 出错: {e}")
+        import traceback
+        log_callback(f"详细错误: {traceback.format_exc()}")
         return False

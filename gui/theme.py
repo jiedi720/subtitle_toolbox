@@ -84,17 +84,25 @@ def apply_theme_enhanced(mode):
               - "Light": 浅色主题
               - "Dark": 深色主题
     """
+    print(f"  [3/5] 应用主题设置 - 开始，模式: {mode}")
     app = QApplication.instance()
+    print(f"  [3/5] 应用主题设置 - 获取 QApplication 实例")
     
     # 创建全新的调色板
     palette = QPalette()
+    print(f"  [3/5] 应用主题设置 - 创建调色板")
     
     # 根据传入的主题模式应用不同的主题设置
     if mode == "System":
+        print(f"  [3/5] 应用主题设置 - 系统默认主题")
         # 应用系统默认主题
         app.setStyle(None)  # 清除自定义样式，使用系统默认样式
         app.setPalette(palette)  # 应用默认调色板
+
+        # 清除 QMessageBox 的样式表，使用系统默认样式
+        app.setStyleSheet("")
     elif mode == "Light":
+        print(f"  [3/5] 应用主题设置 - 浅色主题")
         # 应用浅色主题（使用系统默认样式，Win11 下为 Win11 样式）
         app.setStyle(None)  # 使用系统默认样式（如Windows11）
         
@@ -113,8 +121,11 @@ def apply_theme_enhanced(mode):
         palette.setColor(QPalette.ColorRole.Highlight, QColor(51, 153, 255))  # 高亮色
         palette.setColor(QPalette.ColorRole.HighlightedText, Qt.GlobalColor.white)  # 高亮文本色
         palette.setColor(QPalette.ColorRole.PlaceholderText, QColor(128, 128, 128))  # 占位符文本色（浅色模式下更深）
-        
+
         app.setPalette(palette)  # 应用浅色调色板
+
+        # 清除 QMessageBox 的样式表，使用系统默认样式
+        app.setStyleSheet("")
     elif mode == "Dark":
         # 应用深色主题
         app.setStyle(None)  # 使用系统默认样式（如Windows11），与Light模式保持一致
@@ -134,14 +145,44 @@ def apply_theme_enhanced(mode):
         palette.setColor(QPalette.ColorRole.Highlight, QColor(42, 130, 218))  # 高亮色
         palette.setColor(QPalette.ColorRole.HighlightedText, Qt.GlobalColor.black)  # 高亮文本色
         palette.setColor(QPalette.ColorRole.PlaceholderText, QColor(180, 180, 180))  # 占位符文本色（深色模式下更亮）
-        
+
         app.setPalette(palette)  # 应用深色调色板
-    
-    # 强制刷新所有控件，确保主题更改立即生效
+        print(f"  [3/5] 应用主题设置 - 应用深色调色板")
+
+        # 设置 QMessageBox 的样式表，确保深色模式下内容区域和按钮也显示为深色
+        print(f"  [3/5] 应用主题设置 - 设置 QMessageBox 样式表")
+        app.setStyleSheet("""
+            QMessageBox {
+                background-color: #353535;
+                color: #ffffff;
+            }
+            QMessageBox QLabel {
+                color: #ffffff;
+            }
+            QMessageBox QPushButton {
+                background-color: #353535;
+                color: #ffffff;
+                border: 1px solid #555555;
+                border-radius: 4px;
+                padding: 5px 15px;
+                min-width: 80px;
+            }
+            QMessageBox QPushButton:hover {
+                background-color: #454545;
+            }
+            QMessageBox QPushButton:pressed {
+                background-color: #555555;
+            }
+        """)
+    print(f"  [3/5] 应用主题设置 - 样式表设置完成")
     app.processEvents()
+    print(f"  [3/5] 应用主题设置 - 处理事件")
     
     # 更新所有控件的样式
+    print(f"  [3/5] 应用主题设置 - 开始更新所有控件")
+    widget_count = 0
     for widget in QApplication.allWidgets():
+        widget_count += 1
         # 保存当前的样式表
         current_stylesheet = widget.styleSheet()
         
@@ -156,11 +197,14 @@ def apply_theme_enhanced(mode):
         
         # 更新控件
         widget.update()
+    print(f"  [3/5] 应用主题设置 - 已更新 {widget_count} 个控件")
     
     # 再次处理事件，确保所有更新都完成
     app.processEvents()
+    print(f"  [3/5] 应用主题设置 - 事件处理完成")
     
     # 特殊处理：更新硬编码颜色的标签（在所有模式下都执行）
+    print(f"  [3/5] 应用主题设置 - 修复硬编码颜色")
     fixed_labels = 0
     for widget in QApplication.allWidgets():
         if hasattr(widget, 'objectName'):
@@ -174,8 +218,4 @@ def apply_theme_enhanced(mode):
     
     # 最后再次处理事件，确保所有更新都完成
     app.processEvents()
-    
-    if fixed_labels > 0:
-        print(f"  - 修复了 {fixed_labels} 个硬编码颜色的标签")
-    
-    print(f"[OK] 主题已切换到: {mode}")
+    print(f"  [3/5] 应用主题设置 - 完成")

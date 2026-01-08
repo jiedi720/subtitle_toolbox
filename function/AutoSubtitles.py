@@ -39,22 +39,21 @@ class SubtitleGenerator:
         self.language = language
         self.allow_download = allow_download
         self.model = None
-        
-    def initialize_model(self, progress_callback=None):
+    
+    def initialize_model(self, log_callback=None):
         """
-        初始化Whisper模型（仅支持GPU）
+        初始化Whisper模型
         
         Args:
-            progress_callback: 进度回调函数，用于报告初始化状态
+            log_callback: 日志回调函数，用于显示日志消息
         """
         from faster_whisper import WhisperModel
         
-        if progress_callback:
+        if log_callback:
             if self.model_path:
-                progress_callback(f"正在使用本地模型: {self.model_path}")
-                progress_callback("提示: 使用本地模型路径，不需要下载")
+                log_callback(f"正在使用本地模型: {self.model_path}")
             else:
-                progress_callback(f"正在初始化模型 ({self.model_size})...")
+                log_callback(f"正在初始化模型 ({self.model_size})...")
         
         # 验证模型路径
         if self.model_path and not os.path.exists(self.model_path):
@@ -68,8 +67,8 @@ class SubtitleGenerator:
             from huggingface_hub import snapshot_download
             try:
                 cache_dir = snapshot_download(repo_id=f"Systran/{self.model_size}", local_files_only=True)
-                if progress_callback:
-                    progress_callback(f"找到缓存的模型: {cache_dir}")
+                if log_callback:
+                    log_callback(f"找到缓存的模型: {cache_dir}")
             except Exception:
                 # 模型未缓存，提示用户
                 error_msg = f"未找到本地模型: {self.model_size}\n\n"
@@ -81,53 +80,80 @@ class SubtitleGenerator:
                 raise Exception(error_msg)
         
         # 只使用GPU处理
-        if progress_callback:
-            progress_callback("正在使用 GPU 加载模型...")
-        
+        if log_callback:
+            log_callback("正在使用 GPU 加载模型...")
         try:
+            # 优先使用GPU进行处理
             self.model = WhisperModel(
                 model_input,
-                device="cuda", 
+                device="cuda",
                 compute_type="float16",
                 num_workers=1,  # 使用 1 个工作线程，避免 GPU 内存问题
                 device_index=0  # 使用第一个 GPU
             )
-            
-            if progress_callback:
-                progress_callback("✓ 使用 GPU (CUDA) 进行处理")
-                
+
+            if log_callback:
+                log_callback("✓ 使用 GPU (CUDA) 进行处理")
+
         except Exception as e:
-            if progress_callback:
-                progress_callback(f"GPU初始化失败: {str(e)}")
-                progress_callback("错误: 此功能仅支持 GPU，请确保已正确安装 CUDA 和 cuDNN")
-            raise Exception(f"GPU初始化失败: {str(e)}\n请确保：\n1. 已安装 NVIDIA 驱动\n2. 已安装 CUDA Toolkit\n3. 已安装 cuDNN\n4. GPU 可用")
+            # 如果GPU失败，再尝试CPU
+            try:
+                if log_callback:
+                    log_callback(f"GPU初始化失败: {str(e)}，尝试使用CPU...")
+                self.model = WhisperModel(
+                    model_input,
+                    device="cpu",
+                    compute_type="float32",
+                    num_workers=1,
+                    cpu_threads=4  # 限制CPU线程数
+                )
+
+                if log_callback:
+                    log_callback("✓ 使用 CPU 进行处理")
+            except Exception as cpu_e:
+                if log_callback:
+                    log_callback(f"CPU初始化也失败: {str(cpu_e)}")
+                raise Exception(f"模型初始化失败:\nGPU模式: {str(e)}\nCPU模式: {str(cpu_e)}\n请确保：\n1. 已安装 NVIDIA 驱动\n2. 已安装 CUDA Toolkit\n3. 已安装 cuDNN\n4. GPU 可用\n\n或者确保系统支持CPU处理")
         
         if self.model is None:
             raise Exception("模型初始化失败: model is None")
-    
-    def generate_subtitle(self, audio_file, progress_callback=None):
+
+    def cleanup(self):
+        """清理模型资源"""
+        if self.model is not None:
+            try:
+                print("DEBUG: cleanup - 开始清理模型")
+                # 不删除模型对象，只是将引用设为 None
+                # 这样可以避免 Whisper 模型的析构函数卡死
+                self.model = None
+                print("DEBUG: cleanup - 模型已设为 None")
+                print("DEBUG: cleanup - 清理完成（跳过 gc.collect）")
+            except Exception as e:
+                print(f"DEBUG: cleanup - 清理出错: {e}")
+                pass  # 忽略清理过程中的错误
+        else:
+            print("DEBUG: cleanup - model 为 None，无需清理")
+
+    def generate_subtitle(self, audio_file, log_callback=None):
         """
         为单个音频文件生成字幕
         
         Args:
             audio_file: 音频文件路径
-            progress_callback: 进度回调函数
-        
-        Returns:
-            输出文件路径
+            log_callback: 日志回调函数，用于显示日志消息
         """
         if not self.model:
             raise Exception("模型未初始化，请先调用 initialize_model()")
-        
+
         # 生成输出文件名（只使用 SRT 格式）
         base_name = os.path.splitext(audio_file)[0]
         output_file = f"{base_name}.srt"
-        
+
         try:
             # 使用模型生成字幕
-            if progress_callback:
-                progress_callback("正在分析音频...")
-            
+            if log_callback:
+                log_callback("正在分析音频...")
+
             # 调用transcribe，启用语言检测
             # 添加 beam_size 和 best_of 参数来提高速度
             segments, info = self.model.transcribe(
@@ -144,26 +170,30 @@ class SubtitleGenerator:
                 # 支持混合语言（如果音频中包含多种语言）
                 # faster-whisper 会自动处理混合语言
             )
-            
-            if progress_callback:
-                progress_callback("正在提取字幕片段...")
-            
-            # 转换为列表以获取实际内容
+
+            # 确保segments被完全处理
+            import gc
             segments_list = list(segments)
-            
+
+            # 强制垃圾回收，释放内存
+            gc.collect()
+
+            if log_callback:
+                log_callback("正在提取字幕片段...")
+
             # 检查语言检测信息
             detected_language = None
             if hasattr(info, 'language') and info.language:
                 detected_language = info.language
                 probability = getattr(info, 'language_probability', 0.0)
-                if progress_callback:
-                    progress_callback(f"检测到语言: {detected_language} (置信度: {probability:.2f})")
+                if log_callback:
+                    log_callback(f"检测到语言: {detected_language} (置信度: {probability:.2f})")
             else:
-                if progress_callback:
-                    progress_callback("语言检测信息不可用")
+                if log_callback:
+                    log_callback("语言检测信息不可用")
             
-            if progress_callback:
-                progress_callback(f"找到 {len(segments_list)} 个片段")
+            if log_callback:
+                log_callback(f"找到 {len(segments_list)} 个片段")
             
             # 语言代码映射
             language_map = {
@@ -172,109 +202,71 @@ class SubtitleGenerator:
                 'zh': 'chn',  # 中文
                 'en': 'eng',  # 英语
             }
-            
+
+            if log_callback:
+                log_callback(f"DEBUG: self.language = {self.language}")
+                log_callback(f"DEBUG: detected_language = {detected_language}")
+
             # 确定最终使用的语言代码
-            final_language = self.language if self.language else detected_language
-            
-            # 如果没有指定语言，尝试分析字幕内容中的语言占比
-            if not self.language:
-                if progress_callback:
-                    progress_callback("正在分析字幕语言占比...")
-                
-                # 简单的语言检测：根据字符特征判断
-                language_counts = {
-                    'ko': 0,  # 韩语：包含韩文字符
-                    'ja': 0,  # 日语：包含日文字符
-                    'zh': 0,  # 中文：包含中文字符
-                    'en': 0,  # 英语：主要是拉丁字母
-                }
-                
-                import re
-                
-                for segment in segments_list:
-                    text = segment.text
-                    
-                    # 统计各语言字符数量
-                    # 韩语范围：\uAC00-\uD7AF
-                    korean_chars = len(re.findall(r'[\uAC00-\uD7AF]', text))
-                    # 日语平假名：\u3040-\u309F，片假名：\u30A0-\u30FF
-                    japanese_chars = len(re.findall(r'[\u3040-\u309F\u30A0-\u30FF]', text))
-                    # 中文范围：\u4E00-\u9FFF
-                    chinese_chars = len(re.findall(r'[\u4E00-\u9FFF]', text))
-                    # 英文和其他拉丁字母
-                    latin_chars = len(re.findall(r'[a-zA-Z]', text))
-                    
-                    language_counts['ko'] += korean_chars
-                    language_counts['ja'] += japanese_chars
-                    language_counts['zh'] += chinese_chars
-                    language_counts['en'] += latin_chars
-                
-                # 找出占比最多的语言
-                total_chars = sum(language_counts.values())
-                if total_chars > 0:
-                    max_lang = max(language_counts, key=language_counts.get)
-                    max_count = language_counts[max_lang]
-                    max_ratio = max_count / total_chars
-                    
-                    if progress_callback:
-                        progress_callback(f"语言占比统计:")
-                        for lang_code, count in language_counts.items():
-                            if count > 0:
-                                ratio = count / total_chars
-                                lang_name = language_map.get(lang_code, lang_code)
-                                progress_callback(f"  - {lang_name}: {ratio:.1%} ({count} 字符)")
-                        progress_callback(f"主要语言: {language_map.get(max_lang, max_lang)} ({max_ratio:.1%})")
-                    
-                    # 如果占比最多的语言超过 30%，使用该语言
-                    if max_ratio > 0.3:
-                        final_language = max_lang
+            # 如果指定了语言，直接使用指定的语言
+            # 如果没有指定语言（None），使用 Whisper 自动检测的语言
+            if self.language:
+                # 用户指定了语言，直接使用
+                final_language = self.language
+                if log_callback:
+                    log_callback(f"使用指定语言: {self.language}")
             else:
-                if progress_callback:
-                    progress_callback(f"使用指定语言: {self.language}")
-            
+                # 自动检测模式，使用 Whisper 检测到的语言
+                final_language = detected_language
+                if log_callback:
+                    log_callback(f"自动检测语言: {detected_language if detected_language else '未知'}")
+
+            if log_callback:
+                log_callback(f"DEBUG: final_language = {final_language}")
+
             # 如果检测到语言，添加语言后缀
             if final_language and final_language in language_map:
                 lang_suffix = language_map[final_language]
                 output_file = f"{base_name}.whisper.[{lang_suffix}].srt"
-                if progress_callback:
-                    progress_callback(f"输出文件名: {os.path.basename(output_file)}")
             else:
                 # 未检测到语言，使用 [none] 后缀
                 output_file = f"{base_name}.whisper.[none].srt"
-                if progress_callback:
-                    progress_callback(f"未检测到语言，使用默认后缀")
-                    progress_callback(f"输出文件名: {os.path.basename(output_file)}")
-            
+
+            if log_callback:
+                log_callback(f"DEBUG: output_file = {output_file}")
+
             # 写入字幕文件
-            if progress_callback:
-                progress_callback("正在写入字幕文件...")
-            
-            self._write_subtitle(output_file, segments_list, progress_callback)
-            
-            if progress_callback:
-                progress_callback(f"字幕文件写入完成: {os.path.basename(output_file)}")
-            
+            if log_callback:
+                log_callback("正在写入字幕文件...")
+
+            self._write_subtitle(output_file, segments_list, log_callback)
+
+            if log_callback:
+                log_callback(f"字幕文件写入完成: {os.path.basename(output_file)}")
+
             return output_file
-            
+
         except Exception as e:
-            if progress_callback:
-                progress_callback(f"字幕生成失败: {str(e)}")
+            if log_callback:
+                log_callback(f"字幕生成失败: {str(e)}")
             raise
     
-    def _write_subtitle(self, output_file, segments, progress_callback=None):
+    def _write_subtitle(self, output_file, segments, log_callback=None):
         """
-        写入 SRT 格式字幕文件
+        写入字幕文件
         
         Args:
             output_file: 输出文件路径
             segments: 字幕片段列表
-            progress_callback: 进度回调函数
+            log_callback: 日志回调函数，用于显示日志消息
         """
-        with open(output_file, "w", encoding="utf-8") as f:
-            # 写入SRT格式
+        try:
+            if log_callback:
+                log_callback(f"正在写入字幕文件: {os.path.basename(output_file)}")
+            
+            # 使用缓冲写入，避免卡死
+            content_lines = []
             for i, segment in enumerate(segments, 1):
-                if progress_callback:
-                    progress_callback(f"处理片段 {i}/{len(segments)}")
                 
                 start_time = segment.start
                 end_time = segment.end
@@ -286,25 +278,35 @@ class SubtitleGenerator:
                     h, m = divmod(m, 60)
                     return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
                 
-                f.write(f"{i}\n")
-                f.write(f"{format_time(start_time)} --> {format_time(end_time)}\n")
-                f.write(f"{segment.text.strip()}\n")
-                f.write("\n")
+                content_lines.append(f"{i}\n")
+                content_lines.append(f"{format_time(start_time)} --> {format_time(end_time)}\n")
+                content_lines.append(f"{segment.text.strip()}\n")
+                content_lines.append("\n")
+            
+            # 一次性写入所有内容
+            with open(output_file, "w", encoding="utf-8", buffering=8192) as f:
+                f.writelines(content_lines)
+            
+            if log_callback:
+                log_callback(f"字幕文件写入完成: {os.path.basename(output_file)}")
+        except Exception as e:
+            if log_callback:
+                log_callback(f"写入字幕文件失败: {str(e)}")
+            raise
     
-    def batch_process(self, input_dir, progress_callback=None):
+    def batch_process(self, input_dir, progress_callback=None, log_callback=None, skip_existing=True):
         """
-        批量处理目录中的所有MP3文件，生成SRT字幕
+        批量处理音频文件，生成字幕
         
         Args:
-            input_dir: 输入目录
-            progress_callback: 进度回调函数
-        
-        Returns:
-            处理的文件列表
+            input_dir: 输入目录路径
+            progress_callback: 进度回调函数（仅用于更新进度条，传入整数）
+            log_callback: 日志回调函数（用于显示日志消息，传入字符串）
+            skip_existing: 是否跳过已存在字幕的文件
         """
         if not self.model:
             raise Exception("模型未初始化，请先调用 initialize_model()")
-        
+
         try:
             # 获取所有.mp3文件
             mp3_files = []
@@ -312,47 +314,97 @@ class SubtitleGenerator:
                 for file in files:
                     if file.lower().endswith(".mp3"):
                         mp3_files.append(os.path.join(root, file))
-            
+
             if not mp3_files:
-                if progress_callback:
-                    progress_callback("错误: 未找到MP3文件")
+                if log_callback:
+                    log_callback("错误: 未找到MP3文件")
                 return []
             
-            if progress_callback:
-                progress_callback(f"找到 {len(mp3_files)} 个MP3文件")
+            if log_callback:
+                log_callback(f"找到 {len(mp3_files)} 个MP3文件")
             
-            # 处理每个文件
+            # 检测已生成的字幕文件
+            existing_files = []
+            new_files = []
+
+            for mp3_file in mp3_files:
+                base_name = os.path.splitext(os.path.basename(mp3_file))[0]
+                dir_name = os.path.dirname(mp3_file)
+
+                # 检查是否存在任何 .whisper.[].srt 文件
+                has_subtitle = False
+                for file in os.listdir(dir_name):
+                    if file.startswith(f"{base_name}.whisper.[") and file.endswith("].srt"):
+                        has_subtitle = True
+                        break
+
+                if has_subtitle:
+                    existing_files.append(mp3_file)
+                else:
+                    new_files.append(mp3_file)
+
+            if log_callback:
+                if new_files:
+                    log_callback(f"未生成字幕: {len(new_files)} 个")
+                if existing_files:
+                    log_callback(f"已生成字幕: {len(existing_files)} 个")
+
+            # 优先处理未生成的文件
             results = []
-            for idx, mp3_file in enumerate(mp3_files):
+            all_files = new_files + existing_files  # 先处理新的，再处理已存在的
+
+            total_files = len(all_files)
+            for idx, mp3_file in enumerate(all_files):
+                base_name = os.path.splitext(os.path.basename(mp3_file))[0]
+                dir_name = os.path.dirname(mp3_file)
+
+                # 更新进度条
                 if progress_callback:
-                    progress_callback(f"\n正在处理: {os.path.basename(mp3_file)} ({idx+1}/{len(mp3_files)})")
-                
+                    progress_value = int((idx + 1) / len(all_files) * 100)
+                    progress_callback(progress_value)
+
+                # 检查是否已存在字幕
+                has_subtitle = False
+                existing_subtitle = None
+                for file in os.listdir(dir_name):
+                    if file.startswith(f"{base_name}.whisper.[") and file.endswith("].srt"):
+                        has_subtitle = True
+                        existing_subtitle = os.path.join(dir_name, file)
+                        break
+
+                if has_subtitle and skip_existing:
+                    # 跳过已存在的字幕
+                    results.append((mp3_file, existing_subtitle, True))
+                    if log_callback:
+                        log_callback(f"⏭️ 跳过: {os.path.basename(mp3_file)} (已存在字幕)")
+                    continue
+
+                if log_callback:
+                    log_callback(f"\n正在处理: {os.path.basename(mp3_file)} ({idx+1}/{total_files})")
+
                 try:
-                    output_file = self.generate_subtitle(mp3_file, progress_callback)
+                    output_file = self.generate_subtitle(mp3_file, log_callback)
                     results.append((mp3_file, output_file, True))
-                    
-                    if progress_callback:
-                        progress_callback(f"✓ 已生成: {output_file}")
+
+                    if log_callback:
+                        log_callback(f"✅ 已生成: {os.path.basename(output_file)}")
                 except Exception as e:
                     results.append((mp3_file, None, False))
-                    if progress_callback:
-                        progress_callback(f"✗ 处理失败: {str(e)}")
+                    if log_callback:
+                        log_callback(f"❌ 处理失败: {str(e)}")
                     # 继续处理下一个文件
                     continue
-            
+
+            # 确保所有处理完成后再返回结果
+            if log_callback:
+                success_count = sum(1 for _, _, success in results if success)
+                fail_count = len(results) - success_count
+
+                log_callback(f"\n✅ 批处理完成: 总计 {len(results)}, 成功 {success_count}, 失败 {fail_count}")
+
             return results
-            
+
         except Exception as e:
-            if progress_callback:
-                progress_callback(f"批处理过程中发生错误: {str(e)}")
+            if log_callback:
+                log_callback(f"批处理过程中发生错误: {str(e)}")
             raise
-        finally:
-            # 确保清理 GPU 内存
-            try:
-                import torch
-                if torch.cuda.is_available():
-                    torch.cuda.empty_cache()
-                    if progress_callback:
-                        progress_callback("已清理 GPU 缓存")
-            except:
-                pass

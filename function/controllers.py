@@ -6,6 +6,7 @@
 """
 
 import os
+import re
 import threading
 from PySide6.QtCore import Signal, QObject
 from PySide6.QtWidgets import QDialog, QInputDialog, QMessageBox
@@ -23,6 +24,7 @@ class BaseController(QObject):
     update_log = Signal(str)  # 更新日志信号
     update_progress = Signal(int)  # 更新进度条信号
     enable_start_button = Signal(bool)  # 启用/禁用开始按钮信号
+    show_overwrite_dialog = Signal(int)  # 显示覆盖对话框信号，参数为已存在文件数量
     
     def __init__(self, root, startup_path=None, startup_out=None):
         """
@@ -44,6 +46,9 @@ class BaseController(QObject):
         
         # 将配置属性同步到控制器实例
         self.config.sync_to_controller(self)
+        
+        # 用于存储用户选择（是否跳过已存在的文件）
+        self.skip_existing = True
 
     def load_settings(self):
         """从配置文件加载设置"""
@@ -90,7 +95,7 @@ class BaseController(QObject):
             self._delete_autosub_files(target_dir)
         else:
             # 其他模式：使用现有的清理功能
-            clear_output_to_trash(target_dir, self.log)
+            clear_output_to_trash(target_dir, self.log, self.root)
     
     def _delete_autosub_files(self, target_dir):
         """删除 AutoSub 生成的 .whisper.[].srt 文件
@@ -120,9 +125,9 @@ class BaseController(QObject):
         
         # 确认删除
         if not QMessageBox.question(
-            None, 
-            "确认清空", 
-            f"即将删除 {len(whisper_files)} 个 AutoSub 生成的字幕文件\n确定吗？", 
+            self.root,
+            "确认清空",
+            f"即将删除 {len(whisper_files)} 个 AutoSub 生成的字幕文件\n确定吗？",
             QMessageBox.Yes | QMessageBox.No
         ) == QMessageBox.Yes:
             return
@@ -237,22 +242,83 @@ class TaskController:
         # 更新GUI状态：禁用开始按钮，重置进度条
         self.enable_start_button.emit(False)
         self.update_progress.emit(0)
-        
-        # 执行任务
-        success = execute_task(
-            task_mode=self.task_mode,
-            path_var=self.path_var,
-            output_path_var=self.output_path_var,
-            log_callback=self.log,
-            progress_callback=self.update_progress,
-            root=self.root,
-            gui=self.gui,
-            _get_current_styles=self._get_current_styles
-        )
-        
-        # 任务完成后恢复GUI状态
-        self.enable_start_button.emit(True)
-        self.update_progress.emit(0)
+
+        # 在子线程中执行任务，避免阻塞主线程
+        # 不使用 daemon=True，让线程正常结束
+        threading.Thread(
+            target=self._run_task_in_thread,
+            daemon=False
+        ).start()
+
+    def _run_task_in_thread(self):
+        """在线程中运行任务"""
+        success = False
+        try:
+            self.log("DEBUG: [1] 任务线程开始")
+            self.log("--- 任务启动 ---")
+            # 执行任务
+            self.log("DEBUG: [2] 准备调用 execute_task")
+            success = execute_task(
+                task_mode=self.task_mode,
+                path_var=self.path_var,
+                output_path_var=self.output_path_var,
+                log_callback=self.log,
+                progress_callback=self.update_progress.emit,
+                root=self.root,
+                gui=self.gui,
+                _get_current_styles=self._get_current_styles
+            )
+            self.log("DEBUG: [3] execute_task 返回")
+            self.log("--- 任务执行完毕 ---")
+        except Exception as e:
+            # 捕获任务执行过程中的异常
+            import traceback
+            self.log(f"❌ 任务执行异常: {e}")
+            self.log(f"详细错误: {traceback.format_exc()}")
+        finally:
+            # 任务完成后恢复GUI状态
+            self.log("DEBUG: [4] 进入 finally 块")
+            self.log("--- 任务线程即将结束 ---")
+            try:
+                self.log("DEBUG: [5] 开始恢复GUI状态")
+                self.log("--- 恢复GUI状态 ---")
+                # 使用信号在主线程中恢复GUI状态
+                if hasattr(self, 'enable_start_button'):
+                    self.log("DEBUG: [6] 发送 enable_start_button 信号")
+                    self.enable_start_button.emit(True)
+                
+                if hasattr(self.gui, 'ProgressBar'):
+                    self.log("DEBUG: [7] 发送 update_progress 信号")
+                    self.update_progress.emit(0)
+                
+                self.log("--- GUI状态已恢复 ---")
+                self.log("--- 线程正常退出 ---")
+                self.log("DEBUG: [8] finally 块完成")
+            except Exception as e:
+                import traceback
+                self.log(f"❌ 恢复GUI状态时出错: {e}")
+                self.log(f"详细错误: {traceback.format_exc()}")
+    
+    def _restore_gui_state(self):
+        """恢复GUI状态的方法"""
+        try:
+            # 使用Qt信号安全地更新GUI组件
+            # 直接发送信号，这是最安全的方式
+            if hasattr(self, 'enable_start_button'):
+                # 简单地发出信号，让Qt处理线程安全
+                self.enable_start_button.emit(True)
+
+            if hasattr(self.gui, 'ProgressBar'):
+                # 重置进度条
+                self.update_progress.emit(0)
+
+            # 发送最终日志
+            self.log("--- GUI状态已恢复 ---")
+        except Exception as e:
+            import traceback
+            # 使用日志回调而不是直接打印
+            self.log(f"❌ 恢复GUI状态时出错: {e}")
+            self.log(f"详细错误: {traceback.format_exc()}")
 
     def _get_current_styles(self):
         """
@@ -297,8 +363,8 @@ class ToolController:
         
         # 获取目标目录
         target = self.path_var.strip()
-        if not target or not os.path.exists(target): 
-            QMessageBox.critical(None, "错误", "请选择有效目录")
+        if not target or not os.path.exists(target):
+            QMessageBox.critical(self.root, "错误", "请选择有效目录")
             return
         
         # 设置日志回调
@@ -352,9 +418,49 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
         from gui.qt_gui import ToolboxGUI
         self.gui = ToolboxGUI(self.root, self)
         
+        # 暂时禁用主题设置，避免卡死
         # 应用保存的主题设置（使用增强的主题切换函数）
-        from gui.theme import apply_theme_enhanced
-        apply_theme_enhanced(self.theme_mode)
+        # from gui.theme import apply_theme_enhanced
+        # apply_theme_enhanced(self.theme_mode)
+        
+        # # 设置主题属性，使控件能够根据主题应用不同的样式
+        # theme_value = self.theme_mode.lower()
+        # self.gui.setProperty("theme", theme_value)  # 为主窗口设置主题属性，使 QToolTip 样式生效
+        # self.gui.Function.setProperty("theme", theme_value)
+        # self.gui.menuBar.setProperty("theme", theme_value)
+        
+        # # 额外的初始化处理：确保所有部件都正确应用主题
+        # from PySide6.QtWidgets import QApplication
+        # app = QApplication.instance()
+        
+        # # 强制刷新所有部件的样式表
+        # self.gui.Function.setStyleSheet(self.gui.Function.styleSheet())
+        # self.gui.menuBar.setStyleSheet(self.gui.menuBar.styleSheet())
+        # self.gui.Log.setStyleSheet(self.gui.Log.styleSheet())
+        
+        # # 刷新所有标签部件（移除硬编码颜色）
+        # label_widgets = [
+        #     self.gui.VolumeLabel,
+        #     self.gui.AssPatternLabel,
+        #     self.gui.WhisperModelLabel,
+        #     self.gui.WhisperLanguageLabel
+        # ]
+        
+        # for label in label_widgets:
+        #     if label:
+        #         current_style = label.styleSheet()
+        #         if 'color: rgb(0, 0, 0);' in current_style:
+        #             label.setStyleSheet(current_style.replace('color: rgb(0, 0, 0);', 'color: palette(text);'))
+        
+        # # 最后一次处理事件，确保所有更新都完成
+        # app.processEvents()
+        
+        # # 重置进度条为 0，确保程序启动时进度条显示为空
+        # if hasattr(self.gui, 'ProgressBar'):
+        #     self.gui.ProgressBar.setValue(0)
+        
+        # # 连接覆盖对话框信号
+        # self.show_overwrite_dialog.connect(self._on_show_overwrite_dialog)
         
         # 设置主题属性，使控件能够根据主题应用不同的样式
         theme_value = self.theme_mode.lower()
@@ -362,35 +468,8 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
         self.gui.Function.setProperty("theme", theme_value)
         self.gui.menuBar.setProperty("theme", theme_value)
         
-        # 额外的初始化处理：确保所有部件都正确应用主题
-        from PySide6.QtWidgets import QApplication
-        app = QApplication.instance()
-        
-        # 强制刷新所有部件的样式表
-        self.gui.Function.setStyleSheet(self.gui.Function.styleSheet())
-        self.gui.menuBar.setStyleSheet(self.gui.menuBar.styleSheet())
-        self.gui.Log.setStyleSheet(self.gui.Log.styleSheet())
-        
-        # 刷新所有标签部件（移除硬编码颜色）
-        label_widgets = [
-            self.gui.VolumeLabel,
-            self.gui.AssPatternLabel,
-            self.gui.WhisperModelLabel,
-            self.gui.WhisperLanguageLabel
-        ]
-        
-        for label in label_widgets:
-            if label:
-                current_style = label.styleSheet()
-                if 'color: rgb(0, 0, 0);' in current_style:
-                    label.setStyleSheet(current_style.replace('color: rgb(0, 0, 0);', 'color: palette(text);'))
-        
-        # 最后一次处理事件，确保所有更新都完成
-        app.processEvents()
-        
-        # 重置进度条为 0，确保程序启动时进度条显示为空
-        if hasattr(self.gui, 'ProgressBar'):
-            self.gui.ProgressBar.setValue(0)
+        # 连接覆盖对话框信号
+        self.show_overwrite_dialog.connect(self._on_show_overwrite_dialog)
         
         # 设置窗口关闭事件处理
         self.gui.closeEvent = self.on_close
@@ -401,6 +480,22 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
             self.save_settings()
         finally:
             event.accept()
+
+    def _on_show_overwrite_dialog(self, existing_count):
+        """显示覆盖对话框的槽函数
+        
+        Args:
+            existing_count: 已存在字幕的文件数量
+        """
+        from PySide6.QtWidgets import QMessageBox
+        reply = QMessageBox.question(
+            self.gui,
+            "已存在字幕",
+            f"检测到 {existing_count} 个文件已生成字幕。\n\n是否覆盖已存在的字幕文件？\n\n选择「是」覆盖所有，「否」跳过已存在的。",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No
+        )
+        self.skip_existing = (reply == QMessageBox.StandardButton.No)
 
     def save_theme_setting(self, new_theme):
         """更新主题模式（不自动保存配置）
@@ -435,18 +530,9 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
         current_merge_word = self.gui.MergeWord.isChecked()
         current_merge_txt = self.gui.MergeTxt.isChecked()
 
-        print(f"DEBUG: GUI路径 = {current_path}")
-        print(f"DEBUG: GUI输出 = {current_output}")
-        print(f"DEBUG: 当前模式 = {self.task_mode}")
-
         # 重新加载配置文件
         self.load_settings()
         self.refresh_parsed_styles()
-
-        print(f"DEBUG: load_settings后 path_var = {self.path_var}")
-        print(f"DEBUG: load_settings后 output_path_var = {self.output_path_var}")
-        print(f"DEBUG: load_settings后 script_dir = {self.script_dir}")
-        print(f"DEBUG: load_settings后 srt2ass_dir = {self.srt2ass_dir}")
 
         # 逻辑1和3：如果GUI上没有设定，则读取INI里的设定，如果都没有，那么就空着
         if not current_path:
@@ -471,24 +557,19 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
         if self.task_mode == "Script":
             self.script_dir = current_path
             self.script_output_dir = current_output
-            print(f"DEBUG: 设置 script_dir = {self.script_dir}")
         elif self.task_mode == "Merge":
             self.merge_dir = current_path
             self.merge_output_dir = current_output
-            print(f"DEBUG: 设置 merge_dir = {self.merge_dir}")
         elif self.task_mode == "Srt2Ass":
             self.srt2ass_dir = current_path
             self.srt2ass_output_dir = current_output
-            print(f"DEBUG: 设置 srt2ass_dir = {self.srt2ass_dir}")
         elif self.task_mode == "AutoSub":
             self.autosub_dir = current_path
             self.autosub_output_dir = current_output
-            print(f"DEBUG: 设置 autosub_dir = {self.autosub_dir}")
 
         # 同时更新当前路径变量
         self.path_var = current_path
         self.output_path_var = current_output
-        print(f"DEBUG: 设置 path_var = {self.path_var}")
 
         # 保存预设和分卷模式
         if current_ass_pattern:
