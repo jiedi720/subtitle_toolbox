@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SubtitleToolboxDvdEok.ui'
+## Form generated from reading UI file 'SubtitleToolboxTVEGUM.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -175,7 +175,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon3 = QIcon()
-        icon3.addFile(u"Icons/open-folder2.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon3.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/open-folder2.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.ReadPathOpen.setIcon(icon3)
         self.ReadPathOpen.setIconSize(QSize(20, 20))
 
@@ -205,7 +205,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon4 = QIcon()
-        icon4.addFile(u"Icons/search2.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon4.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/search2.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.ReadPathSelect.setIcon(icon4)
         self.ReadPathSelect.setIconSize(QSize(20, 20))
 
@@ -236,7 +236,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon5 = QIcon()
-        icon5.addFile(u"Icons/refresh.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon5.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/refresh.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.ReadPathSet.setIcon(icon5)
         self.ReadPathSet.setIconSize(QSize(20, 20))
 
@@ -368,18 +368,19 @@ class Ui_SubtitleToolbox(object):
 "\n"
 "/* \u6240\u6709\u6807\u7b7e\uff08\u9ed8\u8ba4\u8272\uff09\uff1a\u9ec4\u8272 */\n"
 "/* \u6ce8\u610f\uff1a\u8fd9\u91cc\u4f5c\u4e3a\u9ed8\u8ba4\u503c\uff0c\u4f1a\u88ab first \u548c last \u8986\u76d6 */\n"
-"QTabBar::tab { 
-    color: palette(text);
-    background-color: #FFC209;
-    padding: 2px 1px;/*设置标签文字与标签边框之间的留白区域 */
-    min-width: 84px; /*设置标签的最小宽度 */
-    margin-right: 1px; /* 默认保留边距用于重叠 */
-    /* 核心修改：分别设置四个角的圆弧 顺序为：左上, 右上, 右下, 左下 */
-    border-top-left-radius: 9px;  
-    border-top-right-radius: 9px; 
-    border-bottom-left-radius: 1px;
-    border-bottom-right-radius: 1px;
-}\n"
+"QTabBar::tab { \n"
+"    color: rgb(0, 0, 0);\n"
+"    background-color: #FFC209;\n"
+"    padding: 2px 1px;/*\u8bbe\u7f6e\u6807\u7b7e\u6587\u5b57\u4e0e\u6807\u7b7e\u8fb9\u6846\u4e4b\u95f4\u7684\u7559\u767d\u533a\u57df */\n"
+"    min-width: 84px; /*\u8bbe\u7f6e\u6807\u7b7e\u7684\u6700"
+                        "\u5c0f\u5bbd\u5ea6 */\n"
+"    margin-right: 1px; /* \u9ed8\u8ba4\u4fdd\u7559\u8fb9\u8ddd\u7528\u4e8e\u91cd\u53e0 */\n"
+"    /* \u6838\u5fc3\u4fee\u6539\uff1a\u5206\u522b\u8bbe\u7f6e\u56db\u4e2a\u89d2\u7684\u5f27\u5ea6 \u987a\u5e8f\u4e3a\uff1a\u5de6\u4e0a, \u53f3\u4e0a, \u53f3\u4e0b, \u5de6\u4e0b */\n"
+"    border-top-left-radius: 9px;  \n"
+"    border-top-right-radius: 9px; \n"
+"    border-bottom-left-radius: 1px;\n"
+"    border-bottom-right-radius: 1px;\n"
+"}\n"
 "\n"
 "/* \u9009\u4e2d\u72b6\u6001 */\n"
 "QTabBar::tab:selected {\n"
@@ -457,7 +458,7 @@ class Ui_SubtitleToolbox(object):
                         "adius: 9px;\n"
 "}")
         icon6 = QIcon()
-        icon6.addFile(u"Icons/PDF.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon6.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/PDF.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.Output2PDF.setIcon(icon6)
         self.Output2PDF.setIconSize(QSize(35, 35))
         self.Output2PDF.setCheckable(True)
@@ -506,7 +507,7 @@ class Ui_SubtitleToolbox(object):
                         "adius: 9px;\n"
 "}")
         icon7 = QIcon()
-        icon7.addFile(u"Icons/Word.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon7.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/Word.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.Output2Word.setIcon(icon7)
         self.Output2Word.setIconSize(QSize(35, 35))
         self.Output2Word.setCheckable(True)
@@ -553,7 +554,7 @@ class Ui_SubtitleToolbox(object):
                         "adius: 9px;\n"
 "}")
         icon8 = QIcon()
-        icon8.addFile(u"Icons/txt.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon8.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/txt.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.Output2Txt.setIcon(icon8)
         self.Output2Txt.setIconSize(QSize(35, 35))
         self.Output2Txt.setCheckable(True)
@@ -1190,7 +1191,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon9 = QIcon()
-        icon9.addFile(u"Icons/shuttle.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon9.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/shuttle.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.Start.setIcon(icon9)
         self.Start.setIconSize(QSize(30, 30))
         self.Start.setCheckable(False)
@@ -1231,7 +1232,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon10 = QIcon()
-        icon10.addFile(u"Icons/broom.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon10.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/broom.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.ClearLogs.setIcon(icon10)
         self.ClearLogs.setIconSize(QSize(40, 40))
 
@@ -1263,7 +1264,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon11 = QIcon()
-        icon11.addFile(u"Icons/delete.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon11.addFile(u"e:/OneDrive/PythonProject/SubtitleToolbox/resources/delete.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.DeleteFiles.setIcon(icon11)
         self.DeleteFiles.setIconSize(QSize(30, 30))
 
@@ -1338,16 +1339,16 @@ class Ui_SubtitleToolbox(object):
 "    padding: 3px;\n"
 "}\n"
 "\n"
-"QMenu {
-    background-color: palette(window);
-    color: palette(text);
-    border: 1px solid palette(mid);
-}\n"
+"QMenu {\n"
+"    background-color: #333333; /* \u83dc"
+                        "\u5355\u80cc\u666f\u8272 */\n"
+"    color: #ffffff;            /* \u83dc\u5355\u5b57\u4f53\u989c\u8272 */\n"
+"    border: 1px solid #555555;\n"
+"}\n"
 "\n"
-"QMenu::item:selected {
-    background-color: palette(highlight);
-    color: palette(highlighted-text);
-}")
+"QMenu::item:selected {\n"
+"    background-color: #555555; /* \u9f20\u6807\u60ac\u505c\u65f6\u7684\u989c\u8272 */\n"
+"}")
 
         self.verticalLayout_Log.addWidget(self.Log)
 
