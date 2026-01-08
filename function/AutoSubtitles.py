@@ -1,10 +1,28 @@
 import os
+import sys
+
+# 在导入任何 CUDA 相关库之前就设置 DLL 路径
+# 使用当前工作目录下的 venv
+venv_cudnn = os.path.join(os.getcwd(), "venv", "Lib", "site-packages", "nvidia", "cudnn", "bin")
+venv_cublas = os.path.join(os.getcwd(), "venv", "Lib", "site-packages", "nvidia", "cublas", "bin")
+
+dll_paths = []
+if os.path.exists(venv_cudnn):
+    dll_paths.append(venv_cudnn)
+    os.add_dll_directory(venv_cudnn)
+if os.path.exists(venv_cublas):
+    dll_paths.append(venv_cublas)
+    os.add_dll_directory(venv_cublas)
+
+if dll_paths:
+    path_addition = os.pathsep.join(dll_paths)
+    os.environ["PATH"] = path_addition + os.pathsep + os.environ.get("PATH", "")
 
 
 class SubtitleGenerator:
     """字幕生成器核心类"""
     
-    def __init__(self, model_size="large-v3-turbo", model_path=None, device="auto"):
+    def __init__(self, model_size="large-v3-turbo", model_path=None, device="auto", language=None):
         """
         初始化字幕生成器
         
@@ -12,10 +30,12 @@ class SubtitleGenerator:
             model_size: 模型大小（如 large-v3-turbo）
             model_path: 本地模型路径（可选）
             device: 设备类型（auto/cuda/cpu）
+            language: 指定语言代码（如 'ja', 'ko', 'en', 'zh'），None 表示自动检测
         """
         self.model_size = model_size
         self.model_path = model_path
         self.device = device
+        self.language = language
         self.model = None
         
     def initialize_model(self, progress_callback=None):
@@ -25,16 +45,6 @@ class SubtitleGenerator:
         Args:
             progress_callback: 进度回调函数，用于报告初始化状态
         """
-        # 自动定位 venv 里的 nvidia 库路径并加入系统搜索
-        venv_path = os.path.join(os.getcwd(), "venv", "Lib", "site-packages", "nvidia")
-        if os.path.exists(venv_path):
-            for root, dirs, files in os.walk(venv_path):
-                if "bin" in dirs:
-                    bin_dir = os.path.join(root, "bin")
-                    # 核心逻辑：将 DLL 目录加入 Windows 的搜索路径
-                    os.add_dll_directory(bin_dir)
-                    os.environ["PATH"] = bin_dir + os.pathsep + os.environ["PATH"]
-        
         from faster_whisper import WhisperModel
         
         if progress_callback:
@@ -59,7 +69,9 @@ class SubtitleGenerator:
             self.model = WhisperModel(
                 model_input,
                 device="cuda", 
-                compute_type="float16"
+                compute_type="float16",
+                num_workers=1,  # 使用 1 个工作线程，避免 GPU 内存问题
+                device_index=0  # 使用第一个 GPU
             )
             
             if progress_callback:
@@ -112,29 +124,130 @@ class SubtitleGenerator:
                 progress_callback("正在分析音频...")
             
             # 调用transcribe，启用语言检测
+            # 添加 beam_size 和 best_of 参数来提高速度
             segments, info = self.model.transcribe(
-                audio_file, 
+                audio_file,
                 word_timestamps=True,
-                language=None,  # None表示自动检测语言
-                condition_on_previous_text=False
+                language=self.language,  # 使用指定的语言，None 表示自动检测
+                condition_on_previous_text=False,
+                beam_size=1,  # 使用贪心搜索，更快
+                best_of=1,    # 只采样一次，更快
+                vad_filter=True,  # 启用语音活动检测
+                vad_parameters=dict(min_silence_duration_ms=500),  # 最小静音 500ms
+                # 提高语言检测的准确性
+                language_detection_threshold=0.5,  # 语言检测阈值
+                # 支持混合语言（如果音频中包含多种语言）
+                # faster-whisper 会自动处理混合语言
             )
+            
+            if progress_callback:
+                progress_callback("正在提取字幕片段...")
             
             # 转换为列表以获取实际内容
             segments_list = list(segments)
             
             # 检查语言检测信息
-            if progress_callback:
-                if hasattr(info, 'language') and info.language:
-                    language = info.language
-                    probability = getattr(info, 'language_probability', 0.0)
-                    progress_callback(f"检测到语言: {language} (置信度: {probability:.2f})")
-                else:
+            detected_language = None
+            if hasattr(info, 'language') and info.language:
+                detected_language = info.language
+                probability = getattr(info, 'language_probability', 0.0)
+                if progress_callback:
+                    progress_callback(f"检测到语言: {detected_language} (置信度: {probability:.2f})")
+            else:
+                if progress_callback:
                     progress_callback("语言检测信息不可用")
-                
+            
+            if progress_callback:
                 progress_callback(f"找到 {len(segments_list)} 个片段")
             
+            # 语言代码映射
+            language_map = {
+                'ko': 'kor',  # 韩语
+                'ja': 'jpn',  # 日语
+                'zh': 'chn',  # 中文
+                'en': 'eng',  # 英语
+            }
+            
+            # 确定最终使用的语言代码
+            final_language = self.language if self.language else detected_language
+            
+            # 如果没有指定语言，尝试分析字幕内容中的语言占比
+            if not self.language:
+                if progress_callback:
+                    progress_callback("正在分析字幕语言占比...")
+                
+                # 简单的语言检测：根据字符特征判断
+                language_counts = {
+                    'ko': 0,  # 韩语：包含韩文字符
+                    'ja': 0,  # 日语：包含日文字符
+                    'zh': 0,  # 中文：包含中文字符
+                    'en': 0,  # 英语：主要是拉丁字母
+                }
+                
+                import re
+                
+                for segment in segments_list:
+                    text = segment.text
+                    
+                    # 统计各语言字符数量
+                    # 韩语范围：\uAC00-\uD7AF
+                    korean_chars = len(re.findall(r'[\uAC00-\uD7AF]', text))
+                    # 日语平假名：\u3040-\u309F，片假名：\u30A0-\u30FF
+                    japanese_chars = len(re.findall(r'[\u3040-\u309F\u30A0-\u30FF]', text))
+                    # 中文范围：\u4E00-\u9FFF
+                    chinese_chars = len(re.findall(r'[\u4E00-\u9FFF]', text))
+                    # 英文和其他拉丁字母
+                    latin_chars = len(re.findall(r'[a-zA-Z]', text))
+                    
+                    language_counts['ko'] += korean_chars
+                    language_counts['ja'] += japanese_chars
+                    language_counts['zh'] += chinese_chars
+                    language_counts['en'] += latin_chars
+                
+                # 找出占比最多的语言
+                total_chars = sum(language_counts.values())
+                if total_chars > 0:
+                    max_lang = max(language_counts, key=language_counts.get)
+                    max_count = language_counts[max_lang]
+                    max_ratio = max_count / total_chars
+                    
+                    if progress_callback:
+                        progress_callback(f"语言占比统计:")
+                        for lang_code, count in language_counts.items():
+                            if count > 0:
+                                ratio = count / total_chars
+                                lang_name = language_map.get(lang_code, lang_code)
+                                progress_callback(f"  - {lang_name}: {ratio:.1%} ({count} 字符)")
+                        progress_callback(f"主要语言: {language_map.get(max_lang, max_lang)} ({max_ratio:.1%})")
+                    
+                    # 如果占比最多的语言超过 30%，使用该语言
+                    if max_ratio > 0.3:
+                        final_language = max_lang
+            else:
+                if progress_callback:
+                    progress_callback(f"使用指定语言: {self.language}")
+            
+            # 如果检测到语言，添加语言后缀
+            if final_language and final_language in language_map:
+                lang_suffix = language_map[final_language]
+                output_file = f"{base_name}.whisper.[{lang_suffix}].{output_format}"
+                if progress_callback:
+                    progress_callback(f"输出文件名: {os.path.basename(output_file)}")
+            else:
+                # 未检测到语言，使用 [none] 后缀
+                output_file = f"{base_name}.whisper.[none].{output_format}"
+                if progress_callback:
+                    progress_callback(f"未检测到语言，使用默认后缀")
+                    progress_callback(f"输出文件名: {os.path.basename(output_file)}")
+            
             # 写入字幕文件
+            if progress_callback:
+                progress_callback("正在写入字幕文件...")
+            
             self._write_subtitle(output_file, segments_list, output_format, progress_callback)
+            
+            if progress_callback:
+                progress_callback(f"字幕文件写入完成: {os.path.basename(output_file)}")
             
             return output_file
             
@@ -212,36 +325,54 @@ class SubtitleGenerator:
         if not self.model:
             raise Exception("模型未初始化，请先调用 initialize_model()")
         
-        # 获取所有.mp3文件
-        mp3_files = []
-        for root, _, files in os.walk(input_dir):
-            for file in files:
-                if file.lower().endswith(".mp3"):
-                    mp3_files.append(os.path.join(root, file))
-        
-        if not mp3_files:
-            if progress_callback:
-                progress_callback("错误: 未找到MP3文件")
-            return []
-        
-        if progress_callback:
-            progress_callback(f"找到 {len(mp3_files)} 个MP3文件")
-        
-        # 处理每个文件
-        results = []
-        for idx, mp3_file in enumerate(mp3_files):
-            if progress_callback:
-                progress_callback(f"\n正在处理: {os.path.basename(mp3_file)} ({idx+1}/{len(mp3_files)})")
+        try:
+            # 获取所有.mp3文件
+            mp3_files = []
+            for root, _, files in os.walk(input_dir):
+                for file in files:
+                    if file.lower().endswith(".mp3"):
+                        mp3_files.append(os.path.join(root, file))
             
-            try:
-                output_file = self.generate_subtitle(mp3_file, output_format, progress_callback)
-                results.append((mp3_file, output_file, True))
+            if not mp3_files:
+                if progress_callback:
+                    progress_callback("错误: 未找到MP3文件")
+                return []
+            
+            if progress_callback:
+                progress_callback(f"找到 {len(mp3_files)} 个MP3文件")
+            
+            # 处理每个文件
+            results = []
+            for idx, mp3_file in enumerate(mp3_files):
+                if progress_callback:
+                    progress_callback(f"\n正在处理: {os.path.basename(mp3_file)} ({idx+1}/{len(mp3_files)})")
                 
-                if progress_callback:
-                    progress_callback(f"✓ 已生成: {output_file}")
-            except Exception as e:
-                results.append((mp3_file, None, False))
-                if progress_callback:
-                    progress_callback(f"✗ 处理失败: {str(e)}")
-        
-        return results
+                try:
+                    output_file = self.generate_subtitle(mp3_file, output_format, progress_callback)
+                    results.append((mp3_file, output_file, True))
+                    
+                    if progress_callback:
+                        progress_callback(f"✓ 已生成: {output_file}")
+                except Exception as e:
+                    results.append((mp3_file, None, False))
+                    if progress_callback:
+                        progress_callback(f"✗ 处理失败: {str(e)}")
+                    # 继续处理下一个文件
+                    continue
+            
+            return results
+            
+        except Exception as e:
+            if progress_callback:
+                progress_callback(f"批处理过程中发生错误: {str(e)}")
+            raise
+        finally:
+            # 确保清理 GPU 内存
+            try:
+                import torch
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                    if progress_callback:
+                        progress_callback("已清理 GPU 缓存")
+            except:
+                pass

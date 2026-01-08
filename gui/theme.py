@@ -32,17 +32,17 @@ def apply_theme(mode):
     
     # 根据传入的主题模式应用不同的主题设置
     if mode == "System":
-        # 应用系统默认主题
+        # 应用系统默认主题（Win11 下为 Win11 样式）
         app.setStyle(None)  # 清除自定义样式，使用系统默认样式
         app.setPalette(palette)  # 应用默认调色板
     elif mode == "Light":
-        # 应用浅色主题
+        # 应用浅色主题（使用系统默认样式，Win11 下为 Win11 样式）
         app.setStyle(None)  # 使用系统默认样式（如Windows11）
         app.setPalette(palette)  # 应用默认调色板
     elif mode == "Dark":
         # 应用深色主题
         app.setStyle(None)  # 使用系统默认样式（如Windows11），与Light模式保持一致
-        
+
         # 设置深色主题的各种颜色
         palette.setColor(QPalette.ColorRole.Window, QColor(53, 53, 53))  # 窗口背景色
         palette.setColor(QPalette.ColorRole.WindowText, Qt.GlobalColor.white)  # 窗口文本色
@@ -57,8 +57,8 @@ def apply_theme(mode):
         palette.setColor(QPalette.ColorRole.Link, QColor(42, 130, 218))  # 链接色
         palette.setColor(QPalette.ColorRole.Highlight, QColor(42, 130, 218))  # 高亮色
         palette.setColor(QPalette.ColorRole.HighlightedText, Qt.GlobalColor.black)  # 高亮文本色
-        palette.setColor(QPalette.ColorRole.PlaceholderText, QColor(128, 128, 128))  # 占位符文本色（浅灰色）
-        
+        palette.setColor(QPalette.ColorRole.PlaceholderText, QColor(180, 180, 180))  # 占位符文本色（深色模式下更亮）
+
         app.setPalette(palette)  # 应用深色调色板
     
     # 强制刷新所有控件，确保主题更改立即生效

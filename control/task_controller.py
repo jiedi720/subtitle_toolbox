@@ -99,7 +99,8 @@ class TaskController:
                     generator = SubtitleGenerator(
                         model_size=model_size,
                         model_path=model_path,
-                        device="auto"
+                        device="auto",
+                        language=model_config.get("language", None)
                     )
                     
                     # 初始化模型
@@ -117,6 +118,14 @@ class TaskController:
                     fail_count = len(results) - success_count
                     
                     self.log(f"\n✓ 处理完成: 成功 {success_count} 个，失败 {fail_count} 个")
+                    
+                    # 清理模型资源
+                    try:
+                        del generator
+                        if progress_callback:
+                            self.log("已释放模型资源")
+                    except:
+                        pass
                     
                 except Exception as e:
                     self.log(f"❌ AutoSub模式处理失败: {e}")

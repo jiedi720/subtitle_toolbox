@@ -509,7 +509,18 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
         
         # 记录日志
         if model_name != "默认":
-            self.log(f"已选择 Whisper 模型: {model_name}")
+            self.log(f"✓ 已切换 Whisper 模型: {model_name}")
+        else:
+            self.log(f"✓ 已切换为默认模型")
+        
+        # 保存配置
+        try:
+            if hasattr(self.app, 'config'):
+                self.app.config.sync_from_controller(self.app)
+                self.app.config.save_config()
+                self.log("✓ 模型配置已保存")
+        except Exception as e:
+            self.log(f"⚠️ 保存配置失败: {e}", "error")
     
 
     

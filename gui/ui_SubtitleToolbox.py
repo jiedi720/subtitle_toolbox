@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SubtitleToolboxBnmZUI.ui'
+## Form generated from reading UI file 'SubtitleToolboxDvdEok.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -21,16 +21,12 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
     QMainWindow, QMenu, QMenuBar, QPlainTextEdit,
     QProgressBar, QPushButton, QSizePolicy, QTabWidget,
     QToolButton, QVBoxLayout, QWidget)
-import os
 
 class Ui_SubtitleToolbox(object):
     def setupUi(self, SubtitleToolbox):
         if not SubtitleToolbox.objectName():
             SubtitleToolbox.setObjectName(u"SubtitleToolbox")
         SubtitleToolbox.resize(606, 605)
-        
-        # 获取 resources 目录的绝对路径
-        resources_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "resources")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -53,7 +49,8 @@ class Ui_SubtitleToolbox(object):
         self.actionOpenSettings.setObjectName(u"actionOpenSettings")
         icon = QIcon(QIcon.fromTheme(u"document-open"))
         self.actionOpenSettings.setIcon(icon)
-        self.actionOpenSettings.setFont(font)
+        font1 = QFont()
+        self.actionOpenSettings.setFont(font1)
         self.actionSaveSettings = QAction(SubtitleToolbox)
         self.actionSaveSettings.setObjectName(u"actionSaveSettings")
         icon1 = QIcon(QIcon.fromTheme(u"document-save"))
@@ -90,11 +87,11 @@ class Ui_SubtitleToolbox(object):
         self.ReadPath.setSizePolicy(sizePolicy1)
         self.ReadPath.setMinimumSize(QSize(55, 30))
         self.ReadPath.setMaximumSize(QSize(55, 30))
-        font1 = QFont()
-        font1.setPointSize(10)
-        font1.setBold(False)
-        font1.setHintingPreference(QFont.PreferNoHinting)
-        self.ReadPath.setFont(font1)
+        font2 = QFont()
+        font2.setPointSize(10)
+        font2.setBold(False)
+        font2.setHintingPreference(QFont.PreferNoHinting)
+        self.ReadPath.setFont(font2)
         self.ReadPath.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.PathLabel.addWidget(self.ReadPath)
@@ -105,11 +102,11 @@ class Ui_SubtitleToolbox(object):
         self.SavePath.setSizePolicy(sizePolicy1)
         self.SavePath.setMinimumSize(QSize(55, 30))
         self.SavePath.setMaximumSize(QSize(55, 30))
-        font2 = QFont()
-        font2.setPointSize(10)
-        font2.setWeight(QFont.Medium)
-        font2.setHintingPreference(QFont.PreferNoHinting)
-        self.SavePath.setFont(font2)
+        font3 = QFont()
+        font3.setPointSize(10)
+        font3.setWeight(QFont.Medium)
+        font3.setHintingPreference(QFont.PreferNoHinting)
+        self.SavePath.setFont(font3)
         self.SavePath.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.PathLabel.addWidget(self.SavePath)
@@ -178,7 +175,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon3 = QIcon()
-        icon3.addFile(os.path.join(resources_dir, "open-folder2.png"), QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon3.addFile(u"Icons/open-folder2.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.ReadPathOpen.setIcon(icon3)
         self.ReadPathOpen.setIconSize(QSize(20, 20))
 
@@ -208,7 +205,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon4 = QIcon()
-        icon4.addFile(os.path.join(resources_dir, "search2.png"), QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon4.addFile(u"Icons/search2.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.ReadPathSelect.setIcon(icon4)
         self.ReadPathSelect.setIconSize(QSize(20, 20))
 
@@ -239,7 +236,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon5 = QIcon()
-        icon5.addFile(os.path.join(resources_dir, "refresh.png"), QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon5.addFile(u"Icons/refresh.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.ReadPathSet.setIcon(icon5)
         self.ReadPathSet.setIconSize(QSize(20, 20))
 
@@ -348,10 +345,10 @@ class Ui_SubtitleToolbox(object):
         self.Function.setSizePolicy(sizePolicy2)
         self.Function.setMinimumSize(QSize(348, 0))
         self.Function.setMaximumSize(QSize(348, 120))
-        font3 = QFont()
-        font3.setPointSize(10)
-        font3.setHintingPreference(QFont.PreferDefaultHinting)
-        self.Function.setFont(font3)
+        font4 = QFont()
+        font4.setPointSize(10)
+        font4.setHintingPreference(QFont.PreferDefaultHinting)
+        self.Function.setFont(font4)
         self.Function.setStyleSheet(u"/* \u6574\u4f53\u5bb9\u5668\u7f8e\u5316 */\n"
 "QTabWidget[theme=\"light\"]::pane {\n"
 "    background-color: #DEDEDE;   \n"
@@ -371,19 +368,18 @@ class Ui_SubtitleToolbox(object):
 "\n"
 "/* \u6240\u6709\u6807\u7b7e\uff08\u9ed8\u8ba4\u8272\uff09\uff1a\u9ec4\u8272 */\n"
 "/* \u6ce8\u610f\uff1a\u8fd9\u91cc\u4f5c\u4e3a\u9ed8\u8ba4\u503c\uff0c\u4f1a\u88ab first \u548c last \u8986\u76d6 */\n"
-"QTabBar::tab { \n"
-"    color: rgb(0, 0, 0);\n"
-"    background-color: #FFC209;\n"
-"    padding: 2px 1px;/*\u8bbe\u7f6e\u6807\u7b7e\u6587\u5b57\u4e0e\u6807\u7b7e\u8fb9\u6846\u4e4b\u95f4\u7684\u7559\u767d\u533a\u57df */\n"
-"    min-width: 84px; /*\u8bbe\u7f6e\u6807\u7b7e\u7684\u6700"
-                        "\u5c0f\u5bbd\u5ea6 */\n"
-"    margin-right: 1px; /* \u9ed8\u8ba4\u4fdd\u7559\u8fb9\u8ddd\u7528\u4e8e\u91cd\u53e0 */\n"
-"    /* \u6838\u5fc3\u4fee\u6539\uff1a\u5206\u522b\u8bbe\u7f6e\u56db\u4e2a\u89d2\u7684\u5f27\u5ea6 \u987a\u5e8f\u4e3a\uff1a\u5de6\u4e0a, \u53f3\u4e0a, \u53f3\u4e0b, \u5de6\u4e0b */\n"
-"    border-top-left-radius: 9px;  \n"
-"    border-top-right-radius: 9px; \n"
-"    border-bottom-left-radius: 1px;\n"
-"    border-bottom-right-radius: 1px;\n"
-"}\n"
+"QTabBar::tab { 
+    color: palette(text);
+    background-color: #FFC209;
+    padding: 2px 1px;/*设置标签文字与标签边框之间的留白区域 */
+    min-width: 84px; /*设置标签的最小宽度 */
+    margin-right: 1px; /* 默认保留边距用于重叠 */
+    /* 核心修改：分别设置四个角的圆弧 顺序为：左上, 右上, 右下, 左下 */
+    border-top-left-radius: 9px;  
+    border-top-right-radius: 9px; 
+    border-bottom-left-radius: 1px;
+    border-bottom-right-radius: 1px;
+}\n"
 "\n"
 "/* \u9009\u4e2d\u72b6\u6001 */\n"
 "QTabBar::tab:selected {\n"
@@ -402,9 +398,9 @@ class Ui_SubtitleToolbox(object):
         self.Function.setMovable(False)
         self.Script = QWidget()
         self.Script.setObjectName(u"Script")
-        font4 = QFont()
-        font4.setHintingPreference(QFont.PreferNoHinting)
-        self.Script.setFont(font4)
+        font5 = QFont()
+        font5.setHintingPreference(QFont.PreferNoHinting)
+        self.Script.setFont(font5)
         self.verticalLayout_4 = QVBoxLayout(self.Script)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.horizontalLayout_6 = QHBoxLayout()
@@ -424,10 +420,10 @@ class Ui_SubtitleToolbox(object):
         self.Output2PDF.setSizePolicy(sizePolicy3)
         self.Output2PDF.setMinimumSize(QSize(50, 50))
         self.Output2PDF.setMaximumSize(QSize(50, 50))
-        font5 = QFont()
-        font5.setPointSize(9)
-        font5.setHintingPreference(QFont.PreferDefaultHinting)
-        self.Output2PDF.setFont(font5)
+        font6 = QFont()
+        font6.setPointSize(9)
+        font6.setHintingPreference(QFont.PreferDefaultHinting)
+        self.Output2PDF.setFont(font6)
         self.Output2PDF.setAutoFillBackground(False)
         self.Output2PDF.setStyleSheet(u"QToolButton {\n"
 "    /* \u5373\u4f7f\u4e0d\u8bbe\u7f6e\u80cc\u666f\u548c\u8fb9\u6846\uff0c\u4e5f\u8981\u5728\u8fd9\u91cc\u58f0\u660e\u5706\u89d2 */\n"
@@ -461,7 +457,7 @@ class Ui_SubtitleToolbox(object):
                         "adius: 9px;\n"
 "}")
         icon6 = QIcon()
-        icon6.addFile(os.path.join(resources_dir, "PDF.png"), QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon6.addFile(u"Icons/PDF.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.Output2PDF.setIcon(icon6)
         self.Output2PDF.setIconSize(QSize(35, 35))
         self.Output2PDF.setCheckable(True)
@@ -475,9 +471,9 @@ class Ui_SubtitleToolbox(object):
         self.Output2Word.setSizePolicy(sizePolicy3)
         self.Output2Word.setMinimumSize(QSize(50, 50))
         self.Output2Word.setMaximumSize(QSize(50, 50))
-        font6 = QFont()
-        font6.setPointSize(9)
-        self.Output2Word.setFont(font6)
+        font7 = QFont()
+        font7.setPointSize(9)
+        self.Output2Word.setFont(font7)
         self.Output2Word.setStyleSheet(u"QToolButton {\n"
 "    /* \u5373\u4f7f\u4e0d\u8bbe\u7f6e\u80cc\u666f\u548c\u8fb9\u6846\uff0c\u4e5f\u8981\u5728\u8fd9\u91cc\u58f0\u660e\u5706\u89d2 */\n"
 "    border-radius: 9px;\n"
@@ -510,7 +506,7 @@ class Ui_SubtitleToolbox(object):
                         "adius: 9px;\n"
 "}")
         icon7 = QIcon()
-        icon7.addFile(os.path.join(resources_dir, "Word.ico"), QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon7.addFile(u"Icons/Word.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.Output2Word.setIcon(icon7)
         self.Output2Word.setIconSize(QSize(35, 35))
         self.Output2Word.setCheckable(True)
@@ -524,7 +520,7 @@ class Ui_SubtitleToolbox(object):
         self.Output2Txt.setSizePolicy(sizePolicy3)
         self.Output2Txt.setMinimumSize(QSize(50, 50))
         self.Output2Txt.setMaximumSize(QSize(50, 50))
-        self.Output2Txt.setFont(font6)
+        self.Output2Txt.setFont(font7)
         self.Output2Txt.setStyleSheet(u"QToolButton {\n"
 "    /* \u5373\u4f7f\u4e0d\u8bbe\u7f6e\u80cc\u666f\u548c\u8fb9\u6846\uff0c\u4e5f\u8981\u5728\u8fd9\u91cc\u58f0\u660e\u5706\u89d2 */\n"
 "    border-radius: 9px;\n"
@@ -557,7 +553,7 @@ class Ui_SubtitleToolbox(object):
                         "adius: 9px;\n"
 "}")
         icon8 = QIcon()
-        icon8.addFile(os.path.join(resources_dir, "txt.png"), QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon8.addFile(u"Icons/txt.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.Output2Txt.setIcon(icon8)
         self.Output2Txt.setIconSize(QSize(35, 35))
         self.Output2Txt.setCheckable(True)
@@ -607,11 +603,11 @@ class Ui_SubtitleToolbox(object):
         self.VolumeLabel.setSizePolicy(sizePolicy4)
         self.VolumeLabel.setMinimumSize(QSize(60, 0))
         self.VolumeLabel.setMaximumSize(QSize(50, 16777215))
-        font7 = QFont()
-        font7.setPointSize(11)
-        font7.setBold(True)
-        font7.setHintingPreference(QFont.PreferNoHinting)
-        self.VolumeLabel.setFont(font7)
+        font8 = QFont()
+        font8.setPointSize(11)
+        font8.setBold(True)
+        font8.setHintingPreference(QFont.PreferNoHinting)
+        self.VolumeLabel.setFont(font8)
         self.VolumeLabel.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.VolumeLabel.setStyleSheet(u"color: rgb(0, 0, 0);")
         self.VolumeLabel.setFrameShape(QFrame.Shape.NoFrame)
@@ -633,11 +629,11 @@ class Ui_SubtitleToolbox(object):
         self.VolumePatternSelect.setSizePolicy(sizePolicy5)
         self.VolumePatternSelect.setMinimumSize(QSize(50, 0))
         self.VolumePatternSelect.setMaximumSize(QSize(50, 30))
-        font8 = QFont()
-        font8.setPointSize(10)
-        font8.setBold(False)
-        font8.setHintingPreference(QFont.PreferDefaultHinting)
-        self.VolumePatternSelect.setFont(font8)
+        font9 = QFont()
+        font9.setPointSize(10)
+        font9.setBold(False)
+        font9.setHintingPreference(QFont.PreferDefaultHinting)
+        self.VolumePatternSelect.setFont(font9)
         self.VolumePatternSelect.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.VolumePatternSelect.setContextMenuPolicy(Qt.ContextMenuPolicy.DefaultContextMenu)
         self.VolumePatternSelect.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
@@ -706,7 +702,7 @@ class Ui_SubtitleToolbox(object):
         self.Function.addTab(self.Script, "")
         self.Merge = QWidget()
         self.Merge.setObjectName(u"Merge")
-        self.Merge.setFont(font4)
+        self.Merge.setFont(font5)
         self.verticalLayout_2 = QVBoxLayout(self.Merge)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setContentsMargins(-1, 9, -1, 9)
@@ -720,7 +716,7 @@ class Ui_SubtitleToolbox(object):
         self.MergePDF.setSizePolicy(sizePolicy)
         self.MergePDF.setMinimumSize(QSize(50, 50))
         self.MergePDF.setMaximumSize(QSize(50, 50))
-        self.MergePDF.setFont(font5)
+        self.MergePDF.setFont(font6)
         self.MergePDF.setAutoFillBackground(False)
         self.MergePDF.setStyleSheet(u"QToolButton {\n"
 "    /* \u5373\u4f7f\u4e0d\u8bbe\u7f6e\u80cc\u666f\u548c\u8fb9\u6846\uff0c\u4e5f\u8981\u5728\u8fd9\u91cc\u58f0\u660e\u5706\u89d2 */\n"
@@ -770,7 +766,7 @@ class Ui_SubtitleToolbox(object):
         self.MergeWord.setSizePolicy(sizePolicy)
         self.MergeWord.setMinimumSize(QSize(50, 50))
         self.MergeWord.setMaximumSize(QSize(50, 50))
-        self.MergeWord.setFont(font6)
+        self.MergeWord.setFont(font7)
         self.MergeWord.setStyleSheet(u"QToolButton {\n"
 "    /* \u5373\u4f7f\u4e0d\u8bbe\u7f6e\u80cc\u666f\u548c\u8fb9\u6846\uff0c\u4e5f\u8981\u5728\u8fd9\u91cc\u58f0\u660e\u5706\u89d2 */\n"
 "    border-radius: 9px;\n"
@@ -819,7 +815,7 @@ class Ui_SubtitleToolbox(object):
         self.MergeTxt.setSizePolicy(sizePolicy)
         self.MergeTxt.setMinimumSize(QSize(50, 50))
         self.MergeTxt.setMaximumSize(QSize(50, 50))
-        self.MergeTxt.setFont(font6)
+        self.MergeTxt.setFont(font7)
         self.MergeTxt.setStyleSheet(u"QToolButton {\n"
 "    /* \u5373\u4f7f\u4e0d\u8bbe\u7f6e\u80cc\u666f\u548c\u8fb9\u6846\uff0c\u4e5f\u8981\u5728\u8fd9\u91cc\u58f0\u660e\u5706\u89d2 */\n"
 "    border-radius: 9px;\n"
@@ -867,7 +863,7 @@ class Ui_SubtitleToolbox(object):
         self.Function.addTab(self.Merge, "")
         self.Srt2Ass = QWidget()
         self.Srt2Ass.setObjectName(u"Srt2Ass")
-        self.Srt2Ass.setFont(font4)
+        self.Srt2Ass.setFont(font5)
         self.verticalLayout = QVBoxLayout(self.Srt2Ass)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_3 = QHBoxLayout()
@@ -880,11 +876,11 @@ class Ui_SubtitleToolbox(object):
         self.AssPatternLabel.setSizePolicy(sizePolicy)
         self.AssPatternLabel.setMinimumSize(QSize(0, 30))
         self.AssPatternLabel.setMaximumSize(QSize(16777215, 30))
-        font9 = QFont()
-        font9.setPointSize(11)
-        font9.setWeight(QFont.DemiBold)
-        font9.setHintingPreference(QFont.PreferNoHinting)
-        self.AssPatternLabel.setFont(font9)
+        font10 = QFont()
+        font10.setPointSize(11)
+        font10.setWeight(QFont.DemiBold)
+        font10.setHintingPreference(QFont.PreferNoHinting)
+        self.AssPatternLabel.setFont(font10)
         self.AssPatternLabel.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.AssPatternLabel.setStyleSheet(u"color: rgb(0, 0, 0);")
         self.AssPatternLabel.setFrameShape(QFrame.Shape.NoFrame)
@@ -901,11 +897,11 @@ class Ui_SubtitleToolbox(object):
         self.AssPatternSelect.setObjectName(u"AssPatternSelect")
         sizePolicy.setHeightForWidth(self.AssPatternSelect.sizePolicy().hasHeightForWidth())
         self.AssPatternSelect.setSizePolicy(sizePolicy)
-        self.AssPatternSelect.setMinimumSize(QSize(80, 0))
+        self.AssPatternSelect.setMinimumSize(QSize(80, 30))
         self.AssPatternSelect.setMaximumSize(QSize(80, 30))
-        font10 = QFont()
-        font10.setPointSize(10)
-        self.AssPatternSelect.setFont(font10)
+        font11 = QFont()
+        font11.setPointSize(10)
+        self.AssPatternSelect.setFont(font11)
         self.AssPatternSelect.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.AssPatternSelect.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.AssPatternSelect.setStyleSheet(u"/* 1. \u4e0b\u62c9\u6846\u4e3b\u4f53\uff08\u4fdd\u6301\u4f60\u539f\u6765\u7684\uff09 */\n"
@@ -967,25 +963,25 @@ class Ui_SubtitleToolbox(object):
         self.AutoSub.setObjectName(u"AutoSub")
         self.verticalLayout_3 = QVBoxLayout(self.AutoSub)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setContentsMargins(-1, 9, -1, 9)
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setSpacing(6)
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalLayout_4.setContentsMargins(0, -1, -1, -1)
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setHorizontalSpacing(7)
+        self.gridLayout.setVerticalSpacing(5)
+        self.gridLayout.setContentsMargins(-1, -1, 5, -1)
         self.WhisperModelLabel = QLabel(self.AutoSub)
         self.WhisperModelLabel.setObjectName(u"WhisperModelLabel")
         sizePolicy.setHeightForWidth(self.WhisperModelLabel.sizePolicy().hasHeightForWidth())
         self.WhisperModelLabel.setSizePolicy(sizePolicy)
         self.WhisperModelLabel.setMinimumSize(QSize(0, 30))
         self.WhisperModelLabel.setMaximumSize(QSize(16777215, 30))
-        self.WhisperModelLabel.setFont(font9)
+        self.WhisperModelLabel.setFont(font10)
         self.WhisperModelLabel.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.WhisperModelLabel.setStyleSheet(u"color: rgb(0, 0, 0);")
         self.WhisperModelLabel.setFrameShape(QFrame.Shape.NoFrame)
         self.WhisperModelLabel.setTextFormat(Qt.TextFormat.PlainText)
         self.WhisperModelLabel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.horizontalLayout_4.addWidget(self.WhisperModelLabel)
+        self.gridLayout.addWidget(self.WhisperModelLabel, 0, 0, 1, 1, Qt.AlignmentFlag.AlignRight)
 
         self.WhisperModelSelect = QComboBox(self.AutoSub)
         self.WhisperModelSelect.addItem("")
@@ -994,9 +990,9 @@ class Ui_SubtitleToolbox(object):
         self.WhisperModelSelect.setObjectName(u"WhisperModelSelect")
         sizePolicy.setHeightForWidth(self.WhisperModelSelect.sizePolicy().hasHeightForWidth())
         self.WhisperModelSelect.setSizePolicy(sizePolicy)
-        self.WhisperModelSelect.setMinimumSize(QSize(208, 0))
-        self.WhisperModelSelect.setMaximumSize(QSize(208, 35))
-        self.WhisperModelSelect.setFont(font10)
+        self.WhisperModelSelect.setMinimumSize(QSize(208, 30))
+        self.WhisperModelSelect.setMaximumSize(QSize(208, 30))
+        self.WhisperModelSelect.setFont(font11)
         self.WhisperModelSelect.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.WhisperModelSelect.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.WhisperModelSelect.setStyleSheet(u"/* 1. \u4e0b\u62c9\u6846\u4e3b\u4f53\uff08\u4fdd\u6301\u4f60\u539f\u6765\u7684\uff09 */\n"
@@ -1046,7 +1042,7 @@ class Ui_SubtitleToolbox(object):
 "}")
         self.WhisperModelSelect.setEditable(False)
 
-        self.horizontalLayout_4.addWidget(self.WhisperModelSelect)
+        self.gridLayout.addWidget(self.WhisperModelSelect, 0, 1, 1, 1)
 
         self.SelectWhisperModel = QPushButton(self.AutoSub)
         self.SelectWhisperModel.setObjectName(u"SelectWhisperModel")
@@ -1071,13 +1067,88 @@ class Ui_SubtitleToolbox(object):
         self.SelectWhisperModel.setIcon(icon4)
         self.SelectWhisperModel.setIconSize(QSize(25, 25))
 
-        self.horizontalLayout_4.addWidget(self.SelectWhisperModel)
+        self.gridLayout.addWidget(self.SelectWhisperModel, 0, 2, 1, 1)
 
-        self.horizontalLayout_4.setStretch(0, 1)
-        self.horizontalLayout_4.setStretch(1, 3)
-        self.horizontalLayout_4.setStretch(2, 1)
+        self.WhisperLanguageLabel = QLabel(self.AutoSub)
+        self.WhisperLanguageLabel.setObjectName(u"WhisperLanguageLabel")
+        sizePolicy.setHeightForWidth(self.WhisperLanguageLabel.sizePolicy().hasHeightForWidth())
+        self.WhisperLanguageLabel.setSizePolicy(sizePolicy)
+        self.WhisperLanguageLabel.setMinimumSize(QSize(0, 30))
+        self.WhisperLanguageLabel.setMaximumSize(QSize(16777215, 30))
+        self.WhisperLanguageLabel.setFont(font10)
+        self.WhisperLanguageLabel.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.WhisperLanguageLabel.setStyleSheet(u"color: rgb(0, 0, 0);")
+        self.WhisperLanguageLabel.setFrameShape(QFrame.Shape.NoFrame)
+        self.WhisperLanguageLabel.setTextFormat(Qt.TextFormat.PlainText)
+        self.WhisperLanguageLabel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_4)
+        self.gridLayout.addWidget(self.WhisperLanguageLabel, 1, 0, 1, 1, Qt.AlignmentFlag.AlignRight)
+
+        self.WhisperLanguageSelect = QComboBox(self.AutoSub)
+        self.WhisperLanguageSelect.addItem("")
+        self.WhisperLanguageSelect.addItem("")
+        self.WhisperLanguageSelect.addItem("")
+        self.WhisperLanguageSelect.addItem("")
+        self.WhisperLanguageSelect.addItem("")
+        self.WhisperLanguageSelect.setObjectName(u"WhisperLanguageSelect")
+        sizePolicy.setHeightForWidth(self.WhisperLanguageSelect.sizePolicy().hasHeightForWidth())
+        self.WhisperLanguageSelect.setSizePolicy(sizePolicy)
+        self.WhisperLanguageSelect.setMinimumSize(QSize(50, 30))
+        self.WhisperLanguageSelect.setMaximumSize(QSize(50, 30))
+        self.WhisperLanguageSelect.setFont(font11)
+        self.WhisperLanguageSelect.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.WhisperLanguageSelect.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.WhisperLanguageSelect.setStyleSheet(u"/* 1. \u4e0b\u62c9\u6846\u4e3b\u4f53\uff08\u4fdd\u6301\u4f60\u539f\u6765\u7684\uff09 */\n"
+"QComboBox {\n"
+"    color: #333333;\n"
+"    background-color: #F2F2F2;        \n"
+"    border: 1px solid #B5B5B5;\n"
+"    border-radius: 9px;\n"
+"    padding: 1px 10px;\n"
+"}\n"
+"\n"
+"/* \u60ac\u6d6e\u4e0e\u6fc0\u6d3b\u72b6\u6001 */\n"
+"QComboBox:hover {\n"
+"    border: 2px solid #7953B1;       \n"
+"}\n"
+"\n"
+"/* 2. \u4e0b\u62c9\u5217\u8868\u5bb9\u5668 */\n"
+"QComboBox QAbstractItemView {\n"
+"    border: 1px solid #7953B1;\n"
+"    border-radius: 9px;\n"
+"    background-color: #F2F2F2;\n"
+"    outline: 0px;  /* \u79fb\u9664\u865a\u7ebf\u6846 */\n"
+"}\n"
+"\n"
+"/* 3. \u6bcf\u4e00\u4e2a\u9009\u9879\u7684\u6837\u5f0f */\n"
+"QComboBox QAbstractItemView::item {\n"
+"    height: 30px; /* \u589e\u52a0\u9ad8\u5ea6\uff0c\u5706\u89d2\u624d\u597d\u770b */\n"
+"    padding-left: 10px;\n"
+"}\n"
+"\n"
+"/* 4. \u9009\u4e2d\u9879\u7684\u6837\u5f0f */\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: #7953B1;\n"
+"    "
+                        "color: white;\n"
+"    /* \u5982\u679c\u60f3\u8ba9\u9009\u4e2d\u7684\u9ad8\u4eae\u5757\u4e5f\u6709\u5706\u89d2\uff0c\u53ef\u4ee5\u52a0\u4e0b\u9762\u8fd9\u53e5 */\n"
+"    border-radius: 5px; \n"
+"}\n"
+"\n"
+"/*\u79fb\u9664\u4e0b\u62c9\u7bad\u5934 */\n"
+"QComboBox::drop-down {\n"
+"    width: 0px;                         /* \u5c06\u4e0b\u62c9\u533a\u57df\u5bbd\u5ea6\u8bbe\u4e3a0 */\n"
+"    border: none;                       /* \u79fb\u9664\u53ef\u80fd\u5b58\u5728\u7684\u5206\u5272\u7ebf */\n"
+"}\n"
+"QComboBox::down-arrow {\n"
+"    image: none;                        /* \u660e\u786e\u4e0d\u663e\u793a\u4efb\u4f55\u56fe\u6807 */\n"
+"}")
+        self.WhisperLanguageSelect.setEditable(False)
+
+        self.gridLayout.addWidget(self.WhisperLanguageSelect, 1, 1, 1, 1)
+
+
+        self.verticalLayout_3.addLayout(self.gridLayout)
 
         self.Function.addTab(self.AutoSub, "")
 
@@ -1093,12 +1164,12 @@ class Ui_SubtitleToolbox(object):
         self.Start.setSizePolicy(sizePolicy2)
         self.Start.setMinimumSize(QSize(0, 60))
         self.Start.setMaximumSize(QSize(300, 60))
-        font11 = QFont()
-        font11.setPointSize(12)
-        font11.setWeight(QFont.DemiBold)
-        font11.setKerning(True)
-        font11.setHintingPreference(QFont.PreferNoHinting)
-        self.Start.setFont(font11)
+        font12 = QFont()
+        font12.setPointSize(12)
+        font12.setWeight(QFont.DemiBold)
+        font12.setKerning(True)
+        font12.setHintingPreference(QFont.PreferNoHinting)
+        self.Start.setFont(font12)
         self.Start.setStyleSheet(u"/* \u6309\u94ae\u9ed8\u8ba4\u6837\u5f0f */\n"
 "QPushButton {\n"
 "    color: rgb(0, 0, 0);\n"
@@ -1119,7 +1190,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon9 = QIcon()
-        icon9.addFile(os.path.join(resources_dir, "shuttle.png"), QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon9.addFile(u"Icons/shuttle.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.Start.setIcon(icon9)
         self.Start.setIconSize(QSize(30, 30))
         self.Start.setCheckable(False)
@@ -1160,7 +1231,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon10 = QIcon()
-        icon10.addFile(os.path.join(resources_dir, "broom.png"), QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon10.addFile(u"Icons/broom.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.ClearLogs.setIcon(icon10)
         self.ClearLogs.setIconSize(QSize(40, 40))
 
@@ -1192,7 +1263,7 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "")
         icon11 = QIcon()
-        icon11.addFile(os.path.join(resources_dir, "delete.png"), QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon11.addFile(u"Icons/delete.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.DeleteFiles.setIcon(icon11)
         self.DeleteFiles.setIconSize(QSize(30, 30))
 
@@ -1249,8 +1320,8 @@ class Ui_SubtitleToolbox(object):
         self.Log.setMinimumSize(QSize(400, 300))
         self.Log.setMaximumSize(QSize(16777215, 600))
         self.Log.setStyleSheet(u"QPlainTextEdit {\n"
-"    /* 1. \u5fc5\u987b\u6709\u8fb9\u6846\uff0c\u4f7f\u7528\u8c03\u8272\u677f\u7684\u989c\u8272 */\n"
-"    border: 1px solid palette(mid);\n"
+"    /* 1. \u5fc5\u987b\u6709\u8fb9\u6846\uff0c\u900f\u660e\u5373\u53ef */\n"
+"    border: 1px solid transparent;\n"
 "    \n"
 "    /* 2. \u5b9a\u4e49\u5706\u89d2 */\n"
 "    border-radius: 9px;\n"
@@ -1265,7 +1336,18 @@ class Ui_SubtitleToolbox(object):
 "    \n"
 "    /* \u5efa\u8bae\u52a0\u70b9\u5185\u8fb9\u8ddd\uff0c\u5426\u5219\u5b57\u4f1a\u8d34\u5230\u5706\u89d2\u8fb9\u4e0a */\n"
 "    padding: 3px;\n"
-"}")
+"}\n"
+"\n"
+"QMenu {
+    background-color: palette(window);
+    color: palette(text);
+    border: 1px solid palette(mid);
+}\n"
+"\n"
+"QMenu::item:selected {
+    background-color: palette(highlight);
+    color: palette(highlighted-text);
+}")
 
         self.verticalLayout_Log.addWidget(self.Log)
 
@@ -1340,7 +1422,7 @@ class Ui_SubtitleToolbox(object):
 
         self.retranslateUi(SubtitleToolbox)
 
-        self.Function.setCurrentIndex(2)
+        self.Function.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(SubtitleToolbox)
@@ -1435,6 +1517,13 @@ class Ui_SubtitleToolbox(object):
         self.SelectWhisperModel.setToolTip(QCoreApplication.translate("SubtitleToolbox", u"\u9009\u62e9Whisper\u6a21\u578b\u76ee\u5f55", None))
 #endif // QT_CONFIG(tooltip)
         self.SelectWhisperModel.setText("")
+        self.WhisperLanguageLabel.setText(QCoreApplication.translate("SubtitleToolbox", u"\u8bed\u8a00", None))
+        self.WhisperLanguageSelect.setItemText(0, QCoreApplication.translate("SubtitleToolbox", u"\u81ea\u52a8", None))
+        self.WhisperLanguageSelect.setItemText(1, QCoreApplication.translate("SubtitleToolbox", u"\u97e9\u8bed", None))
+        self.WhisperLanguageSelect.setItemText(2, QCoreApplication.translate("SubtitleToolbox", u"\u65e5\u8bed", None))
+        self.WhisperLanguageSelect.setItemText(3, QCoreApplication.translate("SubtitleToolbox", u"\u82f1\u8bed", None))
+        self.WhisperLanguageSelect.setItemText(4, QCoreApplication.translate("SubtitleToolbox", u"\u4e2d\u6587", None))
+
         self.Function.setTabText(self.Function.indexOf(self.AutoSub), QCoreApplication.translate("SubtitleToolbox", u"AutoSub", None))
 #if QT_CONFIG(tooltip)
         self.Start.setToolTip(QCoreApplication.translate("SubtitleToolbox", u"\u5f00\u59cb\u5904\u7406", None))

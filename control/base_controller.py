@@ -63,6 +63,7 @@ class BaseController(QObject):
     def delete_generated_files(self):
         """删除生成的文件"""
         from function.trash import clear_output_to_trash
+        import re
         
         # 获取目标目录
         target_dir = self.output_path_var.strip() or self.path_var.strip()
@@ -70,8 +71,71 @@ class BaseController(QObject):
             self.log("❌ 请先选择源目录或输出目录")
             return
         
-        # 使用现有的清理功能
-        clear_output_to_trash(target_dir, self.log)
+        # 检查当前模式
+        current_mode = getattr(self, 'task_mode', None)
+        
+        if current_mode == "AutoSub":
+            # AutoSub 模式：只删除 .whisper.[].srt 文件
+            self._delete_autosub_files(target_dir)
+        else:
+            # 其他模式：使用现有的清理功能
+            clear_output_to_trash(target_dir, self.log)
+    
+    def _delete_autosub_files(self, target_dir):
+        """删除 AutoSub 生成的 .whisper.[].srt 文件
+        
+        Args:
+            target_dir: 目标目录
+        """
+        from send2trash import send2trash
+        from PySide6.QtWidgets import QMessageBox
+        
+        if not os.path.exists(target_dir):
+            self.log("[清理] ℹ️ 目录不存在。")
+            return
+        
+        # 查找所有 .whisper.[].srt 文件
+        whisper_files = []
+        for root, dirs, files in os.walk(target_dir):
+            for file in files:
+                # 匹配 .whisper.[xxx].srt 格式
+                if re.search(r'\.whisper\.\[[^\]]+\]\.srt$', file, re.IGNORECASE):
+                    file_path = os.path.join(root, file)
+                    whisper_files.append(file_path)
+        
+        if not whisper_files:
+            self.log("[清理] ℹ️ 未找到 .whisper.[].srt 文件。")
+            return
+        
+        # 确认删除
+        if not QMessageBox.question(
+            None, 
+            "确认清空", 
+            f"即将删除 {len(whisper_files)} 个 AutoSub 生成的字幕文件\n确定吗？", 
+            QMessageBox.Yes | QMessageBox.No
+        ) == QMessageBox.Yes:
+            return
+        
+        # 删除文件
+        deleted_count = 0
+        error_count = 0
+        
+        for file_path in whisper_files:
+            try:
+                send2trash(file_path)
+                deleted_count += 1
+                relative_path = os.path.relpath(file_path, target_dir)
+                self.log(f"✓ 已删除: {relative_path}")
+            except Exception as e:
+                error_count += 1
+                relative_path = os.path.relpath(file_path, target_dir)
+                self.log(f"❌ 删除失败: {relative_path} ({e})", "error")
+        
+        # 汇总
+        if deleted_count > 0:
+            self.log(f"✅ 已清理完成，共删除 {deleted_count} 个文件", "success")
+        if error_count > 0:
+            self.log(f"⚠️ 有 {error_count} 个文件删除失败", "error")
     
     def get_whisper_model_config(self):
         """

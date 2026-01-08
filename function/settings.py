@@ -390,19 +390,11 @@ class ConfigManager:
         获取 Whisper 模型配置
         
         Returns:
-            dict: 包含模型大小和模型路径的字典
+            dict: 包含模型大小、模型路径和语言的字典
         """
         model_size = "large-v3-turbo"  # 默认模型
         model_path = None
-        
-        # 优先使用自定义模型路径
-        if self.whisper_model_path:
-            if os.path.exists(self.whisper_model_path):
-                model_path = self.whisper_model_path
-                return {
-                    "model_size": model_size,
-                    "model_path": model_path
-                }
+        language = None  # 默认自动检测语言
         
         # 如果选择了特定模型
         if self.whisper_model and self.whisper_model != "默认":
@@ -423,10 +415,16 @@ class ConfigManager:
             # 如果是预定义模型
             else:
                 model_size = model_name
+                model_path = None  # 预定义模型不需要路径
+        else:
+            # 使用默认模型路径（whisper_model_path）
+            if self.whisper_model_path and os.path.exists(self.whisper_model_path):
+                model_path = self.whisper_model_path
         
         return {
             "model_size": model_size,
-            "model_path": model_path
+            "model_path": model_path,
+            "language": language
         }
 
     def sync_from_controller(self, controller):
