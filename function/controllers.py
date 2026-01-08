@@ -353,11 +353,12 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
         self.gui = ToolboxGUI(self.root, self)
         
         # 应用保存的主题设置（使用增强的主题切换函数）
-        from gui.theme_switch import apply_theme_enhanced
+        from gui.theme import apply_theme_enhanced
         apply_theme_enhanced(self.theme_mode)
         
         # 设置主题属性，使控件能够根据主题应用不同的样式
         theme_value = self.theme_mode.lower()
+        self.gui.setProperty("theme", theme_value)  # 为主窗口设置主题属性，使 QToolTip 样式生效
         self.gui.Function.setProperty("theme", theme_value)
         self.gui.menuBar.setProperty("theme", theme_value)
         

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SubtitleToolboxTVEGUM.ui'
+## Form generated from reading UI file 'SubtitleToolboxbFHPYJ.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -39,7 +39,23 @@ class Ui_SubtitleToolbox(object):
         SubtitleToolbox.setFont(font)
         SubtitleToolbox.setMouseTracking(False)
         SubtitleToolbox.setToolTipDuration(-1)
-        SubtitleToolbox.setStyleSheet(u"")
+        SubtitleToolbox.setStyleSheet(u"/* \u6d45\u8272\u6a21\u5f0f */\n"
+"[theme=\"light\"] QToolTip {\n"
+"    background-color: #ffffff;\n"
+"    color: #333333;\n"
+"    border: 1px solid #cccccc;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"}\n"
+"\n"
+"/* \u6df1\u8272\u6a21\u5f0f */\n"
+"[theme=\"dark\"] QToolTip {\n"
+"    background-color: #333333;\n"
+"    color: #eeeeee;\n"
+"    border: 1px solid #555555;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"}")
         SubtitleToolbox.setAnimated(True)
         self.actionLight = QAction(SubtitleToolbox)
         self.actionLight.setObjectName(u"actionLight")
@@ -1323,8 +1339,6 @@ class Ui_SubtitleToolbox(object):
         self.Log.setStyleSheet(u"QPlainTextEdit {\n"
 "    /* 1. \u5fc5\u987b\u6709\u8fb9\u6846\uff0c\u900f\u660e\u5373\u53ef */\n"
 "    border: 1px solid transparent;\n"
-"    \n"
-"    /* 2. \u5b9a\u4e49\u5706\u89d2 */\n"
 "    border-radius: 9px;\n"
 "    /* 1. \u663e\u5f0f\u58f0\u660e background\uff0c\u4e0d\u8981\u53ea\u7528 background-color */\n"
 "    background: palette(base);\n"
@@ -1339,15 +1353,45 @@ class Ui_SubtitleToolbox(object):
 "    padding: 3px;\n"
 "}\n"
 "\n"
+"/* \u57fa\u7840\u83dc\u5355\u6837\u5f0f  */\n"
 "QMenu {\n"
-"    background-color: #333333; /* \u83dc"
-                        "\u5355\u80cc\u666f\u8272 */\n"
-"    color: #ffffff;            /* \u83dc\u5355\u5b57\u4f53\u989c\u8272 */\n"
-"    border: 1px solid #555555;\n"
+"    border: 1px solid #dcdcdc; /*\u589e\u52a0"
+                        "\u8fb9\u6846\uff0c\u9632\u6b62\u83dc\u5355\u4e0e\u80cc\u666f\u878d\u4e3a\u4e00\u4f53 */\n"
+"    padding: 4px;              /* \u83dc\u5355\u5185\u90e8\u56db\u5468\u7559\u767d */\n"
+" }  \n"
+"\n"
+"/* \u6df1\u8272\u6a21\u5f0f\u7ec6\u5316 */\n"
+"[theme=\"dark\"] QMenu {\n"
+"    color: #eeeeee;\n"
+"    background-color: #2b2b2b; /* \u4f7f\u7528\u6df1\u7070\u8272\u6bd4\u7eaf\u9ed1\u66f4\u5177\u9ad8\u7ea7\u611f */\n"
+"    border-color: #555555; \n"
+"    border-radius: 9px;\n"
 "}\n"
 "\n"
+"/* \u6d45\u8272\u6a21\u5f0f\u7ec6\u5316 */\n"
+"[theme=\"light\"] QMenu {\n"
+"    color: #333333;\n"
+"    background-color: #ffffff;\n"
+"    border-color: #cccccc;\n"
+"    border-radius: 9px;\n"
+"}\n"
+"\n"
+"/* \u83dc\u5355\u9879\u6574\u4f53\u6837\u5f0f */\n"
+"QMenu::item {\n"
+"    padding: 6px 25px 6px 20px; /* \u589e\u52a0\u70b9\u51fb\u533a\u57df\u5927\u5c0f */\n"
+"    border-radius: 3px;\n"
+"}\n"
+"\n"
+"/* \u9009\u4e2d/\u60ac\u505c\u72b6\u6001 */\n"
 "QMenu::item:selected {\n"
-"    background-color: #555555; /* \u9f20\u6807\u60ac\u505c\u65f6\u7684\u989c\u8272 */\n"
+"    background-color: #FFC209; /* \u9ec4\u8272\u9009\u4e2d"
+                        "\u6548\u679c\uff0c\u66f4\u7b26\u5408\u4e3b\u6d41\u5ba1\u7f8e */\n"
+"    color: black;              /* \u786e\u4fdd\u9009\u4e2d\u65f6\u6587\u5b57\u4f9d\u7136\u6e05\u6670 */\n"
+"}\n"
+"\n"
+"/* \u7981\u7528\u72b6\u6001\uff08\u6bd4\u5982\u6ca1\u6709\u5185\u5bb9\u53ef\u7c98\u8d34\u65f6\uff09 */\n"
+"QMenu::item:disabled {\n"
+"    color: #888888;\n"
 "}")
 
         self.verticalLayout_Log.addWidget(self.Log)
@@ -1423,7 +1467,7 @@ class Ui_SubtitleToolbox(object):
 
         self.retranslateUi(SubtitleToolbox)
 
-        self.Function.setCurrentIndex(3)
+        self.Function.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(SubtitleToolbox)
@@ -1431,7 +1475,6 @@ class Ui_SubtitleToolbox(object):
 
     def retranslateUi(self, SubtitleToolbox):
         SubtitleToolbox.setWindowTitle(QCoreApplication.translate("SubtitleToolbox", u"MainWindow", None))
-        SubtitleToolbox.setProperty(u"text", QCoreApplication.translate("SubtitleToolbox", u"eng", None))
         self.actionLight.setText(QCoreApplication.translate("SubtitleToolbox", u"Light", None))
 #if QT_CONFIG(tooltip)
         self.actionLight.setToolTip(QCoreApplication.translate("SubtitleToolbox", u"Light\u4e3b\u9898", None))
@@ -1471,7 +1514,6 @@ class Ui_SubtitleToolbox(object):
         self.SavePathSet.setToolTip(QCoreApplication.translate("SubtitleToolbox", u"\u66f4\u65b0\u76ee\u5f55", None))
 #endif // QT_CONFIG(tooltip)
         self.SavePathSet.setText("")
-        self.Function.setProperty(u"theme", QCoreApplication.translate("SubtitleToolbox", u"dark", None))
 #if QT_CONFIG(tooltip)
         self.Output2PDF.setToolTip(QCoreApplication.translate("SubtitleToolbox", u"\u4fdd\u5b58\u4e3aPDF", None))
 #endif // QT_CONFIG(tooltip)
@@ -1538,7 +1580,6 @@ class Ui_SubtitleToolbox(object):
         self.DeleteFiles.setToolTip(QCoreApplication.translate("SubtitleToolbox", u"\u6e05\u7a7a\u6587\u4ef6\u5939", None))
 #endif // QT_CONFIG(tooltip)
         self.DeleteFiles.setText("")
-        self.menuBar.setProperty(u"theme", QCoreApplication.translate("SubtitleToolbox", u"dark", None))
         self.Theme.setTitle(QCoreApplication.translate("SubtitleToolbox", u"\u4e3b\u9898", None))
         self.Settings.setTitle(QCoreApplication.translate("SubtitleToolbox", u"\u914d\u7f6e", None))
     # retranslateUi

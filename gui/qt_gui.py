@@ -231,11 +231,12 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
             mode: 主题模式（"Light"或"Dark"）
         """
         # 使用增强的主题切换函数
-        from .theme_switch import apply_theme_enhanced
+        from .theme import apply_theme_enhanced
         apply_theme_enhanced(mode)
         
         # 设置主题属性，使控件能够根据主题应用不同的样式
         theme_value = mode.lower()
+        self.setProperty("theme", theme_value)  # 为主窗口设置主题属性，使 QToolTip 样式生效
         self.Function.setProperty("theme", theme_value)
         self.menuBar.setProperty("theme", theme_value)
         
