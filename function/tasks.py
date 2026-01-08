@@ -261,8 +261,9 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
         # 将 generator 对象保存到全局变量中，防止它被清理
         if 'generator' in locals():
             # 使用字典来保存多个 generator 对象，避免覆盖
-            # 使用语言作为键，这样同一个语言会覆盖，不同语言不会
-            language_key = model_config.get("language", "auto") if task_mode == "AutoSub" else "other"
+            # 使用时间戳作为键，确保每次都是新的键
+            import time
+            language_key = f"{model_config.get('language', 'auto')}_{int(time.time() * 1000)}"
             _global_generator[language_key] = generator
             log_callback(f"DEBUG: generator 对象已保存到全局变量 (key: {language_key})")
         

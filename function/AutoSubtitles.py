@@ -156,6 +156,9 @@ class SubtitleGenerator:
 
             # 调用transcribe，启用语言检测
             # 添加 beam_size 和 best_of 参数来提高速度
+            if log_callback:
+                log_callback("DEBUG: 开始调用 model.transcribe...")
+            
             segments, info = self.model.transcribe(
                 audio_file,
                 word_timestamps=True,
@@ -171,12 +174,27 @@ class SubtitleGenerator:
                 # faster-whisper 会自动处理混合语言
             )
 
-            # 确保segments被完全处理
-            import gc
-            segments_list = list(segments)
+            if log_callback:
+                log_callback("DEBUG: model.transcribe 调用完成")
 
-            # 强制垃圾回收，释放内存
-            gc.collect()
+            # 确保segments被完全处理
+            if log_callback:
+                log_callback("DEBUG: 开始处理 segments...")
+            
+            # 限制 segments 的数量，防止无限迭代
+            segments_list = []
+            max_segments = 1000  # 最多处理 1000 个片段
+            for i, segment in enumerate(segments):
+                if i >= max_segments:
+                    if log_callback:
+                        log_callback(f"WARNING: 达到最大片段数量限制 ({max_segments})")
+                    break
+                segments_list.append(segment)
+            
+            if log_callback:
+                log_callback(f"DEBUG: segments 处理完成，共 {len(segments_list)} 个片段")
+
+            # 不调用 gc.collect()，因为它可能导致阻塞
 
             if log_callback:
                 log_callback("正在提取字幕片段...")
