@@ -172,6 +172,13 @@ class SubtitleGenerator:
 # 确保segments被完全处理
             segments_list = list(segments)
 
+            # 限制最大片段数量，防止无限迭代
+            max_segments = 2000
+            if len(segments_list) > max_segments:
+                if log_callback:
+                    log_callback(f"⚠️ 警告: 字幕片段数量超过限制 ({len(segments_list)} > {max_segments})，只处理前 {max_segments} 个片段")
+                segments_list = segments_list[:max_segments]
+
             if log_callback:
                 log_callback("正在提取字幕片段...")
 
