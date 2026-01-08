@@ -31,9 +31,40 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
         # 实例化GUI
         self.gui = ToolboxGUI(self.root, self)
         
-        # 应用保存的主题设置
-        from gui.theme import apply_theme
-        apply_theme(self.theme_mode)
+        # 应用保存的主题设置（使用增强的主题切换函数）
+        from gui.theme_switch import apply_theme_enhanced
+        apply_theme_enhanced(self.theme_mode)
+        
+        # 设置主题属性，使控件能够根据主题应用不同的样式
+        theme_value = self.theme_mode.lower()
+        self.gui.Function.setProperty("theme", theme_value)
+        self.gui.menuBar.setProperty("theme", theme_value)
+        
+        # 额外的初始化处理：确保所有部件都正确应用主题
+        from PySide6.QtWidgets import QApplication
+        app = QApplication.instance()
+        
+        # 强制刷新所有部件的样式表
+        self.gui.Function.setStyleSheet(self.gui.Function.styleSheet())
+        self.gui.menuBar.setStyleSheet(self.gui.menuBar.styleSheet())
+        self.gui.Log.setStyleSheet(self.gui.Log.styleSheet())
+        
+        # 刷新所有标签部件（移除硬编码颜色）
+        label_widgets = [
+            self.gui.VolumeLabel,
+            self.gui.AssPatternLabel,
+            self.gui.WhisperModelLabel,
+            self.gui.WhisperLanguageLabel
+        ]
+        
+        for label in label_widgets:
+            if label:
+                current_style = label.styleSheet()
+                if 'color: rgb(0, 0, 0);' in current_style:
+                    label.setStyleSheet(current_style.replace('color: rgb(0, 0, 0);', 'color: palette(text);'))
+        
+        # 最后一次处理事件，确保所有更新都完成
+        app.processEvents()
         
         # 设置窗口关闭事件处理
         self.gui.closeEvent = self.on_close

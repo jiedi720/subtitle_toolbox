@@ -225,24 +225,46 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
     
     def theme_change(self, mode):
         """
-        切换主题
+        切换主题（增强版，确保只需点击一次就能完全切换）
         
         Args:
             mode: 主题模式（"Light"或"Dark"）
         """
-        from .theme import apply_theme
-        apply_theme(mode)
+        # 使用增强的主题切换函数
+        from .theme_switch import apply_theme_enhanced
+        apply_theme_enhanced(mode)
         
         # 设置主题属性，使控件能够根据主题应用不同的样式
         theme_value = mode.lower()
         self.Function.setProperty("theme", theme_value)
         self.menuBar.setProperty("theme", theme_value)
         
-        # 刷新 Log 控件，重新设置样式表以保持圆角效果
+        # 强制刷新所有部件的样式表
         from PySide6.QtWidgets import QApplication
         app = QApplication.instance()
-        # 重新设置样式表，确保圆角效果
+        
+        # 刷新所有标签部件（移除硬编码颜色）
+        label_widgets = [
+            self.VolumeLabel,
+            self.AssPatternLabel,
+            self.WhisperModelLabel,
+            self.WhisperLanguageLabel
+        ]
+        
+        for label in label_widgets:
+            if label:
+                current_style = label.styleSheet()
+                if 'color: rgb(0, 0, 0);' in current_style:
+                    label.setStyleSheet(current_style.replace('color: rgb(0, 0, 0);', 'color: palette(text);'))
+        
+        # 刷新 Log 控件，重新设置样式表以保持圆角效果
         self.Log.setStyleSheet(self.Log.styleSheet())
+        
+        # 刷新菜单栏
+        self.menuBar.setStyleSheet(self.menuBar.styleSheet())
+        
+        # 刷新 TabWidget
+        self.Function.setStyleSheet(self.Function.styleSheet())
         
         # 保存主题设置
         if hasattr(self.app, 'save_theme_setting'):
