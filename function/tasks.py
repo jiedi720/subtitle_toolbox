@@ -50,8 +50,6 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
     else:
         final_out = target_dir
     
-    log_callback("--- 任务启动 ---")
-    
     try:
         if task_mode == "Srt2Ass":
             # 执行SRT转ASS任务
@@ -224,19 +222,14 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
                 success_count = sum(1 for _, _, success in results if success)
                 fail_count = len(results) - success_count
 
-                log_callback(f"\n✅ 处理完成: 成功 {success_count} 个，失败 {fail_count} 个")
+                log_callback(f"✅ 处理完成: 成功 {success_count} 个，失败 {fail_count} 个")
 
                 log_callback("--- AutoSub任务完成 ---")
-                
+
             except Exception as e:
                 log_callback(f"❌ AutoSub模式处理失败: {e}")
                 import traceback
                 log_callback(f"详细错误: {traceback.format_exc()}")
-                return False
-        
-        # 任务完成日志
-        log_callback("✅ 任务流处理完毕。")
-        log_callback("--- execute_task函数返回 ---")
         
         # 不做任何清理操作，让 Python 的垃圾回收器自然处理
         # 自动模式下 Whisper 的析构函数会卡死，所以不能显式清理
@@ -249,11 +242,7 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
             # 使用时间戳作为键，确保每次都是新的键
             import time
             language_key = f"{model_config.get('language', 'auto')}_{int(time.time() * 1000)}"
-            _global_generator[language_key] = generator
-        
-        # 不使用 return 语句，直接让函数结束
-        # Python 会自动返回 None
-        # 调用者需要检查 None 并视为 True        
+            _global_generator[language_key] = generator        
     except Exception as e: 
         log_callback(f"❌ 出错: {e}")
         import traceback

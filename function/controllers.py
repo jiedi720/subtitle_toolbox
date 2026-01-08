@@ -268,26 +268,19 @@ class TaskController:
             )
             if success is None:
                 success = True
-            self.log("--- 任务执行完毕 ---")
         except Exception as e:
             # 捕获任务执行过程中的异常
             import traceback
             self.log(f"❌ 任务执行异常: {e}")
             self.log(f"详细错误: {traceback.format_exc()}")
         finally:
-            # 任务完成后恢复GUI状态
-            self.log("--- 任务线程即将结束 ---")
             try:
-                self.log("--- 恢复GUI状态 ---")
                 # 使用信号在主线程中恢复GUI状态
                 if hasattr(self, 'enable_start_button'):
                     self.enable_start_button.emit(True)
                 
                 if hasattr(self.gui, 'ProgressBar'):
                     self.update_progress.emit(0)
-                
-                self.log("--- GUI状态已恢复 ---")
-                self.log("--- 线程正常退出 ---")
             except Exception as e:
                 import traceback
                 self.log(f"❌ 恢复GUI状态时出错: {e}")

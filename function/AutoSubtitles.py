@@ -80,8 +80,6 @@ class SubtitleGenerator:
                 raise Exception(error_msg)
         
         # 只使用GPU处理
-        if log_callback:
-            log_callback("正在使用 GPU 加载模型...")
         try:
             # 优先使用GPU进行处理
             self.model = WhisperModel(
@@ -171,21 +169,8 @@ class SubtitleGenerator:
                 # faster-whisper 会自动处理混合语言
             )
 
-            # 确保segments被完全处理
-            if log_callback:
-                log_callback("DEBUG: 开始处理 segments...")
-            
-            # 限制 segments 的数量，防止无限迭代
-            segments_list = []
-            max_segments = 1000  # 最多处理 1000 个片段
-            for i, segment in enumerate(segments):
-                if i >= max_segments:
-                    if log_callback:
-                        log_callback(f"WARNING: 达到最大片段数量限制 ({max_segments})")
-                    break
-                segments_list.append(segment)
-
-            # 不调用 gc.collect()，因为它可能导致阻塞
+# 确保segments被完全处理
+            segments_list = list(segments)
 
             if log_callback:
                 log_callback("正在提取字幕片段...")
@@ -234,13 +219,7 @@ class SubtitleGenerator:
                 # 未检测到语言，使用 [none] 后缀
                 output_file = f"{base_name}.whisper.[none].srt"
 
-            if log_callback:
-                log_callback(f"DEBUG: output_file = {output_file}")
-
             # 写入字幕文件
-            if log_callback:
-                log_callback(f"正在写入字幕文件: {os.path.basename(output_file)}")
-
             self._write_subtitle(output_file, segments_list, log_callback)
 
             if log_callback:
@@ -288,9 +267,6 @@ class SubtitleGenerator:
             # 一次性写入所有内容
             with open(output_file, "w", encoding="utf-8", buffering=8192) as f:
                 f.writelines(content_lines)
-            
-            if log_callback:
-                log_callback(f"字幕文件写入完成: {os.path.basename(output_file)}")
         except Exception as e:
             if log_callback:
                 log_callback(f"写入字幕文件失败: {str(e)}")
@@ -402,7 +378,7 @@ class SubtitleGenerator:
                 success_count = sum(1 for _, _, success in results if success)
                 fail_count = len(results) - success_count
 
-                log_callback(f"\n✅ 批处理完成: 总计 {len(results)}, 成功 {success_count}, 失败 {fail_count}")
+                log_callback(f"✅ 批处理完成: 总计 {len(results)}, 成功 {success_count}, 失败 {fail_count}")
 
             return results
 
