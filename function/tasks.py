@@ -37,7 +37,7 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
     try:
         _global_generator
     except NameError:
-        _global_generator = None
+        _global_generator = {}  # 使用字典保存多个 generator 对象
     # 验证源目录
     target_dir = path_var.strip()
     if not target_dir or not os.path.exists(target_dir):
@@ -161,10 +161,9 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
             language_setting = model_config.get("language", None)
             log_callback(f"DEBUG: 语言设置: {language_setting}")
             
-            # 清理之前的 generator 对象
-            if _global_generator is not None:
-                log_callback("DEBUG: 清理之前的 generator 对象")
-                _global_generator = None
+            # 不清理之前的 generator 对象，直接创建新的
+            # 使用字典来保存多个 generator 对象，避免覆盖
+            log_callback("DEBUG: 创建新的 generator 对象")
             
             generator = SubtitleGenerator(
                 model_size=model_size,
@@ -261,8 +260,11 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
         
         # 将 generator 对象保存到全局变量中，防止它被清理
         if 'generator' in locals():
-            _global_generator = generator
-            log_callback("DEBUG: generator 对象已保存到全局变量")
+            # 使用字典来保存多个 generator 对象，避免覆盖
+            # 使用语言作为键，这样同一个语言会覆盖，不同语言不会
+            language_key = model_config.get("language", "auto") if task_mode == "AutoSub" else "other"
+            _global_generator[language_key] = generator
+            log_callback(f"DEBUG: generator 对象已保存到全局变量 (key: {language_key})")
         
         # 不使用 return 语句，直接让函数结束
         # Python 会自动返回 None
