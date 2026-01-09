@@ -74,6 +74,10 @@ if errorlevel 1 (
     exit /b 1
 )
 
+REM echo [Info] Cleaning duplicate torch DLL files...
+REM python clean_torch_duplicates.py
+REM Note: torch DLLs are now properly handled in the spec file
+
 echo.
 echo ============================================
 echo Build completed successfully!

@@ -8,6 +8,51 @@
 import os
 import sys
 
+# 在导入任何模块之前设置 DLL 搜索路径
+if getattr(sys, 'frozen', False):
+    # 打包后的程序
+    base_dir = os.path.dirname(sys.executable)
+    cuda_base = os.path.join(os.path.dirname(base_dir), 'Faster_Whisper_Model')
+    internal_dir = os.path.join(base_dir, '_internal')  # torch DLL 在这里
+else:
+    # 开发环境
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    cuda_base = os.path.join(os.path.dirname(base_dir), 'Faster_Whisper_Model')
+    internal_dir = None  # 开发环境不需要
+
+cuda_paths = [
+    os.path.join(cuda_base, 'nvidia', 'cublas', 'bin'),
+    os.path.join(cuda_base, 'nvidia', 'cudnn', 'bin'),
+    os.path.join(cuda_base, 'nvidia', 'cuda_runtime', 'bin'),
+]
+
+# 添加 _internal 目录到 PATH（打包后的程序，torch DLL 在这里）
+if internal_dir and os.path.exists(internal_dir):
+    current_path = os.environ.get('PATH', '')
+    if internal_dir not in current_path:
+        os.environ['PATH'] = internal_dir + os.pathsep + current_path
+
+# 添加 CUDA 库路径
+for cuda_path in cuda_paths:
+    if os.path.exists(cuda_path):
+        current_path = os.environ.get('PATH', '')
+        if cuda_path not in current_path:
+            os.environ['PATH'] = cuda_path + os.pathsep + current_path
+
+# 同时也使用 add_dll_directory
+for cuda_path in cuda_paths:
+    if os.path.exists(cuda_path):
+        try:
+            os.add_dll_directory(cuda_path)
+        except AttributeError:
+            pass
+
+if internal_dir and os.path.exists(internal_dir):
+    try:
+        os.add_dll_directory(internal_dir)
+    except AttributeError:
+        pass
+
 from PySide6.QtWidgets import QMessageBox
 from logic.txt_logic import run_txt_creation_task
 from logic.pdf_logic import run_pdf_task
@@ -158,13 +203,17 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
             # 创建字幕生成器
             language_setting = model_config.get("language", None)
             
+            # 智能设备选择：优先使用 GPU，如果没有 NVIDIA 显卡则使用 CPU
+            import torch
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+            
             # 不清理之前的 generator 对象，直接创建新的
             # 使用字典来保存多个 generator 对象，避免覆盖
             
             generator = SubtitleGenerator(
                 model_size=model_size,
                 model_path=model_path,
-                device="auto",
+                device=device,
                 language=language_setting,
                 allow_download=model_config.get("allow_download", False)
             )

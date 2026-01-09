@@ -1,22 +1,28 @@
 import os
 import sys
 
-# 在导入任何 CUDA 相关库之前就设置 DLL 路径
-# 使用当前工作目录下的 venv
-venv_cudnn = os.path.join(os.getcwd(), "venv", "Lib", "site-packages", "nvidia", "cudnn", "bin")
-venv_cublas = os.path.join(os.getcwd(), "venv", "Lib", "site-packages", "nvidia", "cublas", "bin")
+# 在导入 faster_whisper 之前设置 DLL 搜索路径
+if getattr(sys, 'frozen', False):
+    # 打包后的程序
+    base_dir = os.path.dirname(sys.executable)
+    cuda_base = os.path.join(os.path.dirname(base_dir), 'Faster_Whisper_Model')
+else:
+    # 开发环境
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    cuda_base = os.path.join(os.path.dirname(base_dir), 'Faster_Whisper_Model')
 
-dll_paths = []
-if os.path.exists(venv_cudnn):
-    dll_paths.append(venv_cudnn)
-    os.add_dll_directory(venv_cudnn)
-if os.path.exists(venv_cublas):
-    dll_paths.append(venv_cublas)
-    os.add_dll_directory(venv_cublas)
+cuda_paths = [
+    os.path.join(cuda_base, 'nvidia', 'cublas', 'bin'),
+    os.path.join(cuda_base, 'nvidia', 'cudnn', 'bin'),
+    os.path.join(cuda_base, 'nvidia', 'cuda_runtime', 'bin'),
+]
 
-if dll_paths:
-    path_addition = os.pathsep.join(dll_paths)
-    os.environ["PATH"] = path_addition + os.pathsep + os.environ.get("PATH", "")
+for cuda_path in cuda_paths:
+    if os.path.exists(cuda_path):
+        try:
+            os.add_dll_directory(cuda_path)
+        except AttributeError:
+            pass
 
 
 class SubtitleGenerator:
