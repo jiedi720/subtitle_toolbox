@@ -86,7 +86,7 @@ def execute_task(task_mode, path_var, output_path_var, log_callback, progress_ca
     # 验证源目录
     target_dir = path_var.strip()
     if not target_dir or not os.path.exists(target_dir):
-        QMessageBox.critical(root, "错误", "源目录无效")
+        log_callback("❌ 未设置待处理文件目录")
         return False
     
     # 获取输出目录
