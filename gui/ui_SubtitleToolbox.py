@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SubtitleToolboxBIRybY.ui'
+## Form generated from reading UI file 'SubtitleToolboxQZyuDv.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -1093,9 +1093,14 @@ class Ui_SubtitleToolbox(object):
 "}\n"
 "\n"
 "/* \u60ac\u6d6e\u7279\u6548\uff1a\u80cc\u666f\u989c\u8272\u53d8\u6d45\uff0c\u5e76\u589e\u52a0\u84dd\u8272\u8fb9\u6846\u611f */\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(160, 160, 160); /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
+"QPushButton[theme=\"light\"]:hover {\n"
+"    background-color: #a0a0a0; /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
 "}\n"
+"\n"
+"QPushButton[theme=\"dark\"]:hover {\n"
+"    background-color: #DEDEDE;  /* \u989c\u8272\u6bd4\u9ed8\u8ba4\u7a0d\u4eae */\n"
+"}\n"
+"\n"
 "\n"
 "QPushButton:pressed {\n"
 "    /* 1. \u5411\u4e0b\u63a8\u6587\u5b57 */\n"
@@ -1498,7 +1503,7 @@ class Ui_SubtitleToolbox(object):
 
         self.retranslateUi(SubtitleToolbox)
 
-        self.Function.setCurrentIndex(0)
+        self.Function.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(SubtitleToolbox)

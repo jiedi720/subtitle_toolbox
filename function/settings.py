@@ -213,7 +213,8 @@ class ConfigManager:
         self.autosub_dir = autosub_config.get("autosub_dir", "")
         self.autosub_output_dir = autosub_config.get("autosub_output_dir", "")
         default_whisper_path = "C:/Users/jiedi/AppData/Roaming/PotPlayerMini64/Model/faster-whisper-large-v3-turbo"
-        self.whisper_model_path = autosub_config.get("Model_dir", default_whisper_path)
+        raw_model_path = autosub_config.get("Model_dir", default_whisper_path)
+        self.whisper_model_path = os.path.normpath(raw_model_path) if raw_model_path else raw_model_path
         # 加载语言设置
         language_value = autosub_config.get("language", "auto")
         # 处理空字符串、字符串 'None' 或 None，都转换为 "auto"
@@ -352,7 +353,7 @@ class ConfigManager:
             "AutoSub": {
                 "autosub_dir": self.autosub_dir.strip() if hasattr(self, 'autosub_dir') else "",
                 "autosub_output_dir": self.autosub_output_dir.strip() if hasattr(self, 'autosub_output_dir') else "",
-                "Model_dir": self.whisper_model_path if hasattr(self, 'whisper_model_path') else "",
+                "Model_dir": os.path.normpath(self.whisper_model_path) if hasattr(self, 'whisper_model_path') and self.whisper_model_path else "",
                 "language": self.whisper_language if hasattr(self, 'whisper_language') else "auto"
             }
         }

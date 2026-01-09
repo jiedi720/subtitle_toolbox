@@ -299,24 +299,27 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
     def theme_change(self, mode):
         """
         切换主题（增强版，确保只需点击一次就能完全切换）
-        
+
         Args:
             mode: 主题模式（"Light"或"Dark"）
         """
         # 使用增强的主题切换函数
-        from .theme import apply_theme_enhanced
+        from .theme import apply_theme_enhanced, refresh_all_widget_styles
         apply_theme_enhanced(mode)
-        
+
         # 设置主题属性，使控件能够根据主题应用不同的样式
         theme_value = mode.lower()
         self.setProperty("theme", theme_value)  # 为主窗口设置主题属性，使 QToolTip 样式生效
         self.Function.setProperty("theme", theme_value)
         self.menuBar.setProperty("theme", theme_value)
-        
+
+        # 为所有子控件设置主题属性，确保主题选择器生效
+        self._set_theme_property_recursive(self, theme_value)
+
         # 强制刷新所有部件的样式表
         from PySide6.QtWidgets import QApplication
         app = QApplication.instance()
-        
+
         # 刷新所有标签部件（移除硬编码颜色）
         label_widgets = [
             self.VolumeLabel,
@@ -324,26 +327,44 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
             self.WhisperModelLabel,
             self.WhisperLanguageLabel
         ]
-        
+
         for label in label_widgets:
             if label:
                 current_style = label.styleSheet()
                 if 'color: rgb(0, 0, 0);' in current_style:
                     label.setStyleSheet(current_style.replace('color: rgb(0, 0, 0);', 'color: palette(text);'))
-        
+
         # 刷新 Log 控件，重新设置样式表以保持圆角效果
         self.Log.setStyleSheet(self.Log.styleSheet())
-        
+
         # 刷新菜单栏
         self.menuBar.setStyleSheet(self.menuBar.styleSheet())
-        
+
         # 刷新 TabWidget
         self.Function.setStyleSheet(self.Function.styleSheet())
-        
+
+        # 通用刷新：确保所有带 [theme="light"] 和 [theme="dark"] 选择器的样式正确应用
+        refresh_all_widget_styles()
+
         # 保存主题设置
         if hasattr(self.app, 'save_theme_setting'):
             self.app.save_theme_setting(mode)
-    
+
+    def _set_theme_property_recursive(self, widget, theme_value):
+        """
+        递归设置控件及其所有子控件的主题属性
+        """
+        from PySide6.QtWidgets import QWidget
+
+        # 为当前控件设置主题属性
+        widget.setProperty("theme", theme_value)
+
+        # 如果控件有子控件，递归设置它们的主题属性
+        for child in widget.findChildren(QWidget):
+            child.setProperty("theme", theme_value)
+            # 递归处理子控件的子控件
+            self._set_theme_property_recursive(child, theme_value)
+
     def _clear_log(self):
         """清除日志"""
         self.Log.clear()
@@ -578,8 +599,9 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
     
     def _select_whisper_model_dir(self):
         """选择 Whisper 模型目录"""
+        import os
         from PySide6.QtWidgets import QFileDialog
-        
+
         # 获取当前设置的目录作为默认路径
         default_dir = ""
         if hasattr(self.app, 'whisper_model_path') and self.app.whisper_model_path:
@@ -587,12 +609,50 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
         elif hasattr(self.app, 'path_var') and self.app.path_var:
             # 如果没有设置过，使用源目录下的 models 文件夹
             default_dir = os.path.join(self.app.path_var.strip(), "models")
-        
+
         # 弹出目录选择对话框
         dir_path = QFileDialog.getExistingDirectory(self, "选择 Whisper 模型目录", default_dir)
         if dir_path:
-            self.app.whisper_model_path = dir_path
-            self.log(f"已选择 Whisper 模型目录: {dir_path}")
+            # 标准化路径分隔符
+            normalized_dir_path = os.path.normpath(dir_path)
+
+            # 检测目录中的模型
+            model_dirs = []
+            for item in os.listdir(normalized_dir_path):
+                item_path = os.path.join(normalized_dir_path, item)
+                if os.path.isdir(item_path):
+                    # 检查目录中是否包含模型文件
+                    model_files = [f for f in os.listdir(item_path)
+                                 if f.endswith(('.bin', '.safetensors', '.onnx', '.onnx_data'))]
+                    if model_files:
+                        model_dirs.append(item)
+
+            # 根据检测结果输出日志
+            if model_dirs:
+                self.app.whisper_model_path = normalized_dir_path
+                self.log(f"已选择 Whisper 模型目录: {normalized_dir_path}")
+
+                if len(model_dirs) == 1:
+                    # 如果只检测到一个模型，假设用户选择了具体模型目录
+                    self.log(f"🔍 检测到模型: {model_dirs[0]}")
+                else:
+                    # 如果检测到多个模型，说明用户选择了模型主目录
+                    self.log(f"🔍 检测到 {len(model_dirs)} 个模型: {', '.join(model_dirs)}")
+            else:
+                # 检查当前目录是否包含模型文件（用户可能选择了具体模型目录）
+                current_model_files = [f for f in os.listdir(normalized_dir_path)
+                                     if f.endswith(('.bin', '.safetensors', '.onnx', '.onnx_data'))]
+                if current_model_files:
+                    # 用户选择了具体模型目录
+                    parent_dir_name = os.path.basename(normalized_dir_path)
+                    self.app.whisper_model_path = normalized_dir_path
+                    self.log(f"已选择 Whisper 模型目录: {normalized_dir_path}")
+                    self.log(f"🔍 检测到模型: {parent_dir_name}")
+                else:
+                    # 没有检测到任何模型
+                    self.log(f"❌ 选择的目录中未检测到任何模型文件 (.bin/.safetensors/.onnx/.onnx_data): {normalized_dir_path}")
+                    # 仍然保存路径，但给出警告
+                    self.app.whisper_model_path = normalized_dir_path
     
     def _on_whisper_model_changed(self, value):
         """

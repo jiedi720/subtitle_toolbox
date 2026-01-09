@@ -205,3 +205,27 @@ def apply_theme_enhanced(mode):
 
     # 最后再次处理事件，确保所有更新都完成
     app.processEvents()
+
+
+def refresh_all_widget_styles():
+    """
+    通用函数：刷新所有控件的样式，确保 [theme="light"] 和 [theme="dark"] 选择器正确应用
+    这个函数可以自动检测并应用UI文件中定义的主题相关样式
+    """
+    app = QApplication.instance()
+
+    # 遍历所有控件并重新应用样式表以确保主题选择器生效
+    for widget in QApplication.allWidgets():
+        # 重新应用控件的样式表
+        current_stylesheet = widget.styleSheet()
+        if current_stylesheet:
+            # 重新设置样式表以确保主题选择器生效
+            widget.setStyleSheet(current_stylesheet)
+
+        # 强制控件更新样式
+        widget.style().unpolish(widget)
+        widget.style().polish(widget)
+        widget.update()
+
+    # 处理事件，确保所有更改都生效
+    app.processEvents()

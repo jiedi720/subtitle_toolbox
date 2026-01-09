@@ -415,8 +415,12 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
         self.gui.Function.setProperty("theme", theme_value)
         self.gui.menuBar.setProperty("theme", theme_value)
 
+        # 为所有子控件设置主题属性，确保主题选择器生效
+        self.gui._set_theme_property_recursive(self.gui, theme_value)
+
         # 额外的初始化处理：确保所有部件都正确应用主题
         from PySide6.QtWidgets import QApplication
+        from gui.theme import refresh_all_widget_styles
         app = QApplication.instance()
 
         # 强制刷新所有部件的样式表
@@ -437,6 +441,9 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
                 current_style = label.styleSheet()
                 if 'color: rgb(0, 0, 0);' in current_style:
                     label.setStyleSheet(current_style.replace('color: rgb(0, 0, 0);', 'color: palette(text);'))
+
+        # 通用刷新：确保所有带 [theme="light"] 和 [theme="dark"] 选择器的样式正确应用
+        refresh_all_widget_styles()
 
         # 最后一次处理事件，确保所有更新都完成
         app.processEvents()
