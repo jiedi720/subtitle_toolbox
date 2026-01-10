@@ -219,11 +219,20 @@ class ConfigManager:
         self.whisper_model_path = os.path.normpath(raw_model_path) if raw_model_path else raw_model_path
         # 加载语言设置
         language_value = autosub_config.get("language", "auto")
+        # 语言名称到语言代码的映射
+        language_name_to_code = {
+            "自动": "auto",
+            "日语": "ja",
+            "韩语": "ko",
+            "英语": "en",
+            "中文": "zh"
+        }
         # 处理空字符串、字符串 'None' 或 None，都转换为 "auto"
         if language_value is None or language_value == "" or language_value == "None":
             self.whisper_language = "auto"
         else:
-            self.whisper_language = language_value
+            # 如果是语言名称，转换为语言代码
+            self.whisper_language = language_name_to_code.get(language_value, language_value)
         
         # 加载 Whisper 引擎设置
         self.whisper_engine = autosub_config.get("whisper_engine", "GPU")
@@ -362,7 +371,13 @@ class ConfigManager:
                 "autosub_dir": self.autosub_dir.strip() if hasattr(self, 'autosub_dir') else "",
                 "autosub_output_dir": self.autosub_output_dir.strip() if hasattr(self, 'autosub_output_dir') else "",
                 "model_dir": os.path.normpath(self.whisper_model_path) if hasattr(self, 'whisper_model_path') and self.whisper_model_path else "",
-                "language": self.whisper_language if hasattr(self, 'whisper_language') else "auto",
+                "language": {
+                    "auto": "自动",
+                    "ja": "日语",
+                    "ko": "韩语",
+                    "en": "英语",
+                    "zh": "中文"
+                }.get(self.whisper_language, "自动") if hasattr(self, 'whisper_language') else "自动",
                 "whisper_engine": self.whisper_engine if hasattr(self, 'whisper_engine') else "GPU",
                 "cuda_library_path": self.cuda_library_path.strip() if hasattr(self, 'cuda_library_path') else ""
             }
@@ -734,6 +749,8 @@ class ConfigManager:
         controller.whisper_model = self.whisper_model
         controller.whisper_model_path = self.whisper_model_path
         controller.whisper_language = self.whisper_language if hasattr(self, 'whisper_language') else "auto"
+        controller.whisper_engine = self.whisper_engine if hasattr(self, 'whisper_engine') else "GPU"
+        controller.cuda_library_path = self.cuda_library_path if hasattr(self, 'cuda_library_path') else ""
 
         # 同步解析后的样式
         controller.kor_parsed = self.kor_parsed

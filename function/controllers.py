@@ -504,7 +504,7 @@ class UnifiedApp(BaseController, UIController, TaskController, ToolController):
         if hasattr(self.gui, '_update_gui_from_settings'):
             self.gui._update_gui_from_settings()
         if hasattr(self.gui, 'log'):
-            self.gui.log("配置已刷新")
+            self.gui.log("已读取最新配置")
     
     def save_current_directory_to_config(self):
         """更新配置：按照优先级逻辑更新GUI和配置文件"""

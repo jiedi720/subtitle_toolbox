@@ -142,6 +142,7 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
         self.actionLight.triggered.connect(lambda: self.theme_change("Light"))
         self.actionDark.triggered.connect(lambda: self.theme_change("Dark"))
         self.actionOpenSettings.triggered.connect(self.app.open_config_file)
+        self.actionReadSettings.triggered.connect(self.app.refresh_config_file)
         
         # AutoSub标签页中的按钮
         self.SelectWhisperModel.clicked.connect(self._select_whisper_model_dir)
@@ -154,6 +155,10 @@ class ToolboxGUI(QMainWindow, Ui_SubtitleToolbox):
         
         # Whisper引擎选择下拉框信号
         self.WhisperEngineSelect.currentIndexChanged.connect(self._on_whisper_engine_changed)
+        
+        # VTT to SRT 拖放区域设置
+        from function.vtt2srt import setup_vtt2srt_drop_area
+        setup_vtt2srt_drop_area(self.Vtt2SrtDrop, self.log)
 
         # 连接控制器信号到GUI槽函数（线程安全更新）
         if hasattr(self.app, 'update_log'):

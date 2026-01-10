@@ -4,7 +4,6 @@ __pycache__/
 *$py.class
 
 # 打包工具产生的临时文件
-*.spec
 dist/
 build/
 C:/Temp_Build/

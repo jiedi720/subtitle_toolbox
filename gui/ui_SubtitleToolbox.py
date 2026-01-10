@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SubtitleToolboxYphipw.ui'
+## Form generated from reading UI file 'SubtitleToolboxameUfx.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -924,12 +924,15 @@ class Ui_SubtitleToolbox(object):
         self.Srt2Ass = QWidget()
         self.Srt2Ass.setObjectName(u"Srt2Ass")
         self.Srt2Ass.setFont(font5)
-        self.verticalLayout = QVBoxLayout(self.Srt2Ass)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout_9 = QVBoxLayout(self.Srt2Ass)
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
         self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setSpacing(0)
+        self.horizontalLayout_3.setSpacing(8)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalLayout_3.setContentsMargins(60, -1, 72, -1)
+        self.horizontalLayout_3.setContentsMargins(-1, -1, 5, -1)
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setSpacing(0)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.AssPatternLabel = QLabel(self.Srt2Ass)
         self.AssPatternLabel.setObjectName(u"AssPatternLabel")
         sizePolicy.setHeightForWidth(self.AssPatternLabel.sizePolicy().hasHeightForWidth())
@@ -945,10 +948,10 @@ class Ui_SubtitleToolbox(object):
         self.AssPatternLabel.setStyleSheet(u"color: rgb(0, 0, 0);")
         self.AssPatternLabel.setFrameShape(QFrame.Shape.NoFrame)
         self.AssPatternLabel.setTextFormat(Qt.TextFormat.PlainText)
-        self.AssPatternLabel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.AssPatternLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.AssPatternLabel.setWordWrap(False)
 
-        self.horizontalLayout_3.addWidget(self.AssPatternLabel, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.verticalLayout.addWidget(self.AssPatternLabel, 0, Qt.AlignmentFlag.AlignHCenter)
 
         self.AssPatternSelect = QComboBox(self.Srt2Ass)
         self.AssPatternSelect.addItem("")
@@ -1012,12 +1015,71 @@ class Ui_SubtitleToolbox(object):
 "}")
         self.AssPatternSelect.setEditable(False)
 
-        self.horizontalLayout_3.addWidget(self.AssPatternSelect, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.verticalLayout.addWidget(self.AssPatternSelect, 0, Qt.AlignmentFlag.AlignHCenter)
+
+
+        self.horizontalLayout_3.addLayout(self.verticalLayout)
+
+        self.DividingLine_2 = QFrame(self.Srt2Ass)
+        self.DividingLine_2.setObjectName(u"DividingLine_2")
+        self.DividingLine_2.setMinimumSize(QSize(10, 0))
+        self.DividingLine_2.setMaximumSize(QSize(10, 70))
+        self.DividingLine_2.setStyleSheet(u"/* \u9488\u5bf9\u6240\u6709\u7ad6\u76f4\u5206\u5272\u7ebf\u8fdb\u884c\u7f8e\u5316 */\n"
+"QFrame[frameShape=\"4\"] {\n"
+"    /* \u53bb\u9664\u9ed8\u8ba4\u7684 3D \u9634\u5f71 */\n"
+"    border: none;\n"
+"    /* \u6838\u5fc3\uff1a\u8bbe\u7f6e\u5bbd\u5ea6\u4e3a 1px */\n"
+"    width: 1px;\n"
+"    max-width: 1px;\n"
+"    /* \u8bbe\u7f6e\u989c\u8272\uff1a\u5efa\u8bae\u4f7f\u7528\u534a\u900f\u660e\uff0c\u4f7f\u5176\u770b\u8d77\u6765\u66f4\u7ec6 */\n"
+"    background-color: rgba(0, 0, 0, 50);\n"
+"    /* \u5efa\u8bae\u4e0a\u4e0b\u7559\u767d\uff0c\u4e0d\u8981\u9876\u6ee1\u5e03\u5c40\uff0c\u4f1a\u66f4\u6709\u547c\u5438\u611f */\n"
+"    margin-top: 5px;\n"
+"    margin-bottom: 5px;\n"
+"}")
+        self.DividingLine_2.setFrameShape(QFrame.Shape.VLine)
+        self.DividingLine_2.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.horizontalLayout_3.addWidget(self.DividingLine_2)
+
+        self.Vtt2SrtDrop = QLabel(self.Srt2Ass)
+        self.Vtt2SrtDrop.setObjectName(u"Vtt2SrtDrop")
+        sizePolicy.setHeightForWidth(self.Vtt2SrtDrop.sizePolicy().hasHeightForWidth())
+        self.Vtt2SrtDrop.setSizePolicy(sizePolicy)
+        self.Vtt2SrtDrop.setMinimumSize(QSize(0, 70))
+        self.Vtt2SrtDrop.setMaximumSize(QSize(180, 70))
+        font12 = QFont()
+        font12.setPointSize(11)
+        font12.setBold(False)
+        font12.setHintingPreference(QFont.PreferNoHinting)
+        self.Vtt2SrtDrop.setFont(font12)
+        self.Vtt2SrtDrop.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.Vtt2SrtDrop.setStyleSheet(u"/* \u9ed8\u8ba4\u6837\u5f0f (\u4f60\u7684\u57fa\u7840\u6837\u5f0f) */\n"
+"QFrame {\n"
+"    color: rgb(0, 0, 0);\n"
+"    background-color: #f0f0f0;\n"
+"    border: 2px solid #7953B1;\n"
+"    border-radius: 9px;\n"
+"    padding: 5px 15px;\n"
+"}\n"
+"\n"
+"/* \u62d6\u62fd\u60ac\u6d6e\u65f6\u7684\u7279\u6548\u6837\u5f0f */\n"
+"QFrame[active=\"true\"] {\n"
+"    background-color: #e0d4f7;  /* \u80cc\u666f\u53d8\u6210\u6d45\u7d2b\u8272\uff0c\u6697\u793a\u53ef\u653e\u5165 */\n"
+"    border: 3px solid #9b72cf;  /* \u8fb9\u6846\u52a0\u7c97\u5e76\u4eae\u5316 */\n"
+"}")
+        self.Vtt2SrtDrop.setFrameShape(QFrame.Shape.NoFrame)
+        self.Vtt2SrtDrop.setTextFormat(Qt.TextFormat.PlainText)
+        self.Vtt2SrtDrop.setScaledContents(False)
+        self.Vtt2SrtDrop.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.Vtt2SrtDrop.setWordWrap(True)
+
+        self.horizontalLayout_3.addWidget(self.Vtt2SrtDrop)
 
         self.horizontalLayout_3.setStretch(0, 1)
-        self.horizontalLayout_3.setStretch(1, 1)
+        self.horizontalLayout_3.setStretch(2, 3)
 
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
+        self.verticalLayout_9.addLayout(self.horizontalLayout_3)
 
         self.Function.addTab(self.Srt2Ass, "")
         self.AutoSub = QWidget()
@@ -1332,12 +1394,12 @@ class Ui_SubtitleToolbox(object):
         self.Start.setSizePolicy(sizePolicy2)
         self.Start.setMinimumSize(QSize(0, 60))
         self.Start.setMaximumSize(QSize(300, 60))
-        font12 = QFont()
-        font12.setPointSize(12)
-        font12.setWeight(QFont.DemiBold)
-        font12.setKerning(True)
-        font12.setHintingPreference(QFont.PreferNoHinting)
-        self.Start.setFont(font12)
+        font13 = QFont()
+        font13.setPointSize(12)
+        font13.setWeight(QFont.DemiBold)
+        font13.setKerning(True)
+        font13.setHintingPreference(QFont.PreferNoHinting)
+        self.Start.setFont(font13)
         self.Start.setStyleSheet(u"/* \u6309\u94ae\u9ed8\u8ba4\u6837\u5f0f */\n"
 "QPushButton {\n"
 "    color: rgb(0, 0, 0);\n"
@@ -1624,7 +1686,7 @@ class Ui_SubtitleToolbox(object):
 
         self.retranslateUi(SubtitleToolbox)
 
-        self.Function.setCurrentIndex(3)
+        self.Function.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(SubtitleToolbox)
@@ -1707,6 +1769,11 @@ class Ui_SubtitleToolbox(object):
         self.AssPatternSelect.setItemText(1, QCoreApplication.translate("SubtitleToolbox", u"\u65e5\u4e0a\u4e2d\u4e0b", None))
         self.AssPatternSelect.setItemText(2, QCoreApplication.translate("SubtitleToolbox", u"\u82f1\u4e0a\u4e2d\u4e0b", None))
 
+#if QT_CONFIG(tooltip)
+        self.Vtt2SrtDrop.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+        self.Vtt2SrtDrop.setText(QCoreApplication.translate("SubtitleToolbox", u"Drop .vtt files\n"
+"here to convert", None))
         self.Function.setTabText(self.Function.indexOf(self.Srt2Ass), QCoreApplication.translate("SubtitleToolbox", u"Srt2Ass", None))
         self.WhisperModelLabel.setText(QCoreApplication.translate("SubtitleToolbox", u"\u5f53\u524d\u6a21\u578b", None))
 #if QT_CONFIG(tooltip)
