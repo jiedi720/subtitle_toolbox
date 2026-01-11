@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SubtitleToolboxameUfx.ui'
+## Form generated from reading UI file 'SubtitleToolboxOFfYev.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -1686,14 +1686,14 @@ class Ui_SubtitleToolbox(object):
 
         self.retranslateUi(SubtitleToolbox)
 
-        self.Function.setCurrentIndex(2)
+        self.Function.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(SubtitleToolbox)
     # setupUi
 
     def retranslateUi(self, SubtitleToolbox):
-        SubtitleToolbox.setWindowTitle(QCoreApplication.translate("SubtitleToolbox", u"MainWindow", None))
+        SubtitleToolbox.setWindowTitle(QCoreApplication.translate("SubtitleToolbox", u"SubtitleToolbox", None))
         self.actionLight.setText(QCoreApplication.translate("SubtitleToolbox", u"Light", None))
 #if QT_CONFIG(tooltip)
         self.actionLight.setToolTip(QCoreApplication.translate("SubtitleToolbox", u"Light\u4e3b\u9898", None))
